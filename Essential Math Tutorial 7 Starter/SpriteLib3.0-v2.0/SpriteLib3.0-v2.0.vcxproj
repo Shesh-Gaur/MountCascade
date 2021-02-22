@@ -196,6 +196,7 @@
     <ClInclude Include="VignetteEffect.h" />
     <ClInclude Include="Window.h" />
     <ClInclude Include="Xinput.h" />
+    <ClInclude Include="ZoomTrigger.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Astar.cpp" />
@@ -255,6 +256,7 @@
     <ClCompile Include="VignetteEffect.cpp" />
     <ClCompile Include="Window.cpp" />
     <ClCompile Include="XInput.cpp" />
+    <ClCompile Include="ZoomTrigger.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

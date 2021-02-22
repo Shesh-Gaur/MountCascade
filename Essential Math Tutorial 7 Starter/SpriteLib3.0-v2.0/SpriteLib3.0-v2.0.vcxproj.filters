@@ -198,6 +198,9 @@
     <ClInclude Include="Astar.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="ZoomTrigger.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="AnimationController.cpp">
@@ -369,6 +372,9 @@
       <Filter>Resource Files\ImGUi</Filter>
     </ClCompile>
     <ClCompile Include="Astar.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="ZoomTrigger.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

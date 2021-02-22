@@ -12,6 +12,7 @@
 #include "MainEntities.h"
 #include "DestroyTrigger.h"
 #include "TranslateTrigger.h"
+#include "ZoomTrigger.h"
 #include "HorizontalScroll.h"
 #include "CanJump.h"
 

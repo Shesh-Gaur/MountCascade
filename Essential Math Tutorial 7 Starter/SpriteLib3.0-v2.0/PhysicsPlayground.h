@@ -36,6 +36,7 @@ public:
 	void dispatchAI();
 	void RunLevelEditor();
 	void cameraTrackPlayer();
+	void ZoomCamera();
 protected:
 	bool m_firstWindow = false;
 	bool m_secondWindow = false;
@@ -56,5 +57,7 @@ protected:
 
 	int mushroomBoss;
 	int mushroomBoss2;
+	int zoomTrigger1;
 
+	
 };

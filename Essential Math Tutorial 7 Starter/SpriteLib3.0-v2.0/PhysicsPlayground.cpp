@@ -5,7 +5,8 @@
 #include <fstream>
 #include <iostream>
 #include "Astar.h"
-
+#include "ZoomTrigger.h"
+#include "ZoomConfirm.h"
 PhysicsPlayground::PhysicsPlayground(std::string name)
 	: Scene(name)
 {
@@ -327,7 +328,7 @@ void PhysicsPlayground::InitScene(float windowWidth, float windowHeight)
 	{
 		//Creates entity
 		auto entity = ECS::CreateEntity();
-
+		zoomTrigger1 = entity;
 		//Add components
 		ECS::AttachComponent<Transform>(entity);
 		ECS::AttachComponent<PhysicsBody>(entity);
@@ -336,10 +337,10 @@ void PhysicsPlayground::InitScene(float windowWidth, float windowHeight)
 		//Sets up components
 		std::string fileName = "boxSprite.jpg";
 		ECS::GetComponent<Transform>(entity).SetPosition(vec3(30.f, -20.f, 80.f));
-		ECS::GetComponent<Trigger*>(entity) = new TranslateTrigger();
+		ECS::GetComponent<Trigger*>(entity) = new ZoomTrigger();
 		ECS::GetComponent<Trigger*>(entity)->SetTriggerEntity(entity);
 		ECS::GetComponent<Trigger*>(entity)->AddTargetEntity(MainEntities::MainPlayer());
-		TranslateTrigger* temp = (TranslateTrigger*)ECS::GetComponent<Trigger*>(entity);
+		ZoomTrigger* temp = (ZoomTrigger*)ECS::GetComponent<Trigger*>(entity);
 		temp->movement = b2Vec2(0.f, 15.f);
 
 		//ECS::GetComponent<Trigger*>(entity)->AddTargetEntity(puzzleWall2);
@@ -612,6 +613,52 @@ void PhysicsPlayground::cameraTrackPlayer()
 
 }
 
+
+void PhysicsPlayground::ZoomCamera()
+{
+
+		//if (fov > 60)
+		//{
+		//	fov -= 0.5f * Timer::deltaTime;
+
+		//	ECS::GetComponent<Camera>(MainEntities::MainCamera()).Perspective(fov, aRatio, nPlane, 1000.f);
+		//	ECS::GetComponent<Camera>(MainEntities::MainCamera()).SetPosition(ECS::GetComponent<Camera>(MainEntities::MainCamera()).GetPosition());
+
+
+		//}
+	
+	//else
+	//{
+	//	if (fov < 70)
+	//	{
+	//		fov += 0.5f * Timer::deltaTime;
+
+	//		ECS::GetComponent<Camera>(MainEntities::MainCamera()).Perspective(fov, aRatio, nPlane, 1000.f);
+	//		ECS::GetComponent<Camera>(MainEntities::MainCamera()).SetPosition(ECS::GetComponent<Camera>(MainEntities::MainCamera()).GetPosition());
+
+
+	//	}
+
+
+	//}
+
+
+
+		//if (fov < 70)
+		//{
+		//	fov += 100.f * Timer::deltaTime;
+		//	ECS::GetComponent<Camera>(MainEntities::MainCamera()).Perspective(fov, aRatio, nPlane, 1000.f);
+
+
+		//}
+
+
+	
+
+
+
+}
+
 void PhysicsPlayground::dispatchAI()
 {
 
@@ -696,9 +743,9 @@ void PhysicsPlayground::Update()
 		startup = true;
 	}
 
-
 	dispatchAI();
 	cameraTrackPlayer();
+	ZoomCamera();
 }
 
 void PhysicsPlayground::GUI()
@@ -1121,32 +1168,40 @@ void PhysicsPlayground::RunLevelEditor()
 		{
 			fov += 2 * Timer::deltaTime;
 			std::cout << "\n" << fov;
-			ECS::GetComponent<PhysicsBody>(playerFollow).SetPosition(b2Vec2(ECS::GetComponent<PhysicsBody>(playerFollow).GetPosition().x + 0.01f, ECS::GetComponent<PhysicsBody>(playerFollow).GetPosition().y));
+			
 			ECS::GetComponent<Camera>(MainEntities::MainCamera()).Perspective(fov, aRatio, nPlane, 1000.f);
+			ECS::GetComponent<Camera>(MainEntities::MainCamera()).SetPosition(ECS::GetComponent<Camera>(MainEntities::MainCamera()).GetPosition());
+
 		}
 		else if (Input::GetKey(Key::DownArrow))
 		{
 			fov -= 2 * Timer::deltaTime;
 			std::cout << "\n" << fov;
-			ECS::GetComponent<PhysicsBody>(playerFollow).SetPosition(b2Vec2(ECS::GetComponent<PhysicsBody>(playerFollow).GetPosition().x + 0.01f, ECS::GetComponent<PhysicsBody>(playerFollow).GetPosition().y));
+			
 			ECS::GetComponent<Camera>(MainEntities::MainCamera()).Perspective(fov, aRatio, nPlane, 1000.f);
+			ECS::GetComponent<Camera>(MainEntities::MainCamera()).SetPosition(ECS::GetComponent<Camera>(MainEntities::MainCamera()).GetPosition());
+
 		}
 
 		if (Input::GetKey(Key::RightArrow))
 		{
 			nPlane += 2 * Timer::deltaTime;
 			std::cout << "\n" << nPlane;
-			ECS::GetComponent<PhysicsBody>(playerFollow).SetPosition(b2Vec2(ECS::GetComponent<PhysicsBody>(playerFollow).GetPosition().x + 0.01f, ECS::GetComponent<PhysicsBody>(playerFollow).GetPosition().y));
+			
 			ECS::GetComponent<Camera>(MainEntities::MainCamera()).Perspective(fov, aRatio, nPlane, 1000.f);
+			ECS::GetComponent<Camera>(MainEntities::MainCamera()).SetPosition(ECS::GetComponent<Camera>(MainEntities::MainCamera()).GetPosition());
+
 
 		}
 		else if (Input::GetKey(Key::LeftArrow))
 		{
 			nPlane -= 2 * Timer::deltaTime;
 			std::cout << "\n" << nPlane;
-			ECS::GetComponent<PhysicsBody>(playerFollow).SetPosition(b2Vec2(ECS::GetComponent<PhysicsBody>(playerFollow).GetPosition().x + 0.01f, ECS::GetComponent<PhysicsBody>(playerFollow).GetPosition().y));
+			
 
 			ECS::GetComponent<Camera>(MainEntities::MainCamera()).Perspective(fov, aRatio, nPlane, 1000.f);
+			ECS::GetComponent<Camera>(MainEntities::MainCamera()).SetPosition(ECS::GetComponent<Camera>(MainEntities::MainCamera()).GetPosition());
+
 
 		}
 	}
