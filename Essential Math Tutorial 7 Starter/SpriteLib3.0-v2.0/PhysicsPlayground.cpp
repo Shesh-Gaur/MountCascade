@@ -86,6 +86,44 @@ void PhysicsPlayground::InitScene(float windowWidth, float windowHeight)
 		ECS::GetComponent<Transform>(entity).SetPosition(vec3(0.f, 0.f, 2.f));
 	}
 
+
+
+	{ //dash bar
+		/*Scene::CreateSprite(m_sceneReg, "HelloWorld.png", 100, 60, 0.5f, vec3(0.f, 0.f, 0.f));*/
+
+		//Creates entity
+		auto entity = ECS::CreateEntity();
+		dashBar = entity;
+		//Add components
+		ECS::AttachComponent<Sprite>(entity);
+		ECS::AttachComponent<Transform>(entity);
+
+		//Set up the components
+		std::string fileName = "LevelEditorUI/Level Editor Enabled.png";
+		ECS::GetComponent<Sprite>(entity).LoadSprite(fileName, 240, 125);
+		ECS::GetComponent<Sprite>(entity).SetTransparency(0.8f);
+		ECS::GetComponent<Transform>(entity).SetPosition(vec3(0.f, 0.f, 2.f));
+	}
+
+	{ //health bar
+		/*Scene::CreateSprite(m_sceneReg, "HelloWorld.png", 100, 60, 0.5f, vec3(0.f, 0.f, 0.f));*/
+
+		//Creates entity
+		auto entity = ECS::CreateEntity();
+		healthBar = entity;
+		//Add components
+		ECS::AttachComponent<Sprite>(entity);
+		ECS::AttachComponent<Transform>(entity);
+
+		//Set up the components
+		std::string fileName = "ui/Health3.png";
+		ECS::GetComponent<Sprite>(entity).LoadSprite(fileName, 240, 125);
+		ECS::GetComponent<Sprite>(entity).SetTransparency(0.8f);
+		ECS::GetComponent<Transform>(entity).SetPosition(vec3(0.f, 0.f, 2.f));
+	}
+
+
+
 	//Setup new Entity
 	{
 		/*Scene::CreateSprite(m_sceneReg, "HelloWorld.png", 100, 60, 0.5f, vec3(0.f, 0.f, 0.f));*/
@@ -468,7 +506,9 @@ bool spacePressed = false;
 bool canDash = false;
 float dashAmount = 60.f;
 float airDashDefault = 3.f;
-float airDashCounter = airDashDefault - 20;
+float airDashCounter = airDashDefault;
+int health = 3;
+bool loadStarted = false;
 
 void PhysicsPlayground::writeAutoSaveFile(int file)
 {
@@ -694,8 +734,53 @@ float pathFindTimerDefault = 2.f;
 float pathFindTimer = pathFindTimerDefault;
 float switchNodeTimer = 0.f;
 
+int lastHealth;
+int lastDash;
+
 void PhysicsPlayground::Update()
 {
+
+	if (lastDash != airDashCounter) {
+		if (airDashCounter >= 3) { //full dash bar
+			std::string fileName = "ui/Dash3.png";
+			ECS::GetComponent<Sprite>(dashBar).LoadSprite(fileName, 65, 15);
+		}
+		else if (airDashCounter >= 2) {
+			std::string fileName = "ui/Dash2.png";
+			ECS::GetComponent<Sprite>(dashBar).LoadSprite(fileName, 65, 15);
+		}
+		else if (airDashCounter >= 1) {
+			std::string fileName = "ui/Dash1.png";
+			ECS::GetComponent<Sprite>(dashBar).LoadSprite(fileName, 65, 15);
+		}
+		else { //empty dash bar
+			std::string fileName = "ui/Dash0.png";
+			ECS::GetComponent<Sprite>(dashBar).LoadSprite(fileName, 65, 15);
+		}
+		lastDash = airDashCounter;
+		//std::cout << std::endl << airDashCounter << std::endl;
+	}
+
+	if (lastHealth != health) {
+		if (health >= 3) { //full dash bar
+			std::string fileName = "ui/Health3.png";
+			ECS::GetComponent<Sprite>(healthBar).LoadSprite(fileName, 65, 15);
+		}
+		else if (health >= 2) {
+			std::string fileName = "ui/Health2.png";
+			ECS::GetComponent<Sprite>(healthBar).LoadSprite(fileName, 65, 15);
+		}
+		else if (health >= 1) {
+			std::string fileName = "ui/Health1.png";
+			ECS::GetComponent<Sprite>(healthBar).LoadSprite(fileName, 65, 15);
+		}
+		else { //empty dash bar
+			std::string fileName = "ui/Health0.png";
+			ECS::GetComponent<Sprite>(healthBar).LoadSprite(fileName, 65, 15);
+		}
+		lastHealth = health;
+	}
+
 	if (startup == false)
 	{
 		readSaveFile();
@@ -1248,6 +1333,11 @@ void PhysicsPlayground::KeyboardHold()
 	
 	auto& player = ECS::GetComponent<PhysicsBody>(MainEntities::MainPlayer());
 
+	ECS::GetComponent<Transform>(dashBar).SetPosition(ECS::GetComponent<Camera>(MainEntities::MainCamera()).GetPosition() + vec3(180, -100, 2));
+
+	ECS::GetComponent<Transform>(healthBar).SetPosition(ECS::GetComponent<Camera>(MainEntities::MainCamera()).GetPosition() + vec3(180, 130, 2));
+
+
 	if (levelEditor == true)
 	{
 		RunLevelEditor();
@@ -1373,7 +1463,7 @@ void PhysicsPlayground::KeyboardHold()
 		//std::cout << "\n" << airDashCounter;
 		if (canJump.m_canJump)
 		{
-			if (airDashCounter <= airDashDefault)
+			if (airDashCounter <= airDashDefault && loadStarted == true)
 			{
 				airDashCounter += 2.f * Timer::deltaTime;
 			}
@@ -1456,6 +1546,10 @@ void PhysicsPlayground::KeyboardDown()
 {
 	auto& player = ECS::GetComponent<PhysicsBody>(MainEntities::MainPlayer());
 	auto& canJump = ECS::GetComponent<CanJump>(MainEntities::MainPlayer());
+
+	if (loadStarted == false) {
+		loadStarted = true;
+	}
 
 	if (Input::GetKeyDown(Key::T))
 	{

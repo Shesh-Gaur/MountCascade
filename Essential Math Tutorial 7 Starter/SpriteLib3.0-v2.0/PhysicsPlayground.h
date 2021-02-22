@@ -59,5 +59,7 @@ protected:
 	int mushroomBoss2;
 	int zoomTrigger1;
 
+	int healthBar;
+	int dashBar;
 	
 };
