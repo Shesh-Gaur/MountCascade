@@ -10,6 +10,7 @@ class PhysicsPlayground : public Scene
 public:
 	PhysicsPlayground(std::string name);
 
+	bool spacePressed;
 	void InitScene(float windowWidth, float windowHeight) override;
 
 	void Update() override;
@@ -59,5 +60,4 @@ protected:
 	int mushroomBoss2;
 	int zoomTrigger1;
 
-	
 };

@@ -40,25 +40,13 @@ void Player::InitPlayer(std::string& fileName, std::string& animationJSON, int w
 	m_animController->AddAnimation(animations["IdleLeft"].get<Animation>());
 	//Idle Right
 	m_animController->AddAnimation(animations["IdleRight"].get<Animation>());
-#ifdef TOPDOWN
-	//Idle Up
-	m_animController->AddAnimation(animations["IdleUp"].get<Animation>());
-	//Idle Down
-	m_animController->AddAnimation(animations["IdleDown"].get<Animation>());
-#endif
 
-	//Walk Animations\\
+	//Run Animations\\
 
-	//WalkLeft
-	m_animController->AddAnimation(animations["WalkLeft"].get<Animation>());
-	//WalkRight
-	m_animController->AddAnimation(animations["WalkRight"].get<Animation>());
-#ifdef TOPDOWN
-	//WalkUP
-	m_animController->AddAnimation(animations["WalkUp"].get<Animation>());
-	//WalkDown
-	m_animController->AddAnimation(animations["WalkDown"].get<Animation>());
-#endif
+	//RunLeft
+	m_animController->AddAnimation(animations["RunLeft"].get<Animation>());
+	//RunRight
+	m_animController->AddAnimation(animations["RunRight"].get<Animation>());
 
 	//Attack Animations\\
 
@@ -66,16 +54,37 @@ void Player::InitPlayer(std::string& fileName, std::string& animationJSON, int w
 	m_animController->AddAnimation(animations["AttackLeft"].get<Animation>());
 	//AttackRight
 	m_animController->AddAnimation(animations["AttackRight"].get<Animation>());
-#ifdef TOPDOWN
-	//AttackUp
-	m_animController->AddAnimation(animations["AttackUp"].get<Animation>());
-	//AttackDown
-	m_animController->AddAnimation(animations["AttackDown"].get<Animation>());
-#endif
+
+	//Dash ANIMATIONS\\
+	
+	//Dash Left
+	m_animController->AddAnimation(animations["DashLeft"].get<Animation>());
+	//Dash Right
+	m_animController->AddAnimation(animations["DashRight"].get<Animation>());
+
+	//Charge Jump ANIMATIONS\\
+	
+	//Charge Jump Left
+	m_animController->AddAnimation(animations["ChargeJumpLeft"].get<Animation>());
+	//Charge Jump Right
+	m_animController->AddAnimation(animations["ChargeJumpRight"].get<Animation>());
+
+	//Jump ANIMATIONS\\
+	
+	//Jump Left
+	m_animController->AddAnimation(animations["JumpLeft"].get<Animation>());
+	//Jump Right
+	m_animController->AddAnimation(animations["JumpRight"].get<Animation>());
+
+	//Death ANIMATIONS\\
+	
+	//Death Left
+	m_animController->AddAnimation(animations["DeathLeft"].get<Animation>());
+	//Death Right
+	m_animController->AddAnimation(animations["DeathRight"].get<Animation>());
 
 	//Set Default Animation
-	m_animController->SetActiveAnim(IDLELEFT);
-
+	m_animController->SetActiveAnim(IDLERIGHT);
 
 }
 
@@ -100,23 +109,9 @@ void Player::MovementUpdate()
 
 		if (Input::GetKey(Key::Shift))
 		{
-			speed *= 7.f;
+
 		}
 
-#ifdef TOPDOWN
-		if (Input::GetKey(Key::W))
-		{
-			vel = vel + vec3(0.f, 1.f, 0.f);
-			m_facing = UP;
-			m_moving = true;
-		}
-		if (Input::GetKey(Key::S))
-		{
-			vel = vel + vec3(0.f, -1.f, 0.f);
-			m_facing = DOWN;
-			m_moving = true;
-		}
-#endif
 
 		if (Input::GetKey(Key::A))
 		{
@@ -138,20 +133,6 @@ void Player::MovementUpdate()
 		//Regular Movement
 		float speed = 15.f;
 
-#ifdef TOPDOWN
-		if (Input::GetKey(Key::W))
-		{
-			m_transform->SetPositionY(m_transform->GetPositionY() + (speed * Timer::deltaTime));
-			m_facing = UP;
-			m_moving = true;
-		}
-		if (Input::GetKey(Key::S))
-		{
-			m_transform->SetPositionY(m_transform->GetPositionY() - (speed * Timer::deltaTime));
-			m_facing = DOWN;
-			m_moving = true;
-		}
-#endif
 
 		if (Input::GetKey(Key::A))
 		{
@@ -167,7 +148,7 @@ void Player::MovementUpdate()
 		}
 	}
 
-	if (Input::GetKeyDown(Key::Space))
+	if (Input::GetKeyDown(Key::F))
 	{
 		m_moving = false;
 
@@ -188,7 +169,7 @@ void Player::AnimationUpdate()
 	if (m_moving)
 	{
 		//Puts it into the WALK category
-		activeAnimation = WALK;
+		activeAnimation = RUN;
 	}
 	else if (m_attacking)
 	{
@@ -209,6 +190,12 @@ void Player::AnimationUpdate()
 	else
 	{
 		activeAnimation = IDLE;
+	}
+	if (!haveYouPressedSpace && !canYouFuckingJump) activeAnimation = JUMP;
+	if (haveYouPressedSpace) {
+		activeAnimation = CHARGEJUMP;
+		if (!haveYouPressedSpace && !canYouFuckingJump) activeAnimation = JUMP;
+		else if (canYouFuckingJump) activeAnimation = IDLE;
 	}
 
 	SetActiveAnimation(activeAnimation + (int)m_facing);

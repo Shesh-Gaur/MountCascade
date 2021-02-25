@@ -3,67 +3,53 @@
 
 #include "BackEnd.h"
 
-#define TOPDOWN
-
 enum AnimEnums
 {
 	IDLELEFT,
 	IDLERIGHT,
-	
-	//Only in Top down
-#ifdef TOPDOWN
-	IDLEUP,
-	IDLEDOWN,
-#endif
 
-	WALKLEFT,
-	WALKRIGHT,
-
-	//Only in Top down
-#ifdef TOPDOWN
-	WALKUP,
-	WALKDOWN,
-#endif
+	RUNLEFT,
+	RUNRIGHT,
 	
 	ATTACKLEFT,
 	ATTACKRIGHT,
 
-	//Only in Top down
-#ifdef TOPDOWN
-	ATTACKUP,
-	ATTACKDOWN
-#endif
+	DASHLEFT,
+	DASHRIGHT,
+
+	CHARGEJUMPLEFT,
+	CHARGEJUMPRIGHT,
+
+	JUMPLEFT,
+	JUMPRIGHT,
+
+	DEATHLEFT,
+	DEATHRIGHT
 };
 
 enum AnimTypes
 {
-#ifdef TOPDOWN
 	IDLE = 0,
-	WALK = 4,
-	ATTACK = 8
-#endif
-#ifndef TOPDOWN
-	IDLE = 0,
-	WALK = 2,
-	ATTACK = 4
-#endif
+	RUN = 2,
+	ATTACK = 4,
+	DASH = 6,
+	CHARGEJUMP = 8,
+	JUMP = 10,
+	DEATH = 12
 };
 
 enum AnimDir
 {
 	LEFT,
 	RIGHT,
-	//Only in Top Down
-#ifdef TOPDOWN
-	UP,
-	DOWN
-#endif
 };
 
 class Player
 {
 public:
 	Player();
+	bool canYouFuckingJump = true;
+	bool haveYouPressedSpace = false;
 	Player(std::string& fileName, std::string& animationJSON, int width, int height, 
 		Sprite* sprite, AnimationController* controller, Transform* transform, bool hasPhys = false, PhysicsBody* body = nullptr);
 
@@ -98,7 +84,7 @@ private:
 	bool m_hasPhysics = false;
 
 	//Default animation direction (feel free to change this to suit your game. If you're making a side-scroller, left or right would be better
-	AnimDir m_facing = LEFT;
+	AnimDir m_facing = RIGHT;
 };
 
 #endif // !__PLAYER_H__

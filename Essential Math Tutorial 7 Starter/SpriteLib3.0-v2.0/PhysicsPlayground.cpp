@@ -175,7 +175,7 @@ void PhysicsPlayground::InitScene(float windowWidth, float windowHeight)
 		ECS::GetComponent<Transform>(entity).SetPosition(vec3(0.f, 0.f, 2.f));
 	}
 	
-	//Link entity
+	//Player
 	{
 		/*Scene::CreatePhysicsSprite(m_sceneReg, "LinkStandby", 80, 60, 1.f, vec3(0.f, 30.f, 2.f), b2_dynamicBody, 0.f, 0.f, true, true)*/
 
@@ -183,14 +183,19 @@ void PhysicsPlayground::InitScene(float windowWidth, float windowHeight)
 		ECS::SetIsMainPlayer(entity, true);
 
 		//Add components
+		ECS::AttachComponent<Player>(entity);
 		ECS::AttachComponent<Sprite>(entity);
 		ECS::AttachComponent<Transform>(entity);
 		ECS::AttachComponent<PhysicsBody>(entity);
 		ECS::AttachComponent<CanJump>(entity);
+		ECS::AttachComponent<AnimationController>(entity);
 
 		//Sets up the components
-		std::string fileName = "idlefirstframe.png";
-		ECS::GetComponent<Sprite>(entity).LoadSprite(fileName, 64, 64);
+		std::string fileName = "spritesheets/Player.png";
+		std::string animations = "Player.json";
+		//ECS::GetComponent<Sprite>(entity).LoadSprite(fileName, 64, 64);
+		ECS::GetComponent<Player>(entity).InitPlayer(fileName, animations, 64, 64, &ECS::GetComponent<Sprite>(entity),
+			&ECS::GetComponent<AnimationController>(entity), &ECS::GetComponent<Transform>(entity));
 		ECS::GetComponent<Sprite>(entity).SetTransparency(1.f);
 		ECS::GetComponent<Transform>(entity).SetPosition(vec3(0.f, 30.f, 0.02f));
 
@@ -464,7 +469,7 @@ float jumpForce = defaultForce;
 int airJumpDefault = 1;
 int airJumpCounter = airJumpDefault;
 bool spaceReleased = false;
-bool spacePressed = false;
+//bool spacePressed = false;
 bool canDash = false;
 float dashAmount = 60.f;
 float airDashDefault = 3.f;
@@ -696,6 +701,13 @@ float switchNodeTimer = 0.f;
 
 void PhysicsPlayground::Update()
 {
+	
+	auto& player = ECS::GetComponent<Player>(MainEntities::MainPlayer());
+	player.Update();
+	player.canYouFuckingJump = ECS::GetComponent<CanJump>(MainEntities::MainPlayer()).m_canJump;
+	player.haveYouPressedSpace = spacePressed;
+
+	
 	if (startup == false)
 	{
 		readSaveFile();
@@ -1368,7 +1380,6 @@ void PhysicsPlayground::KeyboardHold()
 			}
 
 		}
-		
 
 		//std::cout << "\n" << airDashCounter;
 		if (canJump.m_canJump)
