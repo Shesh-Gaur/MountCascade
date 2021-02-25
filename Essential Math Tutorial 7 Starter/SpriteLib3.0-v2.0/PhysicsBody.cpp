@@ -557,6 +557,7 @@ void PhysicsBody::SetCollisionBit(EntityCategories collision, int fixture)
 	m_body->GetFixtureList()[fixture].SetFilterData(filter);
 }
 
+
 void PhysicsBody::SetDraw(bool drawBodies)
 {
 	m_drawBodies = drawBodies;
