@@ -236,10 +236,9 @@ void PhysicsPlayground::InitScene(float windowWidth, float windowHeight)
 			&ECS::GetComponent<AnimationController>(entity), &ECS::GetComponent<Transform>(entity));
 		ECS::GetComponent<Sprite>(entity).SetTransparency(1.f);
 		ECS::GetComponent<Transform>(entity).SetPosition(vec3(0.f, 30.f, 0.02f));
-
 		auto& tempSpr = ECS::GetComponent<Sprite>(entity);
 		auto& tempPhsBody = ECS::GetComponent<PhysicsBody>(entity);
-
+		
 		float shrinkX = 40.f;
 		float shrinkY = 10.f;
 
@@ -701,7 +700,6 @@ void PhysicsPlayground::writeSaveFile()
 	editorSaveFile.close();
 }
 
-
 void PhysicsPlayground::readSaveFile()
 {
 	float xPos, yPos,zPos, angle, width, height;
@@ -854,6 +852,11 @@ void PhysicsPlayground::Update()
 	player.Update();
 	player.canYouFuckingJump = ECS::GetComponent<CanJump>(MainEntities::MainPlayer()).m_canJump;
 	player.haveYouPressedSpace = spacePressed;
+	if (player.m_attacking) {
+		ECS::GetComponent<Sprite>(MainEntities::MainPlayer()).SetWidth(128);
+	}
+	else 
+		ECS::GetComponent<Sprite>(MainEntities::MainPlayer()).SetWidth(64);//if ()
 
 	
 

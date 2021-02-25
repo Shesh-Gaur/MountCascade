@@ -60,15 +60,16 @@ public:
 	void MovementUpdate();
 	void AnimationUpdate();
 
-private:
-	void SetActiveAnimation(int anim);
-
 	//Basically, any animation OTHER than moving will not have a cancel, and we'll be checking whether or not that animation is done
 	bool m_moving = false;
 	//Are you currently attacking?????
 	bool m_attacking = false;
 	//Have we locked the player from moving during this animation?
 	bool m_locked = false;
+
+private:
+	void SetActiveAnimation(int anim);
+
 
 	//A reference to our sprite
 	Sprite* m_sprite = nullptr;

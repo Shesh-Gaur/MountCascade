@@ -66,5 +66,4 @@ protected:
 	int healthBar;
 	int dashBar;
 	int dummy;
-	bool spacePressed;
 };
