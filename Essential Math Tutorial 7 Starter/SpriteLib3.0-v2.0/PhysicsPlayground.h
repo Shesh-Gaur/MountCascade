@@ -66,4 +66,5 @@ protected:
 	int healthBar;
 	int dashBar;
 	int dummy;
+	
 };
