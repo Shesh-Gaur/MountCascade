@@ -33,6 +33,7 @@ public:
 	void makeBox(float xPos, float yPos, float zPos, float rotation, float width, float height);
 	void makeBox2(float xPos, float yPos, float zPos, float rotation, float width, float height);
 	void makeDummy(float xPos, float yPos, float zPos, float rotation, float width, float height);
+	void makeMushroom(float xPos, float yPos, float zPos, float rotation, float width, float height);
 	void makeNode(float xPos, float yPos,float transparency);
 	void dispatchAI();
 	void RunLevelEditor();
@@ -64,5 +65,5 @@ protected:
 	int healthBar;
 	int dashBar;
 	int dummy;
-	
+	bool spacePressed;
 };
