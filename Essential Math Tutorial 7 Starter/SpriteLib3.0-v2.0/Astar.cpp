@@ -121,6 +121,7 @@ void findStartAndEnd(b2Vec2 start, b2Vec2 end)
 	}
 
 	endNode = minIndex;
+	//cout << minIndex;
 	allNodes[minIndex].makeEnd();
 }
 
