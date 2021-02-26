@@ -855,26 +855,36 @@ void PhysicsPlayground::Update()
 	if (player.m_attacking) {
 		ECS::GetComponent<Sprite>(MainEntities::MainPlayer()).SetWidth(128);
 	}
+	else if (player.m_dashing) {
+		ECS::GetComponent<Sprite>(MainEntities::MainPlayer()).SetWidth(448);
+	}
+	else if (player.m_dead) {
+		ECS::GetComponent<Sprite>(MainEntities::MainPlayer()).SetWidth(96);
+	}
 	else 
-		ECS::GetComponent<Sprite>(MainEntities::MainPlayer()).SetWidth(64);//if ()
+		ECS::GetComponent<Sprite>(MainEntities::MainPlayer()).SetWidth(64);
 
 	
 
 	if (lastDash != airDashCounter) {
 		if (airDashCounter >= 3) { //full dash bar
 			std::string fileName = "ui/Dash3.png";
+			player.canDash = true;
 			ECS::GetComponent<Sprite>(dashBar).LoadSprite(fileName, 65, 15);
 		}
 		else if (airDashCounter >= 2) {
 			std::string fileName = "ui/Dash2.png";
+			player.canDash = true;
 			ECS::GetComponent<Sprite>(dashBar).LoadSprite(fileName, 65, 15);
 		}
 		else if (airDashCounter >= 1) {
 			std::string fileName = "ui/Dash1.png";
+			player.canDash = true;
 			ECS::GetComponent<Sprite>(dashBar).LoadSprite(fileName, 65, 15);
 		}
 		else { //empty dash bar
 			std::string fileName = "ui/Dash0.png";
+			player.canDash = false;
 			ECS::GetComponent<Sprite>(dashBar).LoadSprite(fileName, 65, 15);
 		}
 		lastDash = airDashCounter;
@@ -882,7 +892,7 @@ void PhysicsPlayground::Update()
 	}
 
 	if (lastHealth != health) {
-		if (health >= 3) { //full dash bar
+		if (health >= 3) { //full health bar
 			std::string fileName = "ui/Health3.png";
 			ECS::GetComponent<Sprite>(healthBar).LoadSprite(fileName, 65, 15);
 		}
@@ -894,8 +904,9 @@ void PhysicsPlayground::Update()
 			std::string fileName = "ui/Health1.png";
 			ECS::GetComponent<Sprite>(healthBar).LoadSprite(fileName, 65, 15);
 		}
-		else { //empty dash bar
+		else { //empty health bar
 			std::string fileName = "ui/Health0.png";
+			player.m_dead = true;
 			ECS::GetComponent<Sprite>(healthBar).LoadSprite(fileName, 65, 15);
 		}
 		lastHealth = health;
@@ -1496,7 +1507,7 @@ void PhysicsPlayground::KeyboardHold()
 		float speed = 100.f;
 		b2Vec2 vel = b2Vec2(0.f, 0.f);
 
-		if (Input::GetKey(Key::A))
+		if (Input::GetKey(Key::A) && health > 0)
 		{
 			//player.GetBody()->ApplyForceToCenter(b2Vec2(-400000.f * Timer::deltaTime * speed, 0.f), true);
 			player.GetBody()->SetLinearVelocity(b2Vec2(-120.f * Timer::deltaTime * speed, player.GetBody()->GetLinearVelocity().y));
@@ -1544,7 +1555,7 @@ void PhysicsPlayground::KeyboardHold()
 
 			}
 		}
-		if (Input::GetKey(Key::D))
+		if (Input::GetKey(Key::D) && health > 0)
 		{
 			//player.GetBody()->ApplyForceToCenter(b2Vec2(400000.f * Timer::deltaTime * speed, 0.f), true);
 			player.GetBody()->SetLinearVelocity(b2Vec2(120.f * Timer::deltaTime * speed, player.GetBody()->GetLinearVelocity().y));
@@ -1595,8 +1606,13 @@ void PhysicsPlayground::KeyboardHold()
 
 		}
 
+		if (canJump.m_canJump && !Input::GetKey(Key::D) && !Input::GetKey(Key::A)) {
+			player.GetBody()->SetLinearVelocity(speed * vel + b2Vec2(player.GetBody()->GetLinearVelocity().x * 0.9f,
+				player.GetBody()->GetLinearVelocity().y));
+		}
+
 		//std::cout << "\n" << airDashCounter;
-		if (canJump.m_canJump)
+		if (canJump.m_canJump && health > 0)
 		{
 			if (airDashCounter <= airDashDefault && loadStarted == true)
 			{
@@ -1615,7 +1631,7 @@ void PhysicsPlayground::KeyboardHold()
 		else
 		{
 
-			if (Input::GetKeyUp(Key::Space))
+			if (Input::GetKeyUp(Key::Space) && health > 0)
 			{
 				spaceReleased = true;
 				if (player.GetBody()->GetLinearVelocity().y > 0)
@@ -1625,7 +1641,7 @@ void PhysicsPlayground::KeyboardHold()
 				}
 				
 			}
-			if (airJumpCounter > 0 && spaceReleased == true)
+			if (airJumpCounter > 0 && spaceReleased == true && health > 0)
 			{
 				if (Input::GetKey(Key::Space))
 				{
@@ -1681,6 +1697,10 @@ void PhysicsPlayground::KeyboardDown()
 {
 	auto& player = ECS::GetComponent<PhysicsBody>(MainEntities::MainPlayer());
 	auto& canJump = ECS::GetComponent<CanJump>(MainEntities::MainPlayer());
+
+	if (Input::GetKeyDown(Key::OEMMinus) && health > 0) health--;
+	if (Input::GetKeyDown(Key::OEMPlus) && health < 3) health++;
+
 
 	if (loadStarted == false) {
 		loadStarted = true;
