@@ -50,6 +50,7 @@ public:
 	Player();
 	bool canYouFuckingJump = true;
 	bool haveYouPressedSpace = false;
+	bool canDash = true;
 	Player(std::string& fileName, std::string& animationJSON, int width, int height, 
 		Sprite* sprite, AnimationController* controller, Transform* transform, bool hasPhys = false, PhysicsBody* body = nullptr);
 
@@ -66,6 +67,9 @@ public:
 	bool m_attacking = false;
 	//Have we locked the player from moving during this animation?
 	bool m_locked = false;
+	bool m_dashing = false;
+	bool m_dead = false;
+
 
 private:
 	void SetActiveAnimation(int anim);

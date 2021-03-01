@@ -102,63 +102,56 @@ void Player::MovementUpdate()
 {
 	m_moving = false;
 
-	if (m_hasPhysics)
-	{
-		float speed = 10.f;
-		vec3 vel = vec3(0.f, 0.f, 0.f);
-
-		if (Input::GetKey(Key::Shift))
-		{
-
-		}
-
-
-		if (Input::GetKey(Key::A))
-		{
-			vel = vel + vec3(-1.f, 0.f, 0.f);
-			m_facing = LEFT;
-			m_moving = true;
-		}
-		if (Input::GetKey(Key::D))
-		{
-			vel = vel + vec3(1.f, 0.f, 0.f);
-			m_facing = RIGHT;
-			m_moving = true;
-		}
-
-		m_physBody->SetVelocity(vel * speed);
-	}
-	else
-	{
-		//Regular Movement
-		float speed = 15.f;
-
-
-		if (Input::GetKey(Key::A))
-		{
-			m_transform->SetPositionX(m_transform->GetPositionX() - (speed * Timer::deltaTime));
-			m_facing = LEFT;
-			m_moving = true;
-		}
-		if (Input::GetKey(Key::D))
-		{
-			m_transform->SetPositionX(m_transform->GetPositionX() + (speed * Timer::deltaTime));
-			m_facing = RIGHT;
-			m_moving = true;
-		}
-	}
-
-	if (Input::GetKeyDown(Key::F))
-	{
-		m_moving = false;
-
+	if (!m_dead) {
 		if (m_hasPhysics)
 		{
-			m_physBody->SetVelocity(vec3());
-		}
+			float speed = 10.f;
+			vec3 vel = vec3(0.f, 0.f, 0.f);
 
-		m_attacking = true;
-		m_locked = true;
+			if (Input::GetKey(Key::A))
+			{
+				vel = vel + vec3(-1.f, 0.f, 0.f);
+				m_facing = LEFT;
+				m_moving = true;
+			}
+			if (Input::GetKey(Key::D))
+			{
+				vel = vel + vec3(1.f, 0.f, 0.f);
+				m_facing = RIGHT;
+				m_moving = true;
+			}
+			m_physBody->SetVelocity(vel * speed);
+		}
+		else
+		{
+			//Regular Movement
+			float speed = 15.f;
+
+			if (Input::GetKey(Key::A))
+			{
+				m_transform->SetPositionX(m_transform->GetPositionX() - (speed * Timer::deltaTime));
+				m_facing = LEFT;
+				m_moving = true;
+			}
+			if (Input::GetKey(Key::D))
+			{
+				m_transform->SetPositionX(m_transform->GetPositionX() + (speed * Timer::deltaTime));
+				m_facing = RIGHT;
+				m_moving = true;
+			}
+		}
+		if (Input::GetKeyDown(Key::F) && !m_dead)
+		{
+			m_moving = false;
+
+			if (m_hasPhysics)
+			{
+				m_physBody->SetVelocity(vec3());
+			}
+
+			m_attacking = true;
+			m_locked = true;
+		}
 	}
 }
 
@@ -166,36 +159,49 @@ void Player::AnimationUpdate()
 {
 	int activeAnimation = 0;
 
-	if (m_moving)
-	{
-		//Puts it into the WALK category
-		activeAnimation = RUN;
-	}
-	else if (m_attacking)
-	{
-		activeAnimation = ATTACK;
+	if (m_dead) activeAnimation = DEATH;
 
-		//Check if the attack animation is done
-		if (m_animController->GetAnimation(m_animController->GetActiveAnim()).GetAnimationDone())
+	if (!m_dead) {
+		if (m_moving)
 		{
-			//Will auto set to idle
-			m_locked = false;
-			m_attacking = false;
-			//Resets the attack animation
-			m_animController->GetAnimation(m_animController->GetActiveAnim()).Reset();
+			//Puts it into the WALK category
+			activeAnimation = RUN;
+		}
+		else if (m_attacking)
+		{
+			activeAnimation = ATTACK;
 
+			//Check if the attack animation is done
+			if (m_animController->GetAnimation(m_animController->GetActiveAnim()).GetAnimationDone())
+			{
+				//Will auto set to idle
+				m_locked = false;
+				m_attacking = false;
+				//Resets the attack animation
+				m_animController->GetAnimation(m_animController->GetActiveAnim()).Reset();
+
+				activeAnimation = IDLE;
+			}
+		}
+		else
+		{
 			activeAnimation = IDLE;
 		}
-	}
-	else
-	{
-		activeAnimation = IDLE;
-	}
-	if (!haveYouPressedSpace && !canYouFuckingJump) activeAnimation = JUMP;
-	if (haveYouPressedSpace) {
-		activeAnimation = CHARGEJUMP;
-		if (!haveYouPressedSpace && !canYouFuckingJump) activeAnimation = JUMP;
-		else if (canYouFuckingJump) activeAnimation = IDLE;
+		if (!m_attacking && !haveYouPressedSpace && !canYouFuckingJump) activeAnimation = JUMP;
+
+		if (haveYouPressedSpace) {
+			activeAnimation = CHARGEJUMP;
+			if (!m_attacking && !haveYouPressedSpace && !canYouFuckingJump) activeAnimation = JUMP;
+			else if (canYouFuckingJump) activeAnimation = IDLE;
+		}
+
+		if (Input::GetKey(Key::Shift)) {
+			if (canDash) {
+				m_dashing = true;
+				activeAnimation = DASH;
+			}
+		}
+		if (activeAnimation != DASH) m_dashing = false;
 	}
 
 	SetActiveAnimation(activeAnimation + (int)m_facing);
