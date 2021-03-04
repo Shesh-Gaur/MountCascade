@@ -943,9 +943,13 @@ void PhysicsPlayground::Update()
 	
 	if (ECS::GetComponent<PhysicsBody>(MainEntities::MainPlayer()).GetBody()->GetContactList() != NULL)
 	{
-		if (ECS::GetComponent<PhysicsBody>((int)ECS::GetComponent<PhysicsBody>(MainEntities::MainPlayer()).GetBody()->GetContactList()->contact->GetFixtureB()->GetBody()->GetUserData()).GetName() == "Bat" && startAttackCooldown == false)
+		int currentEnemy = (int)ECS::GetComponent<PhysicsBody>(MainEntities::MainPlayer()).GetBody()->GetContactList()->contact->GetFixtureB()->GetBody()->GetUserData();
+		
+		if (ECS::GetComponent<PhysicsBody>(currentEnemy).GetName() == "Bat" && startAttackCooldown == false)
 		{
 			health--;
+			b2Vec2 towardPlayer = ECS::GetComponent<PhysicsBody>(currentEnemy).CalculateMovement(ECS::GetComponent<PhysicsBody>(MainEntities::MainPlayer()).GetPosition());
+			ECS::GetComponent<PhysicsBody>(MainEntities::MainPlayer()).GetBody()->ApplyLinearImpulseToCenter(b2Vec2(towardPlayer.x * 200000, towardPlayer.y * 200000), true); //Knocks back the player, but gets immediately canceled by player movement
 			startAttackCooldown = true;
 		}
 
