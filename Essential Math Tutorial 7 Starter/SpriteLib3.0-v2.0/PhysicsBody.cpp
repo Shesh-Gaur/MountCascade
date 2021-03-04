@@ -1,5 +1,6 @@
 #include "PhysicsBody.h"
 #include "ECS.h"
+#include "Astar.h"
 
 bool PhysicsBody::m_drawBodies = false;
 std::vector<int> PhysicsBody::m_bodiesToDelete;
@@ -137,6 +138,11 @@ void PhysicsBody::DeleteBody()
 
 void PhysicsBody::Update(Transform * trans)
 {
+	if (name == "Bat")
+	{
+		dispatchAI();
+
+	}
 	//Make sure that movement doesn't happen in contact step
 	if (moveLater)
 	{
@@ -257,7 +263,15 @@ bool PhysicsBody::GetDraw()
 	return m_drawBodies;
 }
 
+float PhysicsBody::GetHealth()
+{
+	return health;
+}
 
+std::string PhysicsBody::GetName()
+{
+	return name;
+}
 
 void PhysicsBody::SetBody(b2Body * body)
 {
@@ -563,3 +577,48 @@ void PhysicsBody::SetDraw(bool drawBodies)
 	m_drawBodies = drawBodies;
 }
 
+void PhysicsBody::SetHealth(float hp)
+{
+	if (hp >= 0)
+	{
+		health = hp;
+	}
+}
+
+void PhysicsBody::SetName(std::string n)
+{
+	name = n;
+}
+
+void PhysicsBody::TakeDamage(float dmg,int ent)
+{
+
+	health -= dmg;
+	if (health <= 0)
+	{
+		health = 0;
+		std::cout << "\nI'm dead and need to be deleted.";
+		m_bodiesToDelete.push_back(ent);
+
+	}
+	
+}
+void PhysicsBody::Move(b2Vec2 target, float speed)
+{
+	
+	b2Vec2 direction = target - GetPosition();
+	float distance = sqrt(direction.x * direction.x + direction.y * direction.y);
+	direction = b2Vec2(direction.x / distance, direction.y / distance);
+	speed *= getDeltaTime();
+	GetBody()->SetLinearVelocity(b2Vec2(direction.x * speed, direction.y * speed));
+
+}
+void PhysicsBody::dispatchAI()
+{
+
+		findStartAndEnd(GetPosition(), ECS::GetComponent<PhysicsBody>(MainEntities::MainPlayer()).GetPosition());
+		CalculatePath();
+		Move(getPathSet()[getPathCount() - 1].position, 4000);
+		SetGravityScale(0);
+
+}

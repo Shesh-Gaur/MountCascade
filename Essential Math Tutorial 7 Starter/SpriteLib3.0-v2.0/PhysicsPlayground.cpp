@@ -312,7 +312,25 @@ void PhysicsPlayground::InitScene(float windowWidth, float windowHeight)
 		std::string fileName = "Cave_background1.png";
 		ECS::GetComponent<Sprite>(entity).LoadSprite(fileName, 1920, 1080);
 		ECS::GetComponent<Sprite>(entity).SetTransparency(1.f);
-		ECS::GetComponent<Transform>(entity).SetPosition(vec3(300.f, 300.f, -50.f));
+		ECS::GetComponent<Transform>(entity).SetPosition(vec3(1100.f, 300.f, -50.f));
+	}
+
+	//Setup new Entity
+	{
+		/*Scene::CreateSprite(m_sceneReg, "HelloWorld.png", 100, 60, 0.5f, vec3(0.f, 0.f, 0.f));*/
+
+		//Creates entity
+		auto entity = ECS::CreateEntity();
+
+		//Add components
+		ECS::AttachComponent<Sprite>(entity);
+		ECS::AttachComponent<Transform>(entity);
+
+		//Set up the components
+		std::string fileName = "fadeIn.png";
+		ECS::GetComponent<Sprite>(entity).LoadSprite(fileName, 2560, 1080);
+		ECS::GetComponent<Sprite>(entity).SetTransparency(1.f);
+		ECS::GetComponent<Transform>(entity).SetPosition(vec3(600.f, 300.f, -49.f));
 	}
 
 	//Setup new Entity
@@ -344,9 +362,10 @@ void PhysicsPlayground::InitScene(float windowWidth, float windowHeight)
 
 		tempBody = m_physicsWorld->CreateBody(&tempDef);
 
-		tempPhsBody = PhysicsBody(entity, tempBody, float(tempSpr.GetWidth() - shrinkX), vec2(0.f, 0.f), false, OBJECTS, ENVIRONMENT | ENEMY | OBJECTS | PICKUP | TRIGGER | HEXAGON, 0.f, 0.f);
+		tempPhsBody = PhysicsBody(entity, tempBody, float(tempSpr.GetWidth() - shrinkX), vec2(0.f, 0.f), false, ENEMY, ENVIRONMENT | ENEMY | OBJECTS | PICKUP | TRIGGER | HEXAGON, 0.f, 0.f);
 		tempPhsBody.SetColor(vec4(0.f, 1.f, 0.f, 0.3f));
 		tempPhsBody.SetRotationAngleDeg(0);
+		tempPhsBody.SetName("Bat");
 
 	}
 	//Setup new Entity
@@ -378,58 +397,58 @@ void PhysicsPlayground::InitScene(float windowWidth, float windowHeight)
 
 		tempBody = m_physicsWorld->CreateBody(&tempDef);
 
-		tempPhsBody = PhysicsBody(entity, tempBody, float(tempSpr.GetWidth() - shrinkX), vec2(0.f, 0.f), false, OBJECTS, ENVIRONMENT | ENEMY | OBJECTS | PICKUP | TRIGGER | HEXAGON, 0.f, 0.f);
+		tempPhsBody = PhysicsBody(entity, tempBody, float(tempSpr.GetWidth() - shrinkX), vec2(0.f, 0.f), false, ENEMY, ENVIRONMENT | ENEMY | OBJECTS | PICKUP | TRIGGER | HEXAGON, 0.f, 0.f);
 		tempPhsBody.SetColor(vec4(0.f, 1.f, 0.f, 0.3f));
 		tempPhsBody.SetRotationAngleDeg(0);
-
+		tempPhsBody.SetName("Bat");
 	}
 
 
 
 
 
-	////Setup trigger
-	//{
-	//	//Creates entity
-	//	auto entity = ECS::CreateEntity();
-	//	attackTrigger1 = entity;
-	//	//Add components
-	//	ECS::AttachComponent<Transform>(entity);
-	//	ECS::AttachComponent<PhysicsBody>(entity);
-	//	ECS::AttachComponent<Trigger*>(entity);
-	//	ECS::AttachComponent<Sprite>(entity);
+	//Setup trigger
+	{
+		//Creates entity
+		auto entity = ECS::CreateEntity();
+		attackTrigger1 = entity;
+		//Add components
+		ECS::AttachComponent<Transform>(entity);
+		ECS::AttachComponent<PhysicsBody>(entity);
+		ECS::AttachComponent<Trigger*>(entity);
+		ECS::AttachComponent<Sprite>(entity);
 
-	//	//Sets up components
-	//	std::string fileName = "boxSprite.jpg";
-	//	ECS::GetComponent<Sprite>(entity).LoadSprite(fileName, 50, 80);
-	//	ECS::GetComponent<Sprite>(entity).SetTransparency(0.5f);
-	//	ECS::GetComponent<Transform>(entity).SetPosition(vec3(30.f, -20.f, 0.002f));
-	//	ECS::GetComponent<Trigger*>(entity) = new AttackTrigger();
-	//	ECS::GetComponent<Trigger*>(entity)->SetTriggerEntity(entity);
-	//	//ECS::GetComponent<Trigger*>(entity)->AddTargetEntity(MainEntities::MainPlayer());
-	//	//AttackTrigger* temp = (AttackTrigger*)ECS::GetComponent<Trigger*>(entity);
-	//	//temp->movement = b2Vec2(0.f, 15.f);
+		//Sets up components
+		std::string fileName = "boxSprite.jpg";
+		ECS::GetComponent<Sprite>(entity).LoadSprite(fileName, 56, 60);
+		ECS::GetComponent<Sprite>(entity).SetTransparency(0.5f);
+		ECS::GetComponent<Transform>(entity).SetPosition(vec3(30.f, -20.f, 0.002f));
+		ECS::GetComponent<Trigger*>(entity) = new AttackTrigger();
+		ECS::GetComponent<Trigger*>(entity)->SetTriggerEntity(entity);
+		//ECS::GetComponent<Trigger*>(entity)->AddTargetEntity(MainEntities::MainPlayer());
+		//AttackTrigger* temp = (AttackTrigger*)ECS::GetComponent<Trigger*>(entity);
+		//temp->movement = b2Vec2(0.f, 15.f);
 
-	//	//ECS::GetComponent<Trigger*>(entity)->AddTargetEntity(mushroomBoss);
-	//	//ECS::GetComponent<Trigger*>(entity)->AddTargetEntity(mushroomBoss2);
-	//	//ECS::GetComponent<Trigger*>(entity)->AddTargetEntity(dummy);
+		//ECS::GetComponent<Trigger*>(entity)->AddTargetEntity(mushroomBoss);
+		//ECS::GetComponent<Trigger*>(entity)->AddTargetEntity(mushroomBoss2);
+		//ECS::GetComponent<Trigger*>(entity)->AddTargetEntity(dummy);
 
 
 
-	//	auto& tempPhsBody = ECS::GetComponent<PhysicsBody>(entity);
+		auto& tempPhsBody = ECS::GetComponent<PhysicsBody>(entity);
 
-	//	float shrinkX = 0.f;
-	//	float shrinkY = 0.f;
-	//	b2Body* tempBody;
-	//	b2BodyDef tempDef;
-	//	tempDef.type = b2_staticBody;
-	//	tempDef.position.Set(float32(0.f), float32(80.f));
+		float shrinkX = 0.f;
+		float shrinkY = 0.f;
+		b2Body* tempBody;
+		b2BodyDef tempDef;
+		tempDef.type = b2_staticBody;
+		tempDef.position.Set(float32(0.f), float32(80.f));
 
-	//	tempBody = m_physicsWorld->CreateBody(&tempDef);
+		tempBody = m_physicsWorld->CreateBody(&tempDef);
 
-	//	tempPhsBody = PhysicsBody(entity, tempBody, float(40.f - shrinkX), float(40.f - shrinkY), vec2(0.f, 0.f), true, TRIGGER, PLAYER | OBJECTS);
-	//	tempPhsBody.SetColor(vec4(1.f, 0.f, 0.f, 0.3f));
-	//}
+		tempPhsBody = PhysicsBody(entity, tempBody, float(40.f - shrinkX), float(40.f - shrinkY), vec2(0.f, 0.f), true, TRIGGER, ENEMY);
+		tempPhsBody.SetColor(vec4(1.f, 0.f, 0.f, 0.3f));
+	}
 
 	ECS::GetComponent<HorizontalScroll>(MainEntities::MainCamera()).SetFocus(&ECS::GetComponent<Transform>(MainEntities::MainPlayer()));
 	ECS::GetComponent<VerticalScroll>(MainEntities::MainCamera()).SetFocus(&ECS::GetComponent<Transform>(MainEntities::MainPlayer()));
@@ -625,23 +644,23 @@ void PhysicsPlayground::writeAutoSaveFile(int file)
 	std::ofstream editorSaveFile;
 	if (file == 1)
 	{
-		editorSaveFile.open("assets/backupSaves/BackupSaveFile1.txt");
+		editorSaveFile.open("assets/EditorSaves/MushroomCave/backupSaves/BackupSaveFile1.txt");
 	}
 	else if (file == 2)
 	{
-		editorSaveFile.open("assets/backupSaves/BackupSaveFile2.txt");
+		editorSaveFile.open("assets/EditorSaves/MushroomCave/backupSaves/BackupSaveFile2.txt");
 	}
 	else if (file == 3)
 	{
-		editorSaveFile.open("assets/backupSaves/BackupSaveFile3.txt");
+		editorSaveFile.open("assets/EditorSaves/MushroomCave/backupSaves/BackupSaveFile3.txt");
 	}
 	else if (file == 4)
 	{
-		editorSaveFile.open("assets/backupSaves/BackupSaveFile4.txt");
+		editorSaveFile.open("assets/EditorSaves/MushroomCave/backupSaves/BackupSaveFile4.txt");
 	}
 	else if (file == 5)
 	{
-		editorSaveFile.open("assets/backupSaves/BackupSaveFile5.txt");
+		editorSaveFile.open("assets/EditorSaves/MushroomCave/backupSaves/BackupSaveFile5.txt");
 	}
 
 	b2Body* body = m_physicsWorld->GetBodyList();
@@ -675,7 +694,7 @@ void PhysicsPlayground::writeSaveFile()
 	char x;
 	unsigned int entityNum = 0;
 	std::ofstream editorSaveFile;
-	editorSaveFile.open("assets/LevelEditorSave.txt");
+	editorSaveFile.open("assets/EditorSaves/MushroomCave/LevelEditorSave.txt");
 	b2Body* body = m_physicsWorld->GetBodyList();
 
 
@@ -707,7 +726,7 @@ void PhysicsPlayground::readSaveFile()
 	unsigned int entityNum = 0;
 	std::fstream editorSaveFile;
 
-	editorSaveFile.open("assets/LevelEditorSave.txt");
+	editorSaveFile.open("assets/EditorSaves/MushroomCave/LevelEditorSave.txt");
 	while (editorSaveFile.good())
 	{
 
@@ -738,19 +757,6 @@ void PhysicsPlayground::readSaveFile()
 
 	}
 	editorSaveFile.close();
-}
-
-
-
-void Move(int ent,b2Vec2 target, float speed)
-{
-	auto& entity = ECS::GetComponent<PhysicsBody>(ent);
-	b2Vec2 direction = target - entity.GetPosition();
-	float distance = sqrt(direction.x * direction.x + direction.y * direction.y);
-	direction = b2Vec2(direction.x / distance, direction.y / distance);
-	speed *= Timer::deltaTime;
-	entity.GetBody()->SetLinearVelocity(b2Vec2(direction.x *speed,direction.y *speed));
-
 }
 
 
@@ -807,33 +813,7 @@ void PhysicsPlayground::ZoomCamera()
 
 }
 
-void PhysicsPlayground::dispatchAI()
-{
 
-	//This should 100% be optized. Make the path calculationshappen every other frame, or even every other second if it looks smooth.
-
-	//Mushroom Twin 1;
-	findStartAndEnd(ECS::GetComponent<PhysicsBody>(mushroomBoss).GetPosition(), ECS::GetComponent<PhysicsBody>(MainEntities::MainPlayer()).GetPosition());
-	CalculatePath();
-	Move(mushroomBoss, getPathSet()[getPathCount() - 1].position, 4000);
-
-	//Mushroom Twin 2;
-	findStartAndEnd(ECS::GetComponent<PhysicsBody>(mushroomBoss2).GetPosition(), ECS::GetComponent<PhysicsBody>(MainEntities::MainPlayer()).GetPosition());
-	CalculatePath();
-	Move(mushroomBoss2, getPathSet()[getPathCount() - 1].position, 3000);
-
-	ECS::GetComponent<PhysicsBody>(mushroomBoss).SetGravityScale(0);
-	ECS::GetComponent<PhysicsBody>(mushroomBoss2).SetGravityScale(0);
-
-	//std::cout << "\nPath Calculated";
-	//std::cout << "\n" << getPathCount() - 1;
-
-	//if (round(ECS::GetComponent<PhysicsBody>(mushroomBoss).GetPosition().x) == round(getPathSet()[getPathCount() - 1].position.x) && round(ECS::GetComponent<PhysicsBody>(mushroomBoss).GetPosition().y) == round(getPathSet()[getPathCount() - 1].position.y) )
-	//{
-
-	//}
-
-}
 
 int gLength = 10, gWidth = 5;
 b2Vec2 pastPlayerPosition = b2Vec2(999,999);
@@ -841,7 +821,9 @@ int nextNode = 1;
 float pathFindTimerDefault = 2.f;
 float pathFindTimer = pathFindTimerDefault;
 float switchNodeTimer = 0.f;
-
+float attackCooldownTimerDefault = 1.f;
+float attackCooldownTimer = attackCooldownTimerDefault;
+bool startAttackCooldown = false;
 int lastHealth;
 int lastDash;
 
@@ -956,11 +938,33 @@ void PhysicsPlayground::Update()
 			}
 		}
 		updateNbors(m_physicsWorld);
+		//std::cout << "\nNum:" << mushroomBoss;
+		//std::cout << "\nNum2:" << mushroomBoss2;
+		player.theAttackTrigger = attackTrigger1;
 		startup = true;
 	}
-	//ECS::GetComponent<PhysicsBody>(attackTrigger1).SetPosition(ECS::GetComponent<PhysicsBody>(MainEntities::MainPlayer()).GetPosition() + b2Vec2(20.f,10.f));
+	
+	if (ECS::GetComponent<PhysicsBody>(MainEntities::MainPlayer()).GetBody()->GetContactList() != NULL)
+	{
+		if (ECS::GetComponent<PhysicsBody>((int)ECS::GetComponent<PhysicsBody>(MainEntities::MainPlayer()).GetBody()->GetContactList()->contact->GetFixtureB()->GetBody()->GetUserData()).GetName() == "Bat" && startAttackCooldown == false)
+		{
+			health--;
+			startAttackCooldown = true;
+		}
 
-	dispatchAI();
+	}
+	
+	if (startAttackCooldown == true)
+	{
+		attackCooldownTimer -= 1 * Timer::deltaTime;
+		if (attackCooldownTimer <= 0)
+		{
+			attackCooldownTimer = attackCooldownTimerDefault;
+			startAttackCooldown = false;
+
+		}
+	}
+	
 	cameraTrackPlayer();
 	ZoomCamera();
 	//std::cout << "\n" << airDashCounter;
@@ -1610,7 +1614,11 @@ void PhysicsPlayground::KeyboardHold()
 			player.GetBody()->SetLinearVelocity(speed * vel + b2Vec2(player.GetBody()->GetLinearVelocity().x * 0.9f,
 				player.GetBody()->GetLinearVelocity().y));
 		}
+		if (canJump.m_canJump)
+		{
+			spacePressed = false;
 
+		}
 		//std::cout << "\n" << airDashCounter;
 		if (canJump.m_canJump && health > 0)
 		{

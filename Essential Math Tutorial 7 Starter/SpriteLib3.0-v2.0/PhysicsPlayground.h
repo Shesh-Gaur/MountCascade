@@ -36,7 +36,6 @@ public:
 	void makeDummy(float xPos, float yPos, float zPos, float rotation, float width, float height);
 	void makeMushroom(float xPos, float yPos, float zPos, float rotation, float width, float height);
 	void makeNode(float xPos, float yPos,float transparency);
-	void dispatchAI();
 	void RunLevelEditor();
 	void cameraTrackPlayer();
 	void ZoomCamera();

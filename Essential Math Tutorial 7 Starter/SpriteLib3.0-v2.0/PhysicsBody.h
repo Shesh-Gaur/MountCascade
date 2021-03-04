@@ -91,6 +91,8 @@ public:
 	//Get whether or not we are currently drawing our physics bodies
 	static bool GetDraw();
 
+	float GetHealth();
+	std::string GetName();
 
 	//Setters//
 	//Sets the pointer to the box2D body
@@ -132,6 +134,11 @@ public:
 
 	//Set whether the bodies are being drawn
 	static void SetDraw(bool drawBodies);
+	void SetHealth(float hp);
+	void TakeDamage(float dmg,int ent);
+	void SetName(std::string n);
+	void dispatchAI();
+	void Move(b2Vec2 target, float speed);
 
 	static std::vector<int> m_bodiesToDelete;
 private:
@@ -164,7 +171,8 @@ private:
 	float m_width = 0.f;
 	float m_height = 0.f;
 	
-
+	float health = 5.f;
+	std::string name;
 	//Do you draw the bodies?
 	static bool m_drawBodies;
 };

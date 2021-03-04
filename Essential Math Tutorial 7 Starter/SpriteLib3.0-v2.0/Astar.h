@@ -150,4 +150,5 @@ void findStartAndEnd(b2Vec2 start, b2Vec2 end);
 int getNodeCount();
 node *getNodeList();
 node* getPathSet();
+float getDeltaTime();
 

@@ -22,6 +22,11 @@ int nodeCount = 0;
 
 int startNode,endNode;
 
+float getDeltaTime()
+{
+	return Timer::deltaTime;
+
+}
 
 int getNodeCount()
 {

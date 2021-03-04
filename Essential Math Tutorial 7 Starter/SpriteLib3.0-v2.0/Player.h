@@ -50,6 +50,7 @@ public:
 	Player();
 	bool canYouFuckingJump = true;
 	bool haveYouPressedSpace = false;
+	int theAttackTrigger;
 	bool canDash = true;
 	Player(std::string& fileName, std::string& animationJSON, int width, int height, 
 		Sprite* sprite, AnimationController* controller, Transform* transform, bool hasPhys = false, PhysicsBody* body = nullptr);

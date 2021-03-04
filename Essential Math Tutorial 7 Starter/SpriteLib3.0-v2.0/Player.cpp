@@ -113,6 +113,7 @@ void Player::MovementUpdate()
 				vel = vel + vec3(-1.f, 0.f, 0.f);
 				m_facing = LEFT;
 				m_moving = true;
+
 			}
 			if (Input::GetKey(Key::D))
 			{
@@ -171,9 +172,20 @@ void Player::AnimationUpdate()
 		{
 			activeAnimation = ATTACK;
 
+			if (m_facing == RIGHT)
+			{
+				ECS::GetComponent<PhysicsBody>(theAttackTrigger).SetPosition(ECS::GetComponent<PhysicsBody>(MainEntities::MainPlayer()).GetPosition() + b2Vec2(23.f, 0.f));
+			}
+			else
+			{
+				ECS::GetComponent<PhysicsBody>(theAttackTrigger).SetPosition(ECS::GetComponent<PhysicsBody>(MainEntities::MainPlayer()).GetPosition() + b2Vec2(-23.f, 0.f));
+			}
+			
 			//Check if the attack animation is done
 			if (m_animController->GetAnimation(m_animController->GetActiveAnim()).GetAnimationDone())
 			{
+				ECS::GetComponent<PhysicsBody>(theAttackTrigger).SetPosition(b2Vec2(0,0));
+
 				//Will auto set to idle
 				m_locked = false;
 				m_attacking = false;
@@ -191,8 +203,8 @@ void Player::AnimationUpdate()
 
 		if (haveYouPressedSpace) {
 			activeAnimation = CHARGEJUMP;
-			if (!m_attacking && !haveYouPressedSpace && !canYouFuckingJump) activeAnimation = JUMP;
-			else if (canYouFuckingJump) activeAnimation = IDLE;
+			//if (!m_attacking && !haveYouPressedSpace && !canYouFuckingJump) activeAnimation = JUMP;
+			//if (canYouFuckingJump) activeAnimation = RUN;
 		}
 
 		if (Input::GetKey(Key::Shift)) {

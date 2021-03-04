@@ -50,7 +50,7 @@
     "Frame3": [ 384.0, 192.0, 512.0, 128.0 ],
     "NumFrames": 4,
     "Repeating": false,
-    "SecsPerFrame": 0.15
+    "SecsPerFrame": 0.07
   },
   "AttackRight": {
     "Frame0": [ 512.0, 192.0, 640.0, 128.0 ],
@@ -59,7 +59,7 @@
     "Frame3": [ 896.0, 192.0, 1024.0, 128.0 ],
     "NumFrames": 4,
     "Repeating": false,
-    "SecsPerFrame": 0.15
+    "SecsPerFrame": 0.07
   },
   "DashLeft": {
     "Frame0": [ 0.0, 256.0, 448.0, 192.0 ],

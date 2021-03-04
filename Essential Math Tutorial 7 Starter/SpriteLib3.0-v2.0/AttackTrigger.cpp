@@ -12,15 +12,10 @@ void AttackTrigger::OnEnter()
 {
 	Trigger::OnEnter();
 
-	std::cout << "\n" << ECS::GetComponent<PhysicsBody>(GetTriggerEntity()).GetBody()->GetContactList()->contact->GetFixtureB()->GetBody()->GetUserData();
-	//if (GetTriggerEntity() != MainEntities::MainPlayer())
-	//{
+	//std::cout << "\n" <<(int)ECS::GetComponent<PhysicsBody>(GetTriggerEntity()).GetBody()->GetContactList()->contact->GetFixtureB()->GetBody()->GetUserData();
+	ECS::GetComponent<PhysicsBody>((int)ECS::GetComponent<PhysicsBody>(GetTriggerEntity()).GetBody()->GetContactList()->contact->GetFixtureB()->GetBody()->GetUserData()).TakeDamage(1, (int)ECS::GetComponent<PhysicsBody>(GetTriggerEntity()).GetBody()->GetContactList()->contact->GetFixtureB()->GetBody()->GetUserData());
+	std::cout << "\n" << ECS::GetComponent<PhysicsBody>((int)ECS::GetComponent<PhysicsBody>(GetTriggerEntity()).GetBody()->GetContactList()->contact->GetFixtureB()->GetBody()->GetUserData()).GetHealth();
 
-	//	if (ECS::GetComponent<PhysicsBody>(GetTriggerEntity()).GetBody()->GetType() != b2_staticBody)
-	//	{
-	//		std::cout << "\nTHING DETECTED!";
-	//	}
-	//}
 
 }
 
