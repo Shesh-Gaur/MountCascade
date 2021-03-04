@@ -140,8 +140,32 @@ void PhysicsBody::Update(Transform * trans)
 {
 	if (name == "Bat")
 	{
-		dispatchAI();
+		
+		if (getCurrentClock() % 5 == 0) //Runs Pathfinding Calculations 12 times every 60 frames (5 Times more performant now!)
+		{
+			if (knockedBack == false)
+			{
+				dispatchAI();
+				SetNextMovement(CalculateMovement(getPathSet()[getPathCount() - 1].position));
+			}
+		}
 
+		if (knockedBack == false)
+		{
+			GetBody()->SetLinearVelocity(b2Vec2(GetNextMovement().x * GetSpeed() * getDeltaTime(), GetNextMovement().y * GetSpeed() * getDeltaTime()));
+		}
+		else
+		{
+			b2Vec2 knockDir = -CalculateMovement(ECS::GetComponent<PhysicsBody>(MainEntities::MainPlayer()).GetPosition());
+			GetBody()->SetLinearVelocity(b2Vec2(knockDir.x * 30 * knockbackTimer,knockDir.y * 30 * knockbackTimer));
+			knockbackTimer -= 1/knockbackTimer * getDeltaTime();
+			
+			if (knockbackTimer <= 0)
+			{
+				knockbackTimer = knockbackDefault;
+				knockedBack = false;
+			}
+		}
 	}
 	//Make sure that movement doesn't happen in contact step
 	if (moveLater)
@@ -273,6 +297,17 @@ std::string PhysicsBody::GetName()
 	return name;
 }
 
+b2Vec2 PhysicsBody::GetNextMovement()
+{
+	return nextMovement;
+
+}
+
+float PhysicsBody::GetSpeed()
+{
+	return speed;
+
+}
 void PhysicsBody::SetBody(b2Body * body)
 {
 	m_body = body;
@@ -593,24 +628,25 @@ void PhysicsBody::SetName(std::string n)
 void PhysicsBody::TakeDamage(float dmg,int ent)
 {
 
-	health -= dmg;
-	if (health <= 0)
-	{
-		health = 0;
-		std::cout << "\nI'm dead and need to be deleted.";
-		m_bodiesToDelete.push_back(ent);
+		health -= dmg;
+		if (health <= 0)
+		{
+			health = 0;
+			std::cout << "\nEnemy Killed";
+			m_bodiesToDelete.push_back(ent);
 
-	}
+		}
 	
 }
-void PhysicsBody::Move(b2Vec2 target, float speed)
+b2Vec2 PhysicsBody::CalculateMovement(b2Vec2 target)
 {
 	
 	b2Vec2 direction = target - GetPosition();
 	float distance = sqrt(direction.x * direction.x + direction.y * direction.y);
 	direction = b2Vec2(direction.x / distance, direction.y / distance);
-	speed *= getDeltaTime();
-	GetBody()->SetLinearVelocity(b2Vec2(direction.x * speed, direction.y * speed));
+	direction = b2Vec2(direction.x, direction.y);
+	return direction;
+	
 
 }
 void PhysicsBody::dispatchAI()
@@ -618,7 +654,23 @@ void PhysicsBody::dispatchAI()
 
 		findStartAndEnd(GetPosition(), ECS::GetComponent<PhysicsBody>(MainEntities::MainPlayer()).GetPosition());
 		CalculatePath();
-		Move(getPathSet()[getPathCount() - 1].position, 4000);
 		SetGravityScale(0);
 
+}
+
+void PhysicsBody::SetNextMovement(b2Vec2 pos)
+{
+	nextMovement = pos;
+
+}
+
+void PhysicsBody::SetSpeed(float sp)
+{
+	speed = sp;
+
+}
+
+void PhysicsBody::isKnocked()
+{
+	knockedBack = true;
 }

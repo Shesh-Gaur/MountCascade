@@ -28,6 +28,11 @@ float getDeltaTime()
 
 }
 
+int getCurrentClock()
+{
+	return Timer::currentClock;
+
+}
 int getNodeCount()
 {
 	return nodeCount;

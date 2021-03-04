@@ -160,9 +160,13 @@ void Player::AnimationUpdate()
 {
 	int activeAnimation = 0;
 
-	if (m_dead) activeAnimation = DEATH;
-
+	if (m_dead)
+	{
+		activeAnimation = DEATH;
+		ECS::GetComponent<PhysicsBody>(theAttackTrigger).SetPosition(b2Vec2(0, 0));
+	}
 	if (!m_dead) {
+
 		if (m_moving)
 		{
 			//Puts it into the WALK category
@@ -214,6 +218,8 @@ void Player::AnimationUpdate()
 			}
 		}
 		if (activeAnimation != DASH) m_dashing = false;
+
+		
 	}
 
 	SetActiveAnimation(activeAnimation + (int)m_facing);

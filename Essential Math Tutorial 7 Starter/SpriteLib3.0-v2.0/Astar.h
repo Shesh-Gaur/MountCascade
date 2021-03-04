@@ -151,4 +151,4 @@ int getNodeCount();
 node *getNodeList();
 node* getPathSet();
 float getDeltaTime();
-
+int getCurrentClock();

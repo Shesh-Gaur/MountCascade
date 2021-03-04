@@ -93,6 +93,8 @@ public:
 
 	float GetHealth();
 	std::string GetName();
+	b2Vec2 GetNextMovement();
+	float GetSpeed();
 
 	//Setters//
 	//Sets the pointer to the box2D body
@@ -138,8 +140,12 @@ public:
 	void TakeDamage(float dmg,int ent);
 	void SetName(std::string n);
 	void dispatchAI();
-	void Move(b2Vec2 target, float speed);
+	b2Vec2 CalculateMovement(b2Vec2 target);
+	void SetNextMovement(b2Vec2 pos);
+	void SetSpeed(float sp);
+	void isKnocked();
 
+	
 	static std::vector<int> m_bodiesToDelete;
 private:
 	//The actual box2D body
@@ -173,6 +179,11 @@ private:
 	
 	float health = 5.f;
 	std::string name;
+	b2Vec2 nextMovement;
 	//Do you draw the bodies?
 	static bool m_drawBodies;
+	float speed = 4000;
+	float knockbackDefault = 1.f;
+	float knockbackTimer = knockbackDefault;
+	bool knockedBack = false;
 };
