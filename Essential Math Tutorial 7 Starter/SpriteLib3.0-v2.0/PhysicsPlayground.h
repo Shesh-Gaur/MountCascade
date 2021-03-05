@@ -35,8 +35,11 @@ public:
 	void makeBox2(float xPos, float yPos, float zPos, float rotation, float width, float height);
 	void makeDummy(float xPos, float yPos, float zPos, float rotation, float width, float height);
 	void makeMushroom(float xPos, float yPos, float zPos, float rotation, float width, float height);
+	void makeStalagmite1(float xPos, float yPos, float zPos, float rotation, float width, float height);
+	void makeStalagmite2(float xPos, float yPos, float zPos, float rotation, float width, float height);
 	void makeNode(float xPos, float yPos,float transparency);
 	void makeBat(float xPos, float yPos, float zPos, float rotation, float width, float height);	
+	void makeIceWall(float xPos, float yPos, float zPos, float rotation, float width, float height);
 	void RunLevelEditor();
 	void cameraTrackPlayer();
 	void ZoomCamera();

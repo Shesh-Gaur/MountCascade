@@ -200,7 +200,7 @@ void Camera::SetPosition(vec3 newPosition)
 		float C = (2.0f * m_near * m_far) / nmf;
 		m_projection = mat4(
 			vec4(xs, 0.f, 1 , -(newPosition.x)  *  58/m_fov.y ), //3 changes x translations, 4 changes focal point x
-			vec4(0.f, ys, 1, -(newPosition.y) * 1.5 -10), //3 changes y translation, 4 changes focal point y
+			vec4(0.f, ys, 1, (-(newPosition.y) * 1.5) -50), //3 changes y translation, 4 changes focal point y
 			vec4(0.f, 0.f, B, 0), //??
 			vec4(0.f, 0.f, C, 200)//4 changes z translation
 
