@@ -41,7 +41,7 @@ public:
 	virtual void KeyboardHold() { };
 	virtual void KeyboardDown() { };
 	virtual void KeyboardUp() { };
-
+	
 	//Mouse Input
 	//Because these are virtual you can override them in your inherited classes.
 	//The same way you do for Update().

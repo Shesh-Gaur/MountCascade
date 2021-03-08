@@ -216,28 +216,28 @@ int EffectManager::CreateEffect(EffectType type, unsigned width, unsigned height
 			printf("Already has a Vignette effect");
 		}
 		break;
-	//case Grain:
-	//	if (m_grain == -1)
-	//	{
-	//		//The same as basic buffer
-	//		m_effects.push_back(new GrainEffect());
-	//		m_effects[index]->Init(width, height);
-	//		m_grain = index;
-	//	}
-	//	break;
-	//case Pixelate:
-	//	if (m_pixelate == -1)
-	//	{
-	//		//The same as basic buffer
-	//		m_effects.push_back(new PixelateEffect());
-	//		m_effects[index]->Init(width, height);
-	//		m_pixelate = index;
-	//	}
-	//	else
-	//	{
-	//		printf("Already has a Pixelate effect");
-	//	}
-	//	break;
+	case Grain:
+		if (m_grain == -1)
+		{
+			//The same as basic buffer
+			m_effects.push_back(new GrainEffect());
+			m_effects[index]->Init(width, height);
+			m_grain = index;
+		}
+		break;
+	case Pixelate:
+		if (m_pixelate == -1)
+		{
+			//The same as basic buffer
+			m_effects.push_back(new PixelateEffect());
+			m_effects[index]->Init(width, height);
+			m_pixelate = index;
+		}
+		else
+		{
+			printf("Already has a Pixelate effect");
+		}
+		break;
 	case SelectiveColor:
 		if (m_selectiveColor == -1)
 		{

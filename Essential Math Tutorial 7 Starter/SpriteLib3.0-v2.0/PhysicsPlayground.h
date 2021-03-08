@@ -43,7 +43,7 @@ public:
 	void RunLevelEditor();
 	void cameraTrackPlayer();
 	void ZoomCamera();
-
+	void animateBackground();
 	float cameraZoomDefault = 75.f;
 	float cameraZoom = 75.f;
 	float aRatio;
@@ -89,6 +89,8 @@ public:
 	bool startAttackCooldown = false;
 	int lastHealth;
 	int lastDash;
+	float bgtimerSpeed = 0.25f;
+	float bgtimer = 0.f;
 
 protected:
 	bool m_firstWindow = false;
@@ -118,5 +120,5 @@ protected:
 	int healthBar;
 	int dashBar;
 	int dummy;
-	
+	int mushbg;
 };

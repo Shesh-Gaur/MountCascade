@@ -152,3 +152,4 @@ node *getNodeList();
 node* getPathSet();
 float getDeltaTime();
 int getCurrentClock();
+void resetGrid();

@@ -7,6 +7,7 @@
 #include "Astar.h"
 #include "ZoomTrigger.h"
 #include "ZoomConfirm.h"
+#include "Game.h"
 PhysicsPlayground::PhysicsPlayground(std::string name)
 	: Scene(name)
 {
@@ -317,7 +318,7 @@ void PhysicsPlayground::InitScene(float windowWidth, float windowHeight)
 
 		//Creates entity
 		auto entity = ECS::CreateEntity();
-		
+		mushbg = entity;
 		//Add components
 		ECS::AttachComponent<Sprite>(entity);
 		ECS::AttachComponent<Transform>(entity);
@@ -626,6 +627,7 @@ void PhysicsPlayground::makeMushroom(float xPos, float yPos, float zPos, float r
 
 	//Creates entity
 	auto entity = ECS::CreateEntity();
+	
 	//Add components
 	ECS::AttachComponent<Sprite>(entity);
 	ECS::AttachComponent<Transform>(entity);
@@ -945,6 +947,45 @@ void PhysicsPlayground::readSaveFile()
 }
 
 
+void PhysicsPlayground::animateBackground()
+{
+	bgtimer += 1 * Timer::deltaTime;
+	std::string fileName;
+	if (bgtimer > bgtimerSpeed * 4)
+	{
+		fileName = "Cave_background5.png";
+		ECS::GetComponent<Sprite>(mushbg).LoadSprite(fileName, 1920, 1080);
+		bgtimer = 0;
+	}
+	else if (bgtimer > bgtimerSpeed * 3)
+	{
+		fileName = "Cave_background4.png";
+		ECS::GetComponent<Sprite>(mushbg).LoadSprite(fileName, 1920, 1080);
+
+	}
+	else if (bgtimer > bgtimerSpeed * 2)
+	{
+		fileName = "Cave_background3.png";
+		ECS::GetComponent<Sprite>(mushbg).LoadSprite(fileName, 1920, 1080);
+
+	}
+	else if (bgtimer > bgtimerSpeed)
+	{
+		fileName = "Cave_background2.png";
+		ECS::GetComponent<Sprite>(mushbg).LoadSprite(fileName, 1920, 1080);
+
+	}
+	else if (bgtimer < bgtimerSpeed )
+	{
+		fileName = "Cave_background1.png";
+		ECS::GetComponent<Sprite>(mushbg).LoadSprite(fileName, 1920, 1080);
+
+	}
+	//std::cout << "\n" << bgtimer;
+	
+
+}
+
 void PhysicsPlayground::cameraTrackPlayer()
 {
 
@@ -1090,6 +1131,7 @@ void PhysicsPlayground::Update()
 
 	if (startup == false)
 	{
+		resetGrid();
 		readSaveFile();
 		
 		for (int y = 0; y < (gWidth * 50); y+=50)
@@ -1135,7 +1177,7 @@ void PhysicsPlayground::Update()
 		//std::cout << "\nNum:" << mushroomBoss;
 		//std::cout << "\nNum2:" << mushroomBoss2;
 		player.theAttackTrigger = attackTrigger1;
-
+		
 
 		makeBat(-400, 300, 0.02, 0, 10, 10);
 		makeBat(-400, 310, 0.02, 0, 10, 10);
@@ -1172,7 +1214,8 @@ void PhysicsPlayground::Update()
 
 		}
 	}
-	
+
+	//animateBackground();
 	cameraTrackPlayer();
 	ZoomCamera();
 	//std::cout << "\n" << airDashCounter;
@@ -1713,12 +1756,11 @@ void PhysicsPlayground::RunLevelEditor()
 
 void PhysicsPlayground::KeyboardHold()
 {
-	
 	auto& player = ECS::GetComponent<PhysicsBody>(MainEntities::MainPlayer());
 
-	ECS::GetComponent<Transform>(dashBar).SetPosition(ECS::GetComponent<Camera>(MainEntities::MainCamera()).GetPosition() + vec3(180, -100, 2));
+	ECS::GetComponent<Transform>(dashBar).SetPosition(ECS::GetComponent<Camera>(MainEntities::MainCamera()).GetPosition() + vec3(200, -50, 2));
 
-	ECS::GetComponent<Transform>(healthBar).SetPosition(ECS::GetComponent<Camera>(MainEntities::MainCamera()).GetPosition() + vec3(180, 130, 2));
+	ECS::GetComponent<Transform>(healthBar).SetPosition(ECS::GetComponent<Camera>(MainEntities::MainCamera()).GetPosition() + vec3(200, -70, 2));
 
 
 	if (levelEditor == true)

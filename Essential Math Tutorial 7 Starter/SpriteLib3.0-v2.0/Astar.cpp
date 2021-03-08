@@ -169,6 +169,16 @@ void makeGrid(b2Vec2 position)
 	nodeCount++;
 }
 
+void resetGrid()
+{
+	nodeCount = 0;
+	
+	//for (int i = 0; i < numOfNodes; i++)
+	//{
+	//	allNodes[i] = ;
+	//	
+	//}
+}
 int getPathCount()
 {
 	return pathCount;

@@ -36,12 +36,12 @@ void Game::InitGame()
 	//Creates a new scene.
 	//Replace this with your own scene.
 	m_scenes.push_back(new FirstCreation("FIRST SCENE!!!!"));
-	m_scenes.push_back(new CascadeVillage("PHYSICS PLAYGROUND TIEM!!!"));
+	m_scenes.push_back(new PhysicsPlayground("PHYSICS PLAYGROUND TIEM!!!"));
 	m_scenes.push_back(new AnimationSpritePlayground("Animation TIEM!!!!"));
 	m_scenes.push_back(new CascadeVillage("Cascade Village Time"));
 
 	//Sets active scene reference to our scene
-	m_activeScene = m_scenes[3];
+	m_activeScene = m_scenes[1];
 
 	m_activeScene->InitScene(float(BackEnd::GetWindowWidth()), float(BackEnd::GetWindowHeight()));
 
@@ -218,6 +218,18 @@ void Game::KeyboardDown()
 	{
 		m_activeScene->KeyboardDown();
 	}
+
+
+	if (Input::GetKeyDown(Key::Z))
+	{
+		SwapScene(3);
+
+	}
+	else if (Input::GetKeyDown(Key::X))
+	{
+		SwapScene(1);
+
+	}
 }
 
 void Game::KeyboardUp()
@@ -290,3 +302,27 @@ void Game::MouseWheel(SDL_MouseWheelEvent evnt)
 	//Resets the enabled flag
 	m_wheel = false;
 }
+
+void Game::SwapScene(int newScene)
+{
+	m_activeScene->Unload();
+	m_activeScene = m_scenes[newScene];
+
+	m_activeScene->InitScene(float(BackEnd::GetWindowWidth()), float(BackEnd::GetWindowHeight()));
+
+	//Sets m_register to point to the register in the active scene
+	m_register = m_activeScene->GetScene();
+
+	BackEnd::SetWindowName(m_activeScene->GetName());
+
+	PhysicsSystem::Init();
+	
+
+
+
+
+}
+
+
+
+

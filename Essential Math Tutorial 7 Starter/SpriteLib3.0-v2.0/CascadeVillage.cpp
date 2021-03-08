@@ -30,9 +30,9 @@ void CascadeVillage::InitScene(float windowWidth, float windowHeight)
 	//Sets up aspect ratio for the camera
 	float aspectRatio = windowWidth / windowHeight;
 	aRatio = aspectRatio;
-	EffectManager::CreateEffect(EffectType::Vignette, windowWidth, windowHeight);
-	EffectManager::CreateEffect(EffectType::Sepia, windowWidth, windowHeight);
-	EffectManager::RemoveEffect(EffectManager::GetSepiaHandle()); //added this to get rid of sephia
+	//EffectManager::CreateEffect(EffectType::Vignette, windowWidth, windowHeight);
+	//EffectManager::CreateEffect(EffectType::Sepia, windowWidth, windowHeight);
+	//EffectManager::RemoveEffect(EffectManager::GetSepiaHandle()); //added this to get rid of sephia
 
 
 	//Setup MainCamera Entity
@@ -878,7 +878,7 @@ void CascadeVillage::ZoomCamera()
 
 void CascadeVillage::Update()
 {
-
+	
 	auto& player = ECS::GetComponent<Player>(MainEntities::MainPlayer());
 	player.Update();
 	player.canYouFuckingJump = ECS::GetComponent<CanJump>(MainEntities::MainPlayer()).m_canJump;
@@ -945,8 +945,9 @@ void CascadeVillage::Update()
 
 	if (startup == false)
 	{
+		
 		readSaveFile();
-
+		resetGrid();
 		for (int y = 0; y < (gWidth * 50); y += 50)
 		{
 			for (int x = 0 - 800; x < (gLength * 50) - 800; x += 50)
@@ -980,7 +981,7 @@ void CascadeVillage::Update()
 					//makeNode(x, y ,1);
 					//Adds a blank node to the list
 					makeGrid(b2Vec2(x, y));
-
+					
 				}
 
 
@@ -995,7 +996,7 @@ void CascadeVillage::Update()
 
 		startup = true;
 	}
-
+	
 	if (ECS::GetComponent<PhysicsBody>(MainEntities::MainPlayer()).GetBody()->GetContactList() != NULL)
 	{
 		int currentEnemy = (int)ECS::GetComponent<PhysicsBody>(MainEntities::MainPlayer()).GetBody()->GetContactList()->contact->GetFixtureB()->GetBody()->GetUserData();
@@ -1024,6 +1025,7 @@ void CascadeVillage::Update()
 	cameraTrackPlayer();
 	ZoomCamera();
 	//std::cout << "\n" << airDashCounter;
+	
 }
 
 void CascadeVillage::GUI()
