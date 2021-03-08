@@ -1,5 +1,4 @@
 #include "AttackTrigger.h"
-#include "AttackTrigger.h"
 #include "ECS.h"
 #include "Utilities.h"
 int previousEntity;

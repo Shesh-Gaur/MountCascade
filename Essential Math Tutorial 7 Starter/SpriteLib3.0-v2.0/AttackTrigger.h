@@ -11,7 +11,7 @@ public:
 	void OnEnter() override;
 	void OnExit() override;
 
-	b2Vec2 movement;
+	
 
 protected:
 	bool triggered = false;

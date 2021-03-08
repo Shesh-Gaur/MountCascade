@@ -182,7 +182,7 @@ private:
 	b2Vec2 nextMovement;
 	//Do you draw the bodies?
 	static bool m_drawBodies;
-	float speed = 4000;
+	float speed = 3000;
 	float knockbackDefault = 1.f;
 	float knockbackTimer = knockbackDefault;
 	bool knockedBack = false;

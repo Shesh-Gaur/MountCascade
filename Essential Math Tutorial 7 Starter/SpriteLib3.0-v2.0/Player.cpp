@@ -172,7 +172,7 @@ void Player::AnimationUpdate()
 			//Puts it into the WALK category
 			activeAnimation = RUN;
 		}
-		else if (m_attacking)
+		else if (m_attacking && haveYouPressedSpace == false)
 		{
 			activeAnimation = ATTACK;
 

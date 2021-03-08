@@ -19,11 +19,7 @@ PhysicsPlayground::PhysicsPlayground(std::string name)
 
 
 }
-float cameraZoomDefault = 75.f;
-float cameraZoom = 75.f;
-float aRatio;
-float nPlane = 3.0f;
-float fov = 70.f;
+
 void PhysicsPlayground::InitScene(float windowWidth, float windowHeight)
 {
 	//Dynamically allocates the register
@@ -389,41 +385,41 @@ void PhysicsPlayground::InitScene(float windowWidth, float windowHeight)
 	//	
 	//}
 
-	//Setup new Entity
-	{
-		/*Scene::CreateSprite(m_sceneReg, "HelloWorld.png", 100, 60, 0.5f, vec3(0.f, 0.f, 0.f));*/
+	////Setup new Entity
+	//{
+	//	/*Scene::CreateSprite(m_sceneReg, "HelloWorld.png", 100, 60, 0.5f, vec3(0.f, 0.f, 0.f));*/
 
-		//Creates entity
-		auto entity = ECS::CreateEntity();
-		//Add components
-		ECS::AttachComponent<Sprite>(entity);
-		ECS::AttachComponent<Transform>(entity);
-		ECS::AttachComponent<PhysicsBody>(entity);
+	//	//Creates entity
+	//	auto entity = ECS::CreateEntity();
+	//	//Add components
+	//	ECS::AttachComponent<Sprite>(entity);
+	//	ECS::AttachComponent<Transform>(entity);
+	//	ECS::AttachComponent<PhysicsBody>(entity);
 
-		//Set up the components
-		std::string fileName = "BeachBall.png";
-		ECS::GetComponent<Sprite>(entity).LoadSprite(fileName, 10, 10);
-		ECS::GetComponent<Sprite>(entity).SetTransparency(1.f);
-		ECS::GetComponent<Transform>(entity).SetPosition(vec3(0.f, 0.f, 0.02f));
-		auto& tempSpr = ECS::GetComponent<Sprite>(entity);
-		auto& tempPhsBody = ECS::GetComponent<PhysicsBody>(entity);
+	//	//Set up the components
+	//	std::string fileName = "BeachBall.png";
+	//	ECS::GetComponent<Sprite>(entity).LoadSprite(fileName, 10, 10);
+	//	ECS::GetComponent<Sprite>(entity).SetTransparency(1.f);
+	//	ECS::GetComponent<Transform>(entity).SetPosition(vec3(0.f, 0.f, 0.02f));
+	//	auto& tempSpr = ECS::GetComponent<Sprite>(entity);
+	//	auto& tempPhsBody = ECS::GetComponent<PhysicsBody>(entity);
 
-		float shrinkX = 0.f;
-		float shrinkY = 0.f;
-		b2Body* tempBody;
-		b2BodyDef tempDef;
-		tempDef.type = b2_dynamicBody;
-		tempDef.position.Set(float32(400), float32(500));
+	//	float shrinkX = 0.f;
+	//	float shrinkY = 0.f;
+	//	b2Body* tempBody;
+	//	b2BodyDef tempDef;
+	//	tempDef.type = b2_dynamicBody;
+	//	tempDef.position.Set(float32(400), float32(500));
 
-		tempBody = m_physicsWorld->CreateBody(&tempDef);
+	//	tempBody = m_physicsWorld->CreateBody(&tempDef);
 
-		tempPhsBody = PhysicsBody(entity, tempBody, float(tempSpr.GetWidth() - shrinkX), vec2(0.f, 0.f), false, ENEMY, ENVIRONMENT | ENEMY | OBJECTS | PICKUP | TRIGGER | HEXAGON, 0.f, 0.f);
-		tempPhsBody.SetColor(vec4(0.f, 1.f, 0.f, 0.3f));
-		tempPhsBody.SetRotationAngleDeg(0);
-		tempPhsBody.SetName("Bat");
-		tempPhsBody.SetHealth(2);
+	//	tempPhsBody = PhysicsBody(entity, tempBody, float(tempSpr.GetWidth() - shrinkX), vec2(0.f, 0.f), false, ENEMY, ENVIRONMENT | ENEMY | OBJECTS | PICKUP | TRIGGER | HEXAGON, 0.f, 0.f);
+	//	tempPhsBody.SetColor(vec4(0.f, 1.f, 0.f, 0.3f));
+	//	tempPhsBody.SetRotationAngleDeg(0);
+	//	tempPhsBody.SetName("Bat");
+	//	tempPhsBody.SetHealth(2);
 
-	}
+	//}
 
 	//Setup trigger
 	{
@@ -463,8 +459,53 @@ void PhysicsPlayground::InitScene(float windowWidth, float windowHeight)
 		tempDef.position.Set(float32(0.f), float32(80.f));
 
 		tempBody = m_physicsWorld->CreateBody(&tempDef);
-
+		//Size of body doesnt match sprite. Reference the other trigger to see how to set up.
 		tempPhsBody = PhysicsBody(entity, tempBody, float(40.f - shrinkX), float(40.f - shrinkY), vec2(0.f, 0.f), true, TRIGGER, ENEMY);
+		tempPhsBody.SetColor(vec4(1.f, 0.f, 0.f, 0.3f));
+		tempPhsBody.SetName("Trigger");
+	}
+
+	//Setup trigger
+	{
+		//Creates entity
+		auto entity = ECS::CreateEntity();
+		translateTrigger1 = entity;
+		//Add components
+		ECS::AttachComponent<Transform>(entity);
+		ECS::AttachComponent<PhysicsBody>(entity);
+		ECS::AttachComponent<Trigger*>(entity);
+		ECS::AttachComponent<Sprite>(entity);
+
+		//Sets up components
+		std::string fileName = "boxSprite.jpg";
+		ECS::GetComponent<Sprite>(entity).LoadSprite(fileName, 400, 50);
+		ECS::GetComponent<Sprite>(entity).SetTransparency(0.f);
+		ECS::GetComponent<Transform>(entity).SetPosition(vec3(30.f, -20.f, 0.002f));
+		ECS::GetComponent<Trigger*>(entity) = new TranslateTrigger();
+		ECS::GetComponent<Trigger*>(entity)->SetTriggerEntity(entity);
+		
+		TranslateTrigger* temp = (TranslateTrigger*)ECS::GetComponent<Trigger*>(entity);
+		temp->movement = b2Vec2(642.f, 322.f);
+
+		//ECS::GetComponent<Trigger*>(entity)->AddTargetEntity(mushroomBoss);
+		//ECS::GetComponent<Trigger*>(entity)->AddTargetEntity(mushroomBoss2);
+		//ECS::GetComponent<Trigger*>(entity)->AddTargetEntity(dummy);
+
+
+
+		auto& tempPhsBody = ECS::GetComponent<PhysicsBody>(entity);
+		auto& tempSpr = ECS::GetComponent<Sprite>(entity);
+		float shrinkX = 0.f;
+		float shrinkY = 0.f;
+		b2Body* tempBody;
+		b2BodyDef tempDef;
+		tempDef.type = b2_staticBody;
+		tempDef.position.Set(float32(910.f), float32(25.f));
+
+		tempBody = m_physicsWorld->CreateBody(&tempDef);
+
+		tempPhsBody = PhysicsBody(entity, tempBody, float(tempSpr.GetWidth() - shrinkX),
+			float(tempSpr.GetHeight() - shrinkY), vec2(0.f, 0.f), true, TRIGGER, PLAYER);
 		tempPhsBody.SetColor(vec4(1.f, 0.f, 0.f, 0.3f));
 		tempPhsBody.SetName("Trigger");
 	}
@@ -508,7 +549,7 @@ void PhysicsPlayground::makeBox(float xPos, float yPos, float zPos, float rotati
 
 }
 
-void PhysicsPlayground::makeBox2(float xPos, float yPos, float zPos, float rotation, float width, float height) 
+void PhysicsPlayground::makeBox2(float xPos, float yPos, float zPos, float rotation, float width, float height)
 {
 	//Creates entity
 	auto entity = ECS::CreateEntity();
@@ -543,7 +584,7 @@ void PhysicsPlayground::makeBox2(float xPos, float yPos, float zPos, float rotat
 
 }
 
-void PhysicsPlayground::makeDummy(float xPos, float yPos, float zPos, float rotation, float width, float height) 
+void PhysicsPlayground::makeDummy(float xPos, float yPos, float zPos, float rotation, float width, float height)
 {
 	/*Scene::CreateSprite(m_sceneReg, "HelloWorld.png", 100, 60, 0.5f, vec3(0.f, 0.f, 0.f));*/
 
@@ -579,7 +620,7 @@ void PhysicsPlayground::makeDummy(float xPos, float yPos, float zPos, float rota
 
 }
 
-void PhysicsPlayground::makeMushroom(float xPos, float yPos, float zPos, float rotation, float width, float height) 
+void PhysicsPlayground::makeMushroom(float xPos, float yPos, float zPos, float rotation, float width, float height)
 {
 	/*Scene::CreateSprite(m_sceneReg, "HelloWorld.png", 100, 60, 0.5f, vec3(0.f, 0.f, 0.f));*/
 
@@ -760,7 +801,7 @@ void PhysicsPlayground::makeIceWall(float xPos, float yPos, float zPos, float ro
 	tempBody = m_physicsWorld->CreateBody(&tempDef);
 
 	tempPhsBody = PhysicsBody(entity, tempBody, float(tempSpr.GetWidth() - shrinkX),
-		float(tempSpr.GetHeight() - shrinkY), vec2(0.f, 0.f), false, GROUND, PLAYER | ENEMY | OBJECTS | HEXAGON, 1.f, 69.f);
+		float(tempSpr.GetHeight() - shrinkY), vec2(0.f, 0.f), false, GROUND, PLAYER | ENEMY | OBJECTS | HEXAGON, 0.f, 69.f);
 	tempPhsBody.SetColor(vec4(0.f, 1.f, 0.f, 0.3f));
 	tempPhsBody.SetRotationAngleDeg(rotation);
 	tempPhsBody.SetName("Ice Wall");
@@ -768,33 +809,7 @@ void PhysicsPlayground::makeIceWall(float xPos, float yPos, float zPos, float ro
 	
 }
 
-//Important Variables
-float mousePosX, mousePosY;
-bool levelEditor,startup = false;
 
-float saveUITimer;
-bool objectAlreadySelected;
-bool entitiesCreated = false;
-SDL_MouseButtonEvent mouseEvnt;
-float autosaveTimer = 0.f;
-int autosaveInterval = 60;
-float defaultForce = 160000.f;
-float jumpForce = defaultForce;
-int airJumpDefault = 1;
-int airJumpCounter = airJumpDefault;
-bool spaceReleased = false;
-//bool spacePressed = false;
-bool canDash = false;
-float dashAmount = 60.f;
-float airDashDefault = 3.f;
-float airDashCounter = airDashDefault;
-bool loadStarted = false;
-int playerHpDefault = 3;
-int playerHp = playerHpDefault;
-int dummyHpDefault = 10;
-int dummyHp = playerHpDefault;
-int health = 3;
-bool isTouchingIceWall = false;
 void PhysicsPlayground::writeAutoSaveFile(int file)
 {
 	char x;
@@ -933,6 +948,25 @@ void PhysicsPlayground::readSaveFile()
 void PhysicsPlayground::cameraTrackPlayer()
 {
 
+	//RayCastCallback selectRay;
+	//m_physicsWorld->RayCast(&selectRay, wMousePos + b2Vec2(0, 20), wMousePos);
+	//if (selectRay.m_fixture == nullptr)
+	//{
+	//	m_physicsWorld->RayCast(&selectRay, wMousePos + b2Vec2(0, -20), wMousePos);
+	//	if (selectRay.m_fixture == nullptr)
+	//	{
+	//		m_physicsWorld->RayCast(&selectRay, wMousePos + b2Vec2(-20, 0), wMousePos);
+	//		if (selectRay.m_fixture == nullptr)
+	//		{
+	//			m_physicsWorld->RayCast(&selectRay, wMousePos + b2Vec2(20, 0), wMousePos);
+
+
+	//		}
+
+	//	}
+
+	//}
+
 	b2Vec2 newPos = ECS::GetComponent<PhysicsBody>(MainEntities::MainPlayer()).GetPosition() + b2Vec2(mousePosX/30,(mousePosY/15) - 10) - ECS::GetComponent<PhysicsBody>(playerFollow).GetPosition();
 	float length = sqrt(newPos.x * newPos.x + newPos.y * newPos.y);
 	newPos = b2Vec2(newPos.x, newPos.y);
@@ -985,17 +1019,7 @@ void PhysicsPlayground::ZoomCamera()
 
 
 
-int gLength = 10, gWidth = 5;
-b2Vec2 pastPlayerPosition = b2Vec2(999,999);
-int nextNode = 1;
-float pathFindTimerDefault = 2.f;
-float pathFindTimer = pathFindTimerDefault;
-float switchNodeTimer = 0.f;
-float attackCooldownTimerDefault = 1.f;
-float attackCooldownTimer = attackCooldownTimerDefault;
-bool startAttackCooldown = false;
-int lastHealth;
-int lastDash;
+
 
 void PhysicsPlayground::Update()
 {
@@ -1004,7 +1028,7 @@ void PhysicsPlayground::Update()
 	player.Update();
 	player.canYouFuckingJump = ECS::GetComponent<CanJump>(MainEntities::MainPlayer()).m_canJump;
 	player.haveYouPressedSpace = spacePressed;
-	if (player.m_attacking) {
+	if (player.m_attacking && player.haveYouPressedSpace == false) {
 		ECS::GetComponent<Sprite>(MainEntities::MainPlayer()).SetWidth(128);
 	}
 	else if (player.m_dashing) {
@@ -1070,7 +1094,7 @@ void PhysicsPlayground::Update()
 		
 		for (int y = 0; y < (gWidth * 50); y+=50)
 		{
-			for (int x = 0 + 675; x < (gLength * 50)+ 675; x+=50)
+			for (int x = 0 -800; x < (gLength * 50)-800; x+=50)
 			{
 				RayCastCallback nodeRay;
 				m_physicsWorld->RayCast(&nodeRay, b2Vec2(x,y) + b2Vec2(0, 50), b2Vec2(x, y));
@@ -1111,6 +1135,16 @@ void PhysicsPlayground::Update()
 		//std::cout << "\nNum:" << mushroomBoss;
 		//std::cout << "\nNum2:" << mushroomBoss2;
 		player.theAttackTrigger = attackTrigger1;
+
+
+		makeBat(-400, 300, 0.02, 0, 10, 10);
+		makeBat(-400, 310, 0.02, 0, 10, 10);
+		makeBat(-745, 400, 0.02, 0, 10, 10);
+		makeBat(-745, 410, 0.02, 0, 10, 10);
+		makeBat(-735, 410, 0.02, 0, 10, 10);
+
+
+
 		startup = true;
 	}
 	
@@ -1409,7 +1443,7 @@ void PhysicsPlayground::RunLevelEditor()
 				if (objectAlreadySelected == false)
 				{
 					//writeUndoFile(m_physicsWorld);
-					std::cout << "\n" << selectRay.m_fixture->GetBody()->GetPosition().x;
+					std::cout << "\nX: " << selectRay.m_fixture->GetBody()->GetPosition().x << " Y: " << selectRay.m_fixture->GetBody()->GetPosition().y;
 					selectedEntity = (int)selectRay.m_fixture->GetBody()->GetUserData();
 					objectAlreadySelected = true;
 				}
@@ -1829,6 +1863,7 @@ void PhysicsPlayground::KeyboardHold()
 		{
 
 			isTouchingIceWall = false;
+
 		}
 
 

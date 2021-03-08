@@ -43,6 +43,53 @@ public:
 	void RunLevelEditor();
 	void cameraTrackPlayer();
 	void ZoomCamera();
+
+	float cameraZoomDefault = 75.f;
+	float cameraZoom = 75.f;
+	float aRatio;
+	float nPlane = 3.0f;
+	float fov = 70.f;
+
+	//Important Variables
+	float mousePosX, mousePosY;
+	bool levelEditor, startup = false;
+
+	float saveUITimer;
+	bool objectAlreadySelected;
+	bool entitiesCreated = false;
+	SDL_MouseButtonEvent mouseEvnt;
+	float autosaveTimer = 0.f;
+	int autosaveInterval = 60;
+	float defaultForce = 160000.f;
+	float jumpForce = defaultForce;
+	int airJumpDefault = 1;
+	int airJumpCounter = airJumpDefault;
+	bool spaceReleased = false;
+	//bool spacePressed = false;
+	bool canDash = false;
+	float dashAmount = 60.f;
+	float airDashDefault = 3.f;
+	float airDashCounter = airDashDefault;
+	bool loadStarted = false;
+	int playerHpDefault = 3;
+	int playerHp = playerHpDefault;
+	int dummyHpDefault = 10;
+	int dummyHp = playerHpDefault;
+	int health = 3;
+	bool isTouchingIceWall = false;
+
+	int gLength = 10, gWidth = 10;
+	b2Vec2 pastPlayerPosition = b2Vec2(999, 999);
+	int nextNode = 1;
+	float pathFindTimerDefault = 2.f;
+	float pathFindTimer = pathFindTimerDefault;
+	float switchNodeTimer = 0.f;
+	float attackCooldownTimerDefault = 1.f;
+	float attackCooldownTimer = attackCooldownTimerDefault;
+	bool startAttackCooldown = false;
+	int lastHealth;
+	int lastDash;
+
 protected:
 	bool m_firstWindow = false;
 	bool m_secondWindow = false;
@@ -65,6 +112,8 @@ protected:
 	int mushroomBoss2;
 	int zoomTrigger1;
 	int attackTrigger1;
+	int translateTrigger1;
+
 
 	int healthBar;
 	int dashBar;
