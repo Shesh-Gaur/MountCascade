@@ -1,6 +1,7 @@
 #include "PhysicsBody.h"
 #include "ECS.h"
 #include "Astar.h"
+#include "RayCastCallback.h"
 
 bool PhysicsBody::m_drawBodies = false;
 std::vector<int> PhysicsBody::m_bodiesToDelete;
@@ -140,31 +141,54 @@ void PhysicsBody::Update(Transform * trans)
 {
 	if (name == "Bat")
 	{
-		
-		if (getCurrentClock() % 5 == 0) //Runs Pathfinding Calculations 12 times every 60 frames (5 Times more performant now!)
+		if (playerSpotted == false && getCurrentClock() % 10 == 0)
 		{
-			if (knockedBack == false)
+			RayCastCallback viewRay;
+			m_body->GetWorld()->RayCast(&viewRay, GetPosition(), ECS::GetComponent<PhysicsBody>(MainEntities::MainPlayer()).GetPosition());
+
+			if (viewRay.m_fixture->GetBody() == ECS::GetComponent<PhysicsBody>(MainEntities::MainPlayer()).GetBody())
 			{
-				dispatchAI();
-				SetNextMovement(CalculateMovement(getPathSet()[getPathCount() - 1].position));
+
+				playerSpotted = true;
 			}
 		}
 
-		if (knockedBack == false)
+		if (playerSpotted == true)
 		{
-			GetBody()->SetLinearVelocity(b2Vec2(GetNextMovement().x * GetSpeed() * getDeltaTime(), GetNextMovement().y * GetSpeed() * getDeltaTime()));
+			SetGravityScale(0);
+			GetBody()->GetFixtureList()->SetFriction(0);
+
+			if (getCurrentClock() % 5 == 0) //Runs Pathfinding Calculations 12 times every 60 frames (5 Times more performant now!)
+			{
+				if (knockedBack == false)
+				{
+					dispatchAI();
+					SetNextMovement(CalculateMovement(getPathSet()[getPathCount() - 1].position));
+				}
+			}
+
+			if (knockedBack == false)
+			{
+				GetBody()->SetLinearVelocity(b2Vec2(GetNextMovement().x * GetSpeed() * getDeltaTime(), GetNextMovement().y * GetSpeed() * getDeltaTime()));
+			}
+			else
+			{
+				b2Vec2 knockDir = -CalculateMovement(ECS::GetComponent<PhysicsBody>(MainEntities::MainPlayer()).GetPosition());
+				GetBody()->SetLinearVelocity(b2Vec2(knockDir.x * 30 * knockbackTimer, knockDir.y * 30 * knockbackTimer));
+				knockbackTimer -= 1 / knockbackTimer * getDeltaTime();
+
+				if (knockbackTimer <= 0)
+				{
+					knockbackTimer = knockbackDefault;
+					knockedBack = false;
+				}
+			}
 		}
 		else
 		{
-			b2Vec2 knockDir = -CalculateMovement(ECS::GetComponent<PhysicsBody>(MainEntities::MainPlayer()).GetPosition());
-			GetBody()->SetLinearVelocity(b2Vec2(knockDir.x * 30 * knockbackTimer,knockDir.y * 30 * knockbackTimer));
-			knockbackTimer -= 1/knockbackTimer * getDeltaTime();
-			
-			if (knockbackTimer <= 0)
-			{
-				knockbackTimer = knockbackDefault;
-				knockedBack = false;
-			}
+			SetGravityScale(-1);
+			GetBody()->GetFixtureList()->SetFriction(1);
+
 		}
 	}
 	//Make sure that movement doesn't happen in contact step

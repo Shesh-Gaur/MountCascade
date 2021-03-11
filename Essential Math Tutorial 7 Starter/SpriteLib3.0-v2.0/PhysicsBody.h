@@ -186,4 +186,5 @@ private:
 	float knockbackDefault = 1.f;
 	float knockbackTimer = knockbackDefault;
 	bool knockedBack = false;
+	bool playerSpotted = false;
 };

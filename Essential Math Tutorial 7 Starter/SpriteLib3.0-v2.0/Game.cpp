@@ -316,7 +316,6 @@ void Game::SwapScene(int newScene)
 	BackEnd::SetWindowName(m_activeScene->GetName());
 
 	PhysicsSystem::Init();
-	
 
 
 

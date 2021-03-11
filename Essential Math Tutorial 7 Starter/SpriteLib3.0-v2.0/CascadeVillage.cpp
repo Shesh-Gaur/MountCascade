@@ -21,6 +21,14 @@ CascadeVillage::CascadeVillage(std::string name)
 
 void CascadeVillage::InitScene(float windowWidth, float windowHeight)
 {
+
+	m_physicsWorld = new b2World(m_gravity);
+	m_name = "Cascade";
+	m_gravity = b2Vec2(0.f, -45.f);
+	m_physicsWorld->SetGravity(m_gravity);
+
+	m_physicsWorld->SetContactListener(&listener);
+
 	//Dynamically allocates the register
 	m_sceneReg = new entt::registry;
 
@@ -365,6 +373,57 @@ void CascadeVillage::InitScene(float windowWidth, float windowHeight)
 		tempPhsBody.SetColor(vec4(1.f, 0.f, 0.f, 0.3f));
 		tempPhsBody.SetName("Trigger");
 	}
+
+	readSaveFile();
+	resetGrid();
+	for (int y = 0; y < (gWidth * 50); y += 50)
+	{
+		for (int x = 0 - 800; x < (gLength * 50) - 800; x += 50)
+		{
+			RayCastCallback nodeRay;
+			m_physicsWorld->RayCast(&nodeRay, b2Vec2(x, y) + b2Vec2(0, 50), b2Vec2(x, y));
+			if (nodeRay.m_fixture == nullptr)
+			{
+				m_physicsWorld->RayCast(&nodeRay, b2Vec2(x, y) + b2Vec2(0, -50), b2Vec2(x, y));
+				if (nodeRay.m_fixture == nullptr)
+				{
+					m_physicsWorld->RayCast(&nodeRay, b2Vec2(x, y) + b2Vec2(-50, 0), b2Vec2(x, y));
+					if (nodeRay.m_fixture == nullptr)
+					{
+						m_physicsWorld->RayCast(&nodeRay, b2Vec2(x, y) + b2Vec2(50, 0), b2Vec2(x, y));
+
+
+					}
+
+				}
+
+			}
+
+			//Hmm so for some reason when I add this code to make sure that a node still appears at the AI's spawn point,the game crashes when I get there.
+			//if (nodeRay.m_fixture == nullptr || nodeRay.m_fixture->GetBody()->GetType() == b2_dynamicBody)
+			//{
+
+			if (nodeRay.m_fixture == nullptr)
+			{
+
+				//makeNode(x, y ,1);
+				//Adds a blank node to the list
+				makeGrid(b2Vec2(x, y));
+
+			}
+
+
+		}
+	}
+	updateNbors(m_physicsWorld);
+	//std::cout << "\nNum:" << mushroomBoss;
+	//std::cout << "\nNum2:" << mushroomBoss2;
+	auto& player = ECS::GetComponent<Player>(MainEntities::MainPlayer());
+	player.theAttackTrigger = attackTrigger1;
+
+
+
+	startup = true;
 
 	ECS::GetComponent<HorizontalScroll>(MainEntities::MainCamera()).SetFocus(&ECS::GetComponent<Transform>(MainEntities::MainPlayer()));
 	ECS::GetComponent<VerticalScroll>(MainEntities::MainCamera()).SetFocus(&ECS::GetComponent<Transform>(MainEntities::MainPlayer()));
@@ -946,55 +1005,7 @@ void CascadeVillage::Update()
 	if (startup == false)
 	{
 		
-		readSaveFile();
-		resetGrid();
-		for (int y = 0; y < (gWidth * 50); y += 50)
-		{
-			for (int x = 0 - 800; x < (gLength * 50) - 800; x += 50)
-			{
-				RayCastCallback nodeRay;
-				m_physicsWorld->RayCast(&nodeRay, b2Vec2(x, y) + b2Vec2(0, 50), b2Vec2(x, y));
-				if (nodeRay.m_fixture == nullptr)
-				{
-					m_physicsWorld->RayCast(&nodeRay, b2Vec2(x, y) + b2Vec2(0, -50), b2Vec2(x, y));
-					if (nodeRay.m_fixture == nullptr)
-					{
-						m_physicsWorld->RayCast(&nodeRay, b2Vec2(x, y) + b2Vec2(-50, 0), b2Vec2(x, y));
-						if (nodeRay.m_fixture == nullptr)
-						{
-							m_physicsWorld->RayCast(&nodeRay, b2Vec2(x, y) + b2Vec2(50, 0), b2Vec2(x, y));
-
-
-						}
-
-					}
-
-				}
-
-				//Hmm so for some reason when I add this code to make sure that a node still appears at the AI's spawn point,the game crashes when I get there.
-				//if (nodeRay.m_fixture == nullptr || nodeRay.m_fixture->GetBody()->GetType() == b2_dynamicBody)
-				//{
-
-				if (nodeRay.m_fixture == nullptr)
-				{
-
-					//makeNode(x, y ,1);
-					//Adds a blank node to the list
-					makeGrid(b2Vec2(x, y));
-					
-				}
-
-
-			}
-		}
-		updateNbors(m_physicsWorld);
-		//std::cout << "\nNum:" << mushroomBoss;
-		//std::cout << "\nNum2:" << mushroomBoss2;
-		player.theAttackTrigger = attackTrigger1;
-
-
-
-		startup = true;
+		
 	}
 	
 	if (ECS::GetComponent<PhysicsBody>(MainEntities::MainPlayer()).GetBody()->GetContactList() != NULL)
