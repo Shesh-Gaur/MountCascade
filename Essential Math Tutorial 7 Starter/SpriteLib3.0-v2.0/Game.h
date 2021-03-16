@@ -64,6 +64,8 @@ public:
 	void MouseClick(SDL_MouseButtonEvent evnt);
 	void MouseWheel(SDL_MouseWheelEvent evnt);
 	void SwapScene(int newScene);
+	bool switchSceneCascadeVillage = false;
+	bool switchSceneMushroomCave = false;
 
 private:
 	//The window
@@ -88,7 +90,6 @@ private:
 	//Xbox Input
 	XInputManager input;
 };
-
 
 
 #endif // !__GAME_H__

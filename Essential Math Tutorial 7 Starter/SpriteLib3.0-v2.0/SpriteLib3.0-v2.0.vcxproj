@@ -166,6 +166,7 @@
     <ClInclude Include="include\imgui\imstb_truetype.h" />
     <ClInclude Include="Input.h" />
     <ClInclude Include="JSON.h" />
+    <ClInclude Include="LoadTrigger.h" />
     <ClInclude Include="MainEntities.h" />
     <ClInclude Include="Matrix.h" />
     <ClInclude Include="PhysicsBody.h" />
@@ -188,6 +189,7 @@
     <ClInclude Include="TextureManager.h" />
     <ClInclude Include="Timer.h" />
     <ClInclude Include="Transform.h" />
+    <ClInclude Include="TransitionTrigger.h" />
     <ClInclude Include="TranslateTrigger.h" />
     <ClInclude Include="Trigger.h" />
     <ClInclude Include="UI.h" />
@@ -229,6 +231,7 @@
     <ClCompile Include="include\imgui\imgui_widgets.cpp" />
     <ClCompile Include="Input.cpp" />
     <ClCompile Include="JSON.cpp" />
+    <ClCompile Include="LoadTrigger.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="MainEntities.cpp" />
     <ClCompile Include="Matrix.cpp" />
@@ -250,6 +253,7 @@
     <ClCompile Include="TextureManager.cpp" />
     <ClCompile Include="Timer.cpp" />
     <ClCompile Include="Transform.cpp" />
+    <ClCompile Include="TransitionTrigger.cpp" />
     <ClCompile Include="TranslateTrigger.cpp" />
     <ClCompile Include="Trigger.cpp" />
     <ClCompile Include="UI.cpp" />

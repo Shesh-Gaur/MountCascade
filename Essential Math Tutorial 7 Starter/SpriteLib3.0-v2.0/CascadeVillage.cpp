@@ -120,7 +120,7 @@ void CascadeVillage::InitScene(float windowWidth, float windowHeight)
 
 		//Set up the components
 		std::string fileName = "ui/Health3.png";
-		ECS::GetComponent<Sprite>(entity).LoadSprite(fileName, 240, 125);
+		ECS::GetComponent<Sprite>(entity).LoadSprite(fileName, 65, 15);
 		ECS::GetComponent<Sprite>(entity).SetTransparency(0.8f);
 		ECS::GetComponent<Transform>(entity).SetPosition(vec3(0.f, 0.f, 2.f));
 	}
@@ -365,6 +365,44 @@ void CascadeVillage::InitScene(float windowWidth, float windowHeight)
 		b2BodyDef tempDef;
 		tempDef.type = b2_staticBody;
 		tempDef.position.Set(float32(700.f), float32(-120.f));
+
+		tempBody = m_physicsWorld->CreateBody(&tempDef);
+
+		tempPhsBody = PhysicsBody(entity, tempBody, float(tempSpr.GetWidth() - shrinkX),
+			float(tempSpr.GetHeight() - shrinkY), vec2(0.f, 0.f), true, TRIGGER, PLAYER);
+		tempPhsBody.SetColor(vec4(1.f, 0.f, 0.f, 0.3f));
+		tempPhsBody.SetName("Trigger");
+	}
+	//Setup trigger
+	{
+		//Creates entity
+		auto entity = ECS::CreateEntity();
+
+		//Add components
+		ECS::AttachComponent<Transform>(entity);
+		ECS::AttachComponent<PhysicsBody>(entity);
+		ECS::AttachComponent<Trigger*>(entity);
+		ECS::AttachComponent<Sprite>(entity);
+
+		//Sets up components
+		std::string fileName = "boxSprite.jpg";
+		ECS::GetComponent<Sprite>(entity).LoadSprite(fileName, 50, 50);
+		ECS::GetComponent<Sprite>(entity).SetTransparency(0.5f);
+		ECS::GetComponent<Transform>(entity).SetPosition(vec3(30.f, -20.f, 0.002f));
+		ECS::GetComponent<Trigger*>(entity) = new TransitionTrigger();
+		ECS::GetComponent<Trigger*>(entity)->SetTriggerEntity(entity);
+
+		TransitionTrigger* temp = (TransitionTrigger*)ECS::GetComponent<Trigger*>(entity);
+		temp->nextScene = 1;
+
+		auto& tempPhsBody = ECS::GetComponent<PhysicsBody>(entity);
+		auto& tempSpr = ECS::GetComponent<Sprite>(entity);
+		float shrinkX = 0.f;
+		float shrinkY = 0.f;
+		b2Body* tempBody;
+		b2BodyDef tempDef;
+		tempDef.type = b2_staticBody;
+		tempDef.position.Set(float32(1950.f), float32(283.f));
 
 		tempBody = m_physicsWorld->CreateBody(&tempDef);
 
@@ -857,6 +895,23 @@ void CascadeVillage::readSaveFile()
 
 	}
 	editorSaveFile.close();
+
+	if (startup == true)
+	{
+		std::fstream playerSaveFile;
+		playerSaveFile.open("assets/PlayerSaves/File1.txt");
+
+		float newXPos, newYPos;
+		playerSaveFile >> newXPos;
+		playerSaveFile >> newYPos;
+
+		ECS::GetComponent<PhysicsBody>(MainEntities::MainPlayer()).SetPosition(b2Vec2(newXPos, newYPos));
+		ECS::GetComponent<PhysicsBody>(playerFollow).SetPosition(b2Vec2(newXPos, newYPos));
+
+		playerSaveFile.close();
+	}
+
+	
 }
 
 
@@ -1004,7 +1059,7 @@ void CascadeVillage::Update()
 
 	if (startup == false)
 	{
-		
+		startup = true;
 		
 	}
 	

@@ -1,5 +1,4 @@
 #include "Game.h"
-
 #include <random>
 
 
@@ -51,6 +50,7 @@ void Game::InitGame()
 	BackEnd::SetWindowName(m_activeScene->GetName());
 
 	PhysicsSystem::Init();
+	
 }
 
 bool Game::Run()
@@ -99,6 +99,7 @@ void Game::Update()
 
 	//Updates the active scene
 	m_activeScene->Update();
+
 }
 
 void Game::GUI()
@@ -219,7 +220,22 @@ void Game::KeyboardDown()
 		m_activeScene->KeyboardDown();
 	}
 
+	if (switchSceneCascadeVillage == true)
+	{
 
+		switchSceneCascadeVillage = false;
+			SwapScene(3);
+			
+		
+	}
+
+	if (switchSceneMushroomCave == true)
+	{
+		switchSceneMushroomCave = false;
+		SwapScene(1);
+
+
+	}
 	if (Input::GetKeyDown(Key::Z))
 	{
 		SwapScene(3);
@@ -305,21 +321,21 @@ void Game::MouseWheel(SDL_MouseWheelEvent evnt)
 
 void Game::SwapScene(int newScene)
 {
-	m_activeScene->Unload();
-	m_activeScene = m_scenes[newScene];
 
-	m_activeScene->InitScene(float(BackEnd::GetWindowWidth()), float(BackEnd::GetWindowHeight()));
+		std::cout << "\nMADE IT BRO";
+		m_activeScene->Unload();
+		m_activeScene = m_scenes[newScene];
 
-	//Sets m_register to point to the register in the active scene
-	m_register = m_activeScene->GetScene();
+		m_activeScene->InitScene(float(BackEnd::GetWindowWidth()), float(BackEnd::GetWindowHeight()));
 
-	BackEnd::SetWindowName(m_activeScene->GetName());
+		//Sets m_register to point to the register in the active scene
+		m_register = m_activeScene->GetScene();
 
-	PhysicsSystem::Init();
+		BackEnd::SetWindowName(m_activeScene->GetName());
 
-
-
-
+		PhysicsSystem::Init();
+		switchSceneCascadeVillage = false;
+		switchSceneMushroomCave = false;
 }
 
 

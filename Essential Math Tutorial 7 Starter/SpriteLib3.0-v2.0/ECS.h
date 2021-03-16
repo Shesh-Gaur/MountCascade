@@ -14,6 +14,7 @@
 #include "TranslateTrigger.h"
 #include "ZoomTrigger.h"
 #include "AttackTrigger.h"
+#include "TransitionTrigger.h"
 #include "HorizontalScroll.h"
 #include "CanJump.h"
 

@@ -44,6 +44,7 @@ public:
 	void cameraTrackPlayer();
 	void ZoomCamera();
 	void animateBackground();
+	void loadNear();
 	float cameraZoomDefault = 75.f;
 	float cameraZoom = 75.f;
 	float aRatio;
@@ -52,7 +53,7 @@ public:
 
 	//Important Variables
 	float mousePosX, mousePosY;
-	bool levelEditor, startup = false;
+	bool levelEditor,levelEditorStartup = false, startup = false;
 
 	float saveUITimer;
 	bool objectAlreadySelected;
