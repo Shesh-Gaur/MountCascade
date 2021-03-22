@@ -130,13 +130,13 @@ void Player::MovementUpdate()
 
 			if (Input::GetKey(Key::A))
 			{
-				m_transform->SetPositionX(m_transform->GetPositionX() - (speed * Timer::deltaTime));
+				//m_transform->SetPositionX(m_transform->GetPositionX() - (speed * Timer::deltaTime));
 				m_facing = LEFT;
 				m_moving = true;
 			}
 			if (Input::GetKey(Key::D))
 			{
-				m_transform->SetPositionX(m_transform->GetPositionX() + (speed * Timer::deltaTime));
+				//m_transform->SetPositionX(m_transform->GetPositionX() + (speed * Timer::deltaTime));
 				m_facing = RIGHT;
 				m_moving = true;
 			}
@@ -175,7 +175,14 @@ void Player::AnimationUpdate()
 		else if (m_attacking && haveYouPressedSpace == false)
 		{
 			activeAnimation = ATTACK;
+			if (canYouFuckingJump == true)
+			{
+				ECS::GetComponent<PhysicsBody>(MainEntities::MainPlayer()).SetPosition(ECS::GetComponent<PhysicsBody>(MainEntities::MainPlayer()).GetPosition());
+			}
+			else
+			{
 
+			}
 			if (m_facing == RIGHT)
 			{
 				ECS::GetComponent<PhysicsBody>(theAttackTrigger).SetPosition(ECS::GetComponent<PhysicsBody>(MainEntities::MainPlayer()).GetPosition() + b2Vec2(23.f, 0.f));
@@ -199,6 +206,7 @@ void Player::AnimationUpdate()
 				activeAnimation = IDLE;
 			}
 		}
+
 		else
 		{
 			activeAnimation = IDLE;
@@ -207,6 +215,7 @@ void Player::AnimationUpdate()
 
 		if (haveYouPressedSpace) {
 			activeAnimation = CHARGEJUMP;
+			
 			//if (!m_attacking && !haveYouPressedSpace && !canYouFuckingJump) activeAnimation = JUMP;
 			//if (canYouFuckingJump) activeAnimation = RUN;
 		}

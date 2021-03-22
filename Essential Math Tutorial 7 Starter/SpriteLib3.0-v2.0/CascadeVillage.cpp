@@ -1,4 +1,3 @@
-#include "PhysicsPlayground.h"
 #include "Utilities.h"
 #include "RayCastCallback.h"
 #include <random>
@@ -23,7 +22,7 @@ void CascadeVillage::InitScene(float windowWidth, float windowHeight)
 {
 
 	m_physicsWorld = new b2World(m_gravity);
-	m_name = "Cascade";
+	m_name = "Mt.Cascade";
 	m_gravity = b2Vec2(0.f, -45.f);
 	m_physicsWorld->SetGravity(m_gravity);
 

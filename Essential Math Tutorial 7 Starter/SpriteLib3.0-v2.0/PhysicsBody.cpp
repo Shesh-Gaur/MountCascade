@@ -148,10 +148,13 @@ void PhysicsBody::Update(Transform * trans)
 			RayCastCallback viewRay;
 			m_body->GetWorld()->RayCast(&viewRay, GetPosition(), ECS::GetComponent<PhysicsBody>(MainEntities::MainPlayer()).GetPosition());
 
-			if (viewRay.m_fixture->GetBody() == ECS::GetComponent<PhysicsBody>(MainEntities::MainPlayer()).GetBody())
+			if (viewRay.m_fixture != NULL)
 			{
+				if (viewRay.m_fixture->GetBody() == ECS::GetComponent<PhysicsBody>(MainEntities::MainPlayer()).GetBody())
+				{
 
-				playerSpotted = true;
+					playerSpotted = true;
+				}
 			}
 		}
 
