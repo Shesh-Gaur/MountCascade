@@ -1,4 +1,5 @@
 #include "PhysicsBody.h"
+//#include "Bat.h"
 #include "ECS.h"
 #include "Astar.h"
 #include "RayCastCallback.h"
@@ -141,6 +142,8 @@ void PhysicsBody::Update(Transform * trans)
 {
 	if (name == "Bat")
 	{
+		auto& bat = ECS::GetComponent<Bat>((int)m_body->GetUserData());
+		//bat.Update();
 		if (playerSpotted == false && getCurrentClock() % 10 == 0)
 		{
 			RayCastCallback viewRay;

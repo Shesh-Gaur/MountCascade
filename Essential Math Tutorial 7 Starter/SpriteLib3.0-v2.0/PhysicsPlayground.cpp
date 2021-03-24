@@ -158,7 +158,7 @@ void PhysicsPlayground::InitScene(float windowWidth, float windowHeight)
 
 		tempBody = m_physicsWorld->CreateBody(&tempDef);
 
-		tempPhsBody = PhysicsBody(entity, tempBody, float(tempSpr.GetWidth() - shrinkX), vec2(0.f, 0.f), false, OBJECTS,PICKUP,0.f,0.f);
+		tempPhsBody = PhysicsBody(entity, tempBody, float(tempSpr.GetWidth() - shrinkX), vec2(0.f, 0.f), false, OBJECTS, PICKUP, 0.f, 0.f);
 		tempPhsBody.SetColor(vec4(0.f, 1.f, 0.f, 0.3f));
 		tempPhsBody.SetRotationAngleDeg(0);
 
@@ -195,7 +195,7 @@ void PhysicsPlayground::InitScene(float windowWidth, float windowHeight)
 
 		//Set up the components
 		std::string fileName = "LevelEditorUI/ChangesSaved.png";
-		ECS::GetComponent<Sprite>(entity).LoadSprite(fileName, 160,90);
+		ECS::GetComponent<Sprite>(entity).LoadSprite(fileName, 160, 90);
 		ECS::GetComponent<Sprite>(entity).SetTransparency(0.f);
 		ECS::GetComponent<Transform>(entity).SetPosition(vec3(0.f, 0.f, 18.f));
 	}
@@ -217,7 +217,7 @@ void PhysicsPlayground::InitScene(float windowWidth, float windowHeight)
 		ECS::GetComponent<Sprite>(entity).SetTransparency(0.f);
 		ECS::GetComponent<Transform>(entity).SetPosition(vec3(0.f, 0.f, 2.f));
 	}
-	
+
 	//Player
 	{
 		/*Scene::CreatePhysicsSprite(m_sceneReg, "LinkStandby", 80, 60, 1.f, vec3(0.f, 30.f, 2.f), b2_dynamicBody, 0.f, 0.f, true, true)*/
@@ -243,7 +243,7 @@ void PhysicsPlayground::InitScene(float windowWidth, float windowHeight)
 		ECS::GetComponent<Transform>(entity).SetPosition(vec3(0.f, 30.f, 0.02f));
 		auto& tempSpr = ECS::GetComponent<Sprite>(entity);
 		auto& tempPhsBody = ECS::GetComponent<PhysicsBody>(entity);
-		
+
 		float shrinkX = 40.f;
 		float shrinkY = 10.f;
 
@@ -257,7 +257,7 @@ void PhysicsPlayground::InitScene(float windowWidth, float windowHeight)
 		//tempPhsBody = PhysicsBody(entity, tempBody, float(tempSpr.GetWidth() - shrinkX), float(tempSpr.GetHeight() - shrinkY), vec2(0.f, 0.f), false, PLAYER, ENEMY | OBJECTS | PICKUP | TRIGGER, 0.5f, 3.f);
 
 		tempPhsBody = PhysicsBody(entity, tempBody, float(tempSpr.GetWidth() - shrinkX),
-		float(tempSpr.GetHeight() - shrinkY), vec2(0.f, -5.f), false, PLAYER, ENVIRONMENT | ENEMY | OBJECTS | PICKUP | TRIGGER | HEXAGON, 1.1f, 1.6f);
+			float(tempSpr.GetHeight() - shrinkY), vec2(0.f, -5.f), false, PLAYER, ENVIRONMENT | ENEMY | OBJECTS | PICKUP | TRIGGER | HEXAGON, 1.1f, 1.6f);
 		//std::vector<b2Vec2> points = {b2Vec2(-tempSpr.GetWidth()/2.f, -tempSpr.GetHeight()/2.f), b2Vec2(tempSpr.GetWidth()/2.f, -tempSpr.GetHeight()/2.f), b2Vec2(0.f, tempSpr.GetHeight()/2.f)};
 		//tempPhsBody = PhysicsBody(entity, BodyType::BOX, tempBody, points, vec2(0.f, 0.f), false, PLAYER, ENEMY | OBJECTS | PICKUP | TRIGGER, 0.5f, 3.f);
 
@@ -272,7 +272,7 @@ void PhysicsPlayground::InitScene(float windowWidth, float windowHeight)
 
 		//Creates entity
 		auto entity = ECS::CreateEntity();
-		
+
 		//Add components
 		ECS::AttachComponent<Sprite>(entity);
 		ECS::AttachComponent<Transform>(entity);
@@ -317,7 +317,7 @@ void PhysicsPlayground::InitScene(float windowWidth, float windowHeight)
 		std::string fileName = "Cave_back-background1.png";
 		ECS::GetComponent<Sprite>(entity).LoadSprite(fileName, 3200, 1800);
 		ECS::GetComponent<Sprite>(entity).SetTransparency(1.f);
-		ECS::GetComponent<Transform>(entity).SetPosition(vec3(200.f, 150.f,-65.f));
+		ECS::GetComponent<Transform>(entity).SetPosition(vec3(200.f, 150.f, -65.f));
 	}
 
 	//Setup new Entity
@@ -373,7 +373,7 @@ void PhysicsPlayground::InitScene(float windowWidth, float windowHeight)
 		ECS::GetComponent<Sprite>(entity).SetTransparency(1.f);
 		ECS::GetComponent<Transform>(entity).SetPosition(vec3(100.f, 300.f, -50.f));
 	}
-
+	{
 	//Setup new Entity
 	{
 		/*Scene::CreateSprite(m_sceneReg, "HelloWorld.png", 100, 60, 0.5f, vec3(0.f, 0.f, 0.f));*/
@@ -465,7 +465,7 @@ void PhysicsPlayground::InitScene(float windowWidth, float windowHeight)
 	//	tempPhsBody.SetHealth(2);
 
 	//}
-
+	}
 	//Setup trigger
 	{
 		//Creates entity
@@ -611,8 +611,6 @@ void PhysicsPlayground::InitScene(float windowWidth, float windowHeight)
 	makeBat(-745, 400, 0.02, 0, 10, 10);
 	makeBat(-745, 410, 0.02, 0, 10, 10);
 	makeBat(-735, 410, 0.02, 0, 10, 10);
-
-
 
 	startup = true;
 
@@ -853,12 +851,18 @@ void PhysicsPlayground::makeBat(float xPos, float yPos, float zPos, float rotati
 	auto entity = ECS::CreateEntity();
 	//Add components
 	ECS::AttachComponent<Sprite>(entity);
+	ECS::AttachComponent<Bat>(entity);
 	ECS::AttachComponent<Transform>(entity);
 	ECS::AttachComponent<PhysicsBody>(entity);
+	ECS::AttachComponent<AnimationController>(entity);
 
 	//Set up the components
-	std::string fileName = "BeachBall.png";
-	ECS::GetComponent<Sprite>(entity).LoadSprite(fileName, width, height);
+	//std::string fileName = "BeachBall.png";
+	//ECS::GetComponent<Sprite>(entity).LoadSprite(fileName, width, height);
+	std::string fileName = "spritesheets/Bat sprite.png";
+	std::string animations = "Bat.json";
+	ECS::GetComponent<Bat>(entity).InitBat(fileName, animations, 16, 16, &ECS::GetComponent<Sprite>(entity),
+		&ECS::GetComponent<AnimationController>(entity), &ECS::GetComponent<Transform>(entity));
 	ECS::GetComponent<Sprite>(entity).SetTransparency(1.f);
 	ECS::GetComponent<Transform>(entity).SetPosition(vec3(0.f, 0.f, zPos));
 	auto& tempSpr = ECS::GetComponent<Sprite>(entity);
@@ -878,10 +882,8 @@ void PhysicsPlayground::makeBat(float xPos, float yPos, float zPos, float rotati
 	tempPhsBody.SetRotationAngleDeg(rotation);
 	tempPhsBody.SetName("Bat");
 	tempPhsBody.SetHealth(2);
-	
 
 }
-
 
 void PhysicsPlayground::makeIceWall(float xPos, float yPos, float zPos, float rotation, float width, float height)
 {
@@ -918,7 +920,6 @@ void PhysicsPlayground::makeIceWall(float xPos, float yPos, float zPos, float ro
 
 	
 }
-
 
 void PhysicsPlayground::writeAutoSaveFile(int file)
 {
@@ -1054,7 +1055,6 @@ void PhysicsPlayground::readSaveFile()
 	editorSaveFile.close();
 }
 
-
 void PhysicsPlayground::animateBackground()
 {
 	bgtimer += 1 * Timer::deltaTime;
@@ -1127,7 +1127,6 @@ void PhysicsPlayground::cameraTrackPlayer()
 
 }
 
-
 void PhysicsPlayground::ZoomCamera()
 {
 
@@ -1177,6 +1176,8 @@ void PhysicsPlayground::Update()
 	player.Update();
 	player.canYouFuckingJump = ECS::GetComponent<CanJump>(MainEntities::MainPlayer()).m_canJump;
 	player.haveYouPressedSpace = spacePressed;
+	auto& bat = ECS::GetComponent<Bat>((int)m_body->GetUserData());
+
 	if (player.m_attacking && player.haveYouPressedSpace == false) {
 		ECS::GetComponent<Sprite>(MainEntities::MainPlayer()).SetWidth(128);
 	}

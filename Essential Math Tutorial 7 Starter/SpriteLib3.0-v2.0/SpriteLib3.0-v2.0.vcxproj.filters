@@ -207,6 +207,9 @@
     <ClInclude Include="CascadeVillage.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="Bat.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="AnimationController.cpp">
@@ -387,6 +390,9 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="CascadeVillage.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Bat.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

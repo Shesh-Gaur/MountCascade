@@ -147,9 +147,9 @@ public:
 
 	
 	static std::vector<int> m_bodiesToDelete;
+	b2Body* m_body = nullptr;
 private:
 	//The actual box2D body
-	b2Body* m_body = nullptr;
 	//Body type
 	BodyType m_bodyType = BodyType::BOX;
 

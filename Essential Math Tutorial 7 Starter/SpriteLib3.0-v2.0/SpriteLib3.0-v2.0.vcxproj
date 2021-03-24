@@ -142,6 +142,7 @@
     <ClInclude Include="AnimationSystem.h" />
     <ClInclude Include="AttackTrigger.h" />
     <ClInclude Include="BackEnd.h" />
+    <ClInclude Include="Bat.h" />
     <ClInclude Include="BloomEffect.h" />
     <ClInclude Include="Camera.h" />
     <ClInclude Include="CameraSystem.h" />
@@ -207,6 +208,7 @@
     <ClCompile Include="AnimationSystem.cpp" />
     <ClCompile Include="AttackTrigger.cpp" />
     <ClCompile Include="BackEnd.cpp" />
+    <ClCompile Include="Bat.cpp" />
     <ClCompile Include="BloomEffect.cpp" />
     <ClCompile Include="Camera.cpp" />
     <ClCompile Include="CameraSystem.cpp" />
