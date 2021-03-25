@@ -334,6 +334,144 @@ void CascadeVillage::InitScene(float windowWidth, float windowHeight)
 		tempPhsBody.SetName("Trigger");
 	}
 
+	//Jump Text Tutorial Trigger
+	{
+		//Creates entity
+		auto entity = ECS::CreateEntity();
+		//Add components
+		ECS::AttachComponent<Transform>(entity);
+		ECS::AttachComponent<PhysicsBody>(entity);
+		ECS::AttachComponent<Trigger*>(entity);
+		ECS::AttachComponent<Sprite>(entity);
+
+		//Sets up components
+		std::string fileName = "boxSprite.jpg";
+		ECS::GetComponent<Sprite>(entity).LoadSprite(fileName, 156, 60);
+		ECS::GetComponent<Sprite>(entity).SetTransparency(0.0f);
+		ECS::GetComponent<Transform>(entity).SetPosition(vec3(-120.f, 60.f, 0.5f));
+		ECS::GetComponent<Trigger*>(entity) = new JumpTextTrigger();
+		ECS::GetComponent<Trigger*>(entity)->SetTriggerEntity(entity);
+
+		auto& tempPhsBody = ECS::GetComponent<PhysicsBody>(entity);
+
+		float shrinkX = 0.f;
+		float shrinkY = 0.f;
+		b2Body* tempBody;
+		b2BodyDef tempDef;
+		tempDef.type = b2_staticBody;
+		tempDef.position.Set(float32(-120.f), float32(60.f));
+
+		tempBody = m_physicsWorld->CreateBody(&tempDef);
+		//Size of body doesnt match sprite. Reference the other trigger to see how to set up.
+		tempPhsBody = PhysicsBody(entity, tempBody, float(40.f - shrinkX), float(40.f - shrinkY), vec2(0.f, 0.f), true, TRIGGER, PLAYER);
+		tempPhsBody.SetColor(vec4(1.f, 0.f, 0.f, 0.3f));
+		tempPhsBody.SetName("JumpTextTrigger");
+	}
+
+	//Dash Text Tutorial Trigger
+	{
+		//Creates entity
+		auto entity = ECS::CreateEntity();
+		//Add components
+		ECS::AttachComponent<Transform>(entity);
+		ECS::AttachComponent<PhysicsBody>(entity);
+		ECS::AttachComponent<Trigger*>(entity);
+		ECS::AttachComponent<Sprite>(entity);
+
+		//Sets up components
+		std::string fileName = "boxSprite.jpg";
+		ECS::GetComponent<Sprite>(entity).LoadSprite(fileName, 156, 60);
+		ECS::GetComponent<Sprite>(entity).SetTransparency(0.0f);
+		ECS::GetComponent<Transform>(entity).SetPosition(vec3(-120.f, 60.f, 0.5f));
+		ECS::GetComponent<Trigger*>(entity) = new DashTextTrigger();
+		ECS::GetComponent<Trigger*>(entity)->SetTriggerEntity(entity);
+
+		auto& tempPhsBody = ECS::GetComponent<PhysicsBody>(entity);
+
+		float shrinkX = 0.f;
+		float shrinkY = 0.f;
+		b2Body* tempBody;
+		b2BodyDef tempDef;
+		tempDef.type = b2_staticBody;
+		tempDef.position.Set(float32(380.f), float32(125.f));
+
+		tempBody = m_physicsWorld->CreateBody(&tempDef);
+		//Size of body doesnt match sprite. Reference the other trigger to see how to set up.
+		tempPhsBody = PhysicsBody(entity, tempBody, float(40.f - shrinkX), float(40.f - shrinkY), vec2(0.f, 0.f), true, TRIGGER, PLAYER);
+		tempPhsBody.SetColor(vec4(1.f, 0.f, 0.f, 0.3f));
+		tempPhsBody.SetName("DashTextTrigger");
+	}
+
+	//Wall Jump Text Tutorial Trigger
+	{
+		//Creates entity
+		auto entity = ECS::CreateEntity();
+		//Add components
+		ECS::AttachComponent<Transform>(entity);
+		ECS::AttachComponent<PhysicsBody>(entity);
+		ECS::AttachComponent<Trigger*>(entity);
+		ECS::AttachComponent<Sprite>(entity);
+
+		//Sets up components
+		std::string fileName = "boxSprite.jpg";
+		ECS::GetComponent<Sprite>(entity).LoadSprite(fileName, 156, 60);
+		ECS::GetComponent<Sprite>(entity).SetTransparency(0.0f);
+		ECS::GetComponent<Transform>(entity).SetPosition(vec3(-120.f, 60.f, 0.5f));
+		ECS::GetComponent<Trigger*>(entity) = new WallJumpTextTrigger();
+		ECS::GetComponent<Trigger*>(entity)->SetTriggerEntity(entity);
+
+
+		auto& tempPhsBody = ECS::GetComponent<PhysicsBody>(entity);
+
+		float shrinkX = 0.f;
+		float shrinkY = 0.f;
+		b2Body* tempBody;
+		b2BodyDef tempDef;
+		tempDef.type = b2_staticBody;
+		tempDef.position.Set(float32(1300.f), float32(120.f));
+
+		tempBody = m_physicsWorld->CreateBody(&tempDef);
+		//Size of body doesnt match sprite. Reference the other trigger to see how to set up.
+		tempPhsBody = PhysicsBody(entity, tempBody, float(40.f - shrinkX), float(40.f - shrinkY), vec2(0.f, 0.f), true, TRIGGER, PLAYER);
+		tempPhsBody.SetColor(vec4(1.f, 0.f, 0.f, 0.3f));
+		tempPhsBody.SetName("WallJumpTextTrigger");
+	}
+
+	//Attack Text Tutorial Trigger
+	{
+		//Creates entity
+		auto entity = ECS::CreateEntity();
+		//Add components
+		ECS::AttachComponent<Transform>(entity);
+		ECS::AttachComponent<PhysicsBody>(entity);
+		ECS::AttachComponent<Trigger*>(entity);
+		ECS::AttachComponent<Sprite>(entity);
+
+		//Sets up components
+		std::string fileName = "boxSprite.jpg";
+		ECS::GetComponent<Sprite>(entity).LoadSprite(fileName, 156, 60);
+		ECS::GetComponent<Sprite>(entity).SetTransparency(0.0f);
+		ECS::GetComponent<Transform>(entity).SetPosition(vec3(-120.f, 60.f, 0.0f));
+		ECS::GetComponent<Trigger*>(entity) = new AttackTextTrigger();
+		ECS::GetComponent<Trigger*>(entity)->SetTriggerEntity(entity);
+
+
+		auto& tempPhsBody = ECS::GetComponent<PhysicsBody>(entity);
+
+		float shrinkX = 0.f;
+		float shrinkY = 0.f;
+		b2Body* tempBody;
+		b2BodyDef tempDef;
+		tempDef.type = b2_staticBody;
+		tempDef.position.Set(float32(1630.f), float32(280.f));
+
+		tempBody = m_physicsWorld->CreateBody(&tempDef);
+		//Size of body doesnt match sprite. Reference the other trigger to see how to set up.
+		tempPhsBody = PhysicsBody(entity, tempBody, float(40.f - shrinkX), float(40.f - shrinkY), vec2(0.f, 0.f), true, TRIGGER, PLAYER);
+		tempPhsBody.SetColor(vec4(1.f, 0.f, 0.f, 0.3f));
+		tempPhsBody.SetName("AttackTextTrigger");
+	}
+
 	//Setup trigger
 	{
 		//Creates entity

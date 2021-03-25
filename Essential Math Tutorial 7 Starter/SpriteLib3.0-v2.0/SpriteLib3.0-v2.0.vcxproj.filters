@@ -216,6 +216,18 @@
     <ClInclude Include="BossPhase1.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="JumpTextTrigger.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="DashTextTrigger.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="WallJumpTextTrigger.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="AttackTextTrigger.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="AnimationController.cpp">
@@ -396,6 +408,18 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="CascadeVillage.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="JumpTextTrigger.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="DashTextTrigger.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="WallJumpTextTrigger.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="AttackTextTrigger.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="TransitionTrigger.cpp">

@@ -121,6 +121,4 @@ protected:
 	int dashBar;
 	int dummy;
 
-
-
 };

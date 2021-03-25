@@ -16,6 +16,10 @@
 #include "AttackTrigger.h"
 #include "TransitionTrigger.h"
 #include "HorizontalScroll.h"
+#include "JumpTextTrigger.h"
+#include "DashTextTrigger.h"
+#include "WallJumpTextTrigger.h"
+#include "AttackTextTrigger.h"
 #include "CanJump.h"
 
 

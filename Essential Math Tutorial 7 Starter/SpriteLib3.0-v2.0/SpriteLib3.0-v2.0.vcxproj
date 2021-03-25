@@ -140,6 +140,7 @@
     <ClInclude Include="AnimationController.h" />
     <ClInclude Include="AnimationSpritePlayground.h" />
     <ClInclude Include="AnimationSystem.h" />
+    <ClInclude Include="AttackTextTrigger.h" />
     <ClInclude Include="AttackTrigger.h" />
     <ClInclude Include="BackEnd.h" />
     <ClInclude Include="BloomEffect.h" />
@@ -148,6 +149,7 @@
     <ClInclude Include="CameraSystem.h" />
     <ClInclude Include="CanJump.h" />
     <ClInclude Include="CascadeVillage.h" />
+    <ClInclude Include="DashTextTrigger.h" />
     <ClInclude Include="DestroyTrigger.h" />
     <ClInclude Include="ECS.h" />
     <ClInclude Include="EffectManager.h" />
@@ -168,6 +170,7 @@
     <ClInclude Include="Input.h" />
     <ClInclude Include="JSON.h" />
     <ClInclude Include="LoadTrigger.h" />
+    <ClInclude Include="JumpTextTrigger.h" />
     <ClInclude Include="MainEntities.h" />
     <ClInclude Include="Matrix.h" />
     <ClInclude Include="PhysicsBody.h" />
@@ -199,6 +202,7 @@
     <ClInclude Include="VertexManager.h" />
     <ClInclude Include="VerticalScroll.h" />
     <ClInclude Include="VignetteEffect.h" />
+    <ClInclude Include="WallJumpTextTrigger.h" />
     <ClInclude Include="Window.h" />
     <ClInclude Include="Xinput.h" />
     <ClInclude Include="ZoomTrigger.h" />
@@ -208,6 +212,7 @@
     <ClCompile Include="AnimationController.cpp" />
     <ClCompile Include="AnimationSpritePlayground.cpp" />
     <ClCompile Include="AnimationSystem.cpp" />
+    <ClCompile Include="AttackTextTrigger.cpp" />
     <ClCompile Include="AttackTrigger.cpp" />
     <ClCompile Include="BackEnd.cpp" />
     <ClCompile Include="BloomEffect.cpp" />
@@ -216,6 +221,7 @@
     <ClCompile Include="CameraSystem.cpp" />
     <ClCompile Include="CanJump.cpp" />
     <ClCompile Include="CascadeVillage.cpp" />
+    <ClCompile Include="DashTextTrigger.cpp" />
     <ClCompile Include="DestroyTrigger.cpp" />
     <ClCompile Include="ECS.cpp" />
     <ClCompile Include="EffectManager.cpp" />
@@ -234,6 +240,7 @@
     <ClCompile Include="Input.cpp" />
     <ClCompile Include="JSON.cpp" />
     <ClCompile Include="LoadTrigger.cpp" />
+    <ClCompile Include="JumpTextTrigger.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="MainEntities.cpp" />
     <ClCompile Include="Matrix.cpp" />
@@ -264,6 +271,7 @@
     <ClCompile Include="VertexManager.cpp" />
     <ClCompile Include="VerticalScroll.cpp" />
     <ClCompile Include="VignetteEffect.cpp" />
+    <ClCompile Include="WallJumpTextTrigger.cpp" />
     <ClCompile Include="Window.cpp" />
     <ClCompile Include="XInput.cpp" />
     <ClCompile Include="ZoomTrigger.cpp" />
