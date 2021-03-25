@@ -6,6 +6,12 @@
 #include <iostream>
 #include "Astar.h"
 
+std::vector<int> batVec2;
+
+int startTime2 = clock();
+double diffTime2;
+int batFrameNum2 = 0;
+
 BossPhase1::BossPhase1(std::string name)
 	: Scene(name)
 {
@@ -987,7 +993,82 @@ void BossPhase1::Update()
 	else
 		ECS::GetComponent<Sprite>(MainEntities::MainPlayer()).SetWidth(64);
 
+	diffTime2 = (clock() - startTime2) / (double)(CLOCKS_PER_SEC);
 
+	if (diffTime2 > 0.1) {
+		batFrameNum2 += 1;
+		startTime2 = clock();
+		for (int i = 0; i < batVec2.size(); i++) {
+			std::cout << "Size: " << batVec2.size() << std::endl;
+
+			auto entity = batVec2[i];
+			std::string fileName = "bat/MR1.png";
+
+
+			if (!ECS::GetComponent<PhysicsBody>(entity).GetExists()) {
+				batVec2.erase(batVec2.begin() + i);
+				PhysicsBody::m_bodiesToDelete.push_back(entity);
+
+			}
+			else {
+				if (ECS::GetComponent<PhysicsBody>(entity).GetVelocity().x > 0) {
+					switch (batFrameNum2) {
+					case 1:
+						fileName = "bat/MR1.png";
+						break;
+					case 2:
+						fileName = "bat/MR2.png";
+						break;
+					case 3:
+						fileName = "bat/MR3.png";
+						break;
+					case 4:
+						fileName = "bat/MR4.png";
+						break;
+					case 5:
+						fileName = "bat/MR5.png";
+						break;
+					case 6:
+						fileName = "bat/MR6.png";
+						break;
+					default:
+						fileName = "bat/MR1.png";
+						batFrameNum2 = 1;
+						break;
+					}
+				}
+				else if (ECS::GetComponent<PhysicsBody>(entity).GetVelocity().x <= 0) {
+					switch (batFrameNum2) {
+					case 1:
+						fileName = "bat/ML1.png";
+						break;
+					case 2:
+						fileName = "bat/ML2.png";
+						break;
+					case 3:
+						fileName = "bat/ML3.png";
+						break;
+					case 4:
+						fileName = "bat/ML4.png";
+						break;
+					case 5:
+						fileName = "bat/ML5.png";
+						break;
+					case 6:
+						fileName = "bat/ML6.png";
+						break;
+					default:
+						fileName = "bat/ML1.png";
+						batFrameNum2 = 1;
+						break;
+					}
+				}
+
+				ECS::GetComponent<Sprite>(entity).LoadSprite(fileName, 15, 15);
+			}
+
+		}
+	}
 
 	if (lastDash != airDashCounter) {
 		if (airDashCounter >= 3) { //full dash bar

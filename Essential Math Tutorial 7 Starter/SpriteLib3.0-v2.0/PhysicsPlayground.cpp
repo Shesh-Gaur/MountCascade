@@ -8,6 +8,14 @@
 #include "ZoomTrigger.h"
 #include "ZoomConfirm.h"
 #include "TransitionTrigger.h"
+
+
+std::vector<int> batVec3;
+
+int startTime3 = clock();
+double diffTime3;
+int batFrameNum3 = 0;
+
 PhysicsPlayground::PhysicsPlayground(std::string name)
 	: Scene(name)
 {
@@ -1422,6 +1430,83 @@ void PhysicsPlayground::Update()
 			ECS::GetComponent<Sprite>(healthBar).LoadSprite(fileName, 65, 15);
 		}
 		lastHealth = health;
+	}
+
+	diffTime3 = (clock() - startTime3) / (double)(CLOCKS_PER_SEC);
+
+	if (diffTime3 > 0.1) {
+		batFrameNum3 += 1;
+		startTime3 = clock();
+		for (int i = 0; i < batVec3.size(); i++) {
+			std::cout << "Size: " << batVec3.size() << std::endl;
+
+			auto entity = batVec3[i];
+			std::string fileName = "bat/MR1.png";
+
+
+			if (!ECS::GetComponent<PhysicsBody>(entity).GetExists()) {
+				batVec3.erase(batVec3.begin() + i);
+				PhysicsBody::m_bodiesToDelete.push_back(entity);
+
+			}
+			else {
+				if (ECS::GetComponent<PhysicsBody>(entity).GetVelocity().x > 0) {
+					switch (batFrameNum3) {
+					case 1:
+						fileName = "bat/MR1.png";
+						break;
+					case 2:
+						fileName = "bat/MR2.png";
+						break;
+					case 3:
+						fileName = "bat/MR3.png";
+						break;
+					case 4:
+						fileName = "bat/MR4.png";
+						break;
+					case 5:
+						fileName = "bat/MR5.png";
+						break;
+					case 6:
+						fileName = "bat/MR6.png";
+						break;
+					default:
+						fileName = "bat/MR1.png";
+						batFrameNum3 = 1;
+						break;
+					}
+				}
+				else if (ECS::GetComponent<PhysicsBody>(entity).GetVelocity().x <= 0) {
+					switch (batFrameNum3) {
+					case 1:
+						fileName = "bat/ML1.png";
+						break;
+					case 2:
+						fileName = "bat/ML2.png";
+						break;
+					case 3:
+						fileName = "bat/ML3.png";
+						break;
+					case 4:
+						fileName = "bat/ML4.png";
+						break;
+					case 5:
+						fileName = "bat/ML5.png";
+						break;
+					case 6:
+						fileName = "bat/ML6.png";
+						break;
+					default:
+						fileName = "bat/ML1.png";
+						batFrameNum3 = 1;
+						break;
+					}
+				}
+
+				ECS::GetComponent<Sprite>(entity).LoadSprite(fileName, 15, 15);
+			}
+
+		}
 	}
 
 	if (startup == false)

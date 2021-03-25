@@ -321,6 +321,12 @@ float PhysicsBody::GetHealth()
 	return health;
 }
 
+bool PhysicsBody::GetExists()
+{
+	return batExists;
+}
+
+
 std::string PhysicsBody::GetName()
 {
 	return name;
@@ -656,14 +662,20 @@ void PhysicsBody::SetName(std::string n)
 
 void PhysicsBody::TakeDamage(float dmg,int ent)
 {
-
+	
 		health -= dmg;
 		if (health <= 0)
 		{
 			health = 0;
 			std::cout << "\nEnemy Killed";
-			m_bodiesToDelete.push_back(ent);
 
+			batExists = false;
+			
+			//ECS::GetComponent<Transform>(ent).SetPositionX(-10000.f);
+
+			//SetPosition(b2Vec2(-10000,0), false);
+
+			//m_bodiesToDelete.push_back(ent);
 		}
 	
 }

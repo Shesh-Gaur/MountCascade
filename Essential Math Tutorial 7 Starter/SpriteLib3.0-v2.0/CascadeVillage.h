@@ -5,6 +5,7 @@
 #include <string>
 #include <fstream>
 #include <iostream>
+
 class CascadeVillage : public Scene
 {
 public:

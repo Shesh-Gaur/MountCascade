@@ -5,6 +5,12 @@
 #include <iostream>
 #include "Astar.h"
 
+std::vector<int> batVec;
+
+int startTime = clock();
+double diffTime;
+int batFrameNum = 0;
+
 CascadeVillage::CascadeVillage(std::string name)
 	: Scene(name)
 {
@@ -707,6 +713,8 @@ void CascadeVillage::makeBat(float xPos, float yPos, float zPos, float rotation,
 	auto& tempSpr = ECS::GetComponent<Sprite>(entity);
 	auto& tempPhsBody = ECS::GetComponent<PhysicsBody>(entity);
 
+	batVec.push_back(entity);
+
 	float shrinkX = 0.f;
 	float shrinkY = 0.f;
 	b2Body* tempBody;
@@ -1008,6 +1016,82 @@ void CascadeVillage::Update()
 	else
 		ECS::GetComponent<Sprite>(MainEntities::MainPlayer()).SetWidth(64);
 
+	diffTime = (clock() - startTime) / (double)(CLOCKS_PER_SEC);
+
+	if (diffTime > 0.1) {
+		batFrameNum += 1;
+		startTime = clock();
+		for (int i = 0; i < batVec.size(); i++) {
+			std::cout << "Size: " << batVec.size() << std::endl;
+
+			auto entity = batVec[i];
+			std::string fileName = "bat/MR1.png";
+
+
+			if (!ECS::GetComponent<PhysicsBody>(entity).GetExists()) {
+				batVec.erase(batVec.begin() + i);
+				PhysicsBody::m_bodiesToDelete.push_back(entity);
+				
+			}
+			else {
+				if (ECS::GetComponent<PhysicsBody>(entity).GetVelocity().x > 0) {
+					switch (batFrameNum) {
+					case 1:
+						fileName = "bat/MR1.png";
+						break;
+					case 2:
+						fileName = "bat/MR2.png";
+						break;
+					case 3:
+						fileName = "bat/MR3.png";
+						break;
+					case 4:
+						fileName = "bat/MR4.png";
+						break;
+					case 5:
+						fileName = "bat/MR5.png";
+						break;
+					case 6:
+						fileName = "bat/MR6.png";
+						break;
+					default:
+						fileName = "bat/MR1.png";
+						batFrameNum = 1;
+						break;
+					}
+				}
+				else if(ECS::GetComponent<PhysicsBody>(entity).GetVelocity().x <= 0) {
+					switch (batFrameNum) {
+					case 1:
+						fileName = "bat/ML1.png";
+						break;
+					case 2:
+						fileName = "bat/ML2.png";
+						break;
+					case 3:
+						fileName = "bat/ML3.png";
+						break;
+					case 4:
+						fileName = "bat/ML4.png";
+						break;
+					case 5:
+						fileName = "bat/ML5.png";
+						break;
+					case 6:
+						fileName = "bat/ML6.png";
+						break;
+					default:
+						fileName = "bat/ML1.png";
+						batFrameNum = 1;
+						break;
+					}
+				}
+
+				ECS::GetComponent<Sprite>(entity).LoadSprite(fileName, 15, 15);
+			}
+
+		}
+	}
 
 
 	if (lastDash != airDashCounter) {

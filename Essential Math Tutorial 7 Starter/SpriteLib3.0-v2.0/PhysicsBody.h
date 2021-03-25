@@ -95,6 +95,7 @@ public:
 	std::string GetName();
 	b2Vec2 GetNextMovement();
 	float GetSpeed();
+	bool GetExists();
 
 	//Setters//
 	//Sets the pointer to the box2D body
@@ -187,4 +188,5 @@ private:
 	float knockbackTimer = knockbackDefault;
 	bool knockedBack = false;
 	bool playerSpotted = false;
+	bool batExists = true;
 };

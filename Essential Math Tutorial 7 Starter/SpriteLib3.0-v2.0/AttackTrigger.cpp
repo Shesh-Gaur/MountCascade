@@ -1,6 +1,7 @@
 #include "AttackTrigger.h"
 #include "ECS.h"
 #include "Utilities.h"
+
 int previousEntity;
 void AttackTrigger::OnTrigger()
 {
@@ -16,6 +17,7 @@ void AttackTrigger::OnEnter()
 	if (previousEntity != currentEntity)
 	{
 		ECS::GetComponent<PhysicsBody>(currentEntity).TakeDamage(1, currentEntity);
+
 		ECS::GetComponent<PhysicsBody>(currentEntity).isKnocked();
 		std::cout << "\n" << ECS::GetComponent<PhysicsBody>(currentEntity).GetName() << " " << currentEntity << ": " << ECS::GetComponent<PhysicsBody>(currentEntity).GetHealth() << " HP";
 
