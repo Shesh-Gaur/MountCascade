@@ -11,6 +11,7 @@ std::vector<int> batVec2;
 int startTime2 = clock();
 double diffTime2;
 int batFrameNum2 = 0;
+float curVel2 = 0.f;
 
 BossPhase1::BossPhase1(std::string name)
 	: Scene(name)
@@ -1820,6 +1821,7 @@ void BossPhase1::KeyboardHold()
 
 	ECS::GetComponent<Transform>(healthBar).SetPosition(ECS::GetComponent<Camera>(MainEntities::MainCamera()).GetPosition() + vec3(180, 130, 2));
 
+	int maxVel = 120;
 
 	if (levelEditor == true)
 	{
@@ -1845,8 +1847,13 @@ void BossPhase1::KeyboardHold()
 
 		if (Input::GetKey(Key::A) && health > 0)
 		{
+
+			if (curVel2 < maxVel) {
+				curVel2 += 5;
+			}
+
 			//player.GetBody()->ApplyForceToCenter(b2Vec2(-400000.f * Timer::deltaTime * speed, 0.f), true);
-			player.GetBody()->SetLinearVelocity(b2Vec2(-120.f * Timer::deltaTime * speed, player.GetBody()->GetLinearVelocity().y));
+			player.GetBody()->SetLinearVelocity(b2Vec2(-curVel2 * Timer::deltaTime * speed, player.GetBody()->GetLinearVelocity().y));
 
 			RayCastCallback checkRay;
 			m_physicsWorld->RayCast(&checkRay, player.GetPosition() + b2Vec2(-13, 0), player.GetPosition() + b2Vec2(-15, 0));
@@ -1900,8 +1907,13 @@ void BossPhase1::KeyboardHold()
 		}
 		if (Input::GetKey(Key::D) && health > 0)
 		{
+
+			if (curVel2 < maxVel) {
+				curVel2 += 5;
+			}
+
 			//player.GetBody()->ApplyForceToCenter(b2Vec2(400000.f * Timer::deltaTime * speed, 0.f), true);
-			player.GetBody()->SetLinearVelocity(b2Vec2(120.f * Timer::deltaTime * speed, player.GetBody()->GetLinearVelocity().y));
+			player.GetBody()->SetLinearVelocity(b2Vec2(curVel2 * Timer::deltaTime * speed, player.GetBody()->GetLinearVelocity().y));
 
 			RayCastCallback checkRay;
 			m_physicsWorld->RayCast(&checkRay, player.GetPosition() + b2Vec2(13, 0), player.GetPosition() + b2Vec2(15, 0));
@@ -1954,6 +1966,10 @@ void BossPhase1::KeyboardHold()
 				}
 			}
 
+		}
+
+		if (!Input::GetKey(Key::A) && !Input::GetKey(Key::D)) {
+			curVel2 = 0;
 		}
 
 		RayCastCallback jumpRay;

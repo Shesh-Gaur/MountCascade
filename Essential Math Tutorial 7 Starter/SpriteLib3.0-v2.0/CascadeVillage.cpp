@@ -10,6 +10,7 @@ std::vector<int> batVec;
 int startTime = clock();
 double diffTime;
 int batFrameNum = 0;
+float curVel = 0.f;
 
 CascadeVillage::CascadeVillage(std::string name)
 	: Scene(name)
@@ -1882,10 +1883,16 @@ void CascadeVillage::KeyboardHold()
 		float speed = 100.f;
 		b2Vec2 vel = b2Vec2(0.f, 0.f);
 
+		int maxVel = 120;
+
 		if (Input::GetKey(Key::A) && health > 0)
 		{
+			if (curVel < maxVel) {
+				curVel += 5;
+			}
+
 			//player.GetBody()->ApplyForceToCenter(b2Vec2(-400000.f * Timer::deltaTime * speed, 0.f), true);
-			player.GetBody()->SetLinearVelocity(b2Vec2(-120.f * Timer::deltaTime * speed, player.GetBody()->GetLinearVelocity().y));
+			player.GetBody()->SetLinearVelocity(b2Vec2(-curVel * Timer::deltaTime * speed, player.GetBody()->GetLinearVelocity().y));
 
 			RayCastCallback checkRay;
 			m_physicsWorld->RayCast(&checkRay, player.GetPosition() + b2Vec2(-13, 0), player.GetPosition() + b2Vec2(-15, 0));
@@ -1939,8 +1946,13 @@ void CascadeVillage::KeyboardHold()
 		}
 		if (Input::GetKey(Key::D) && health > 0)
 		{
+
+			if (curVel < maxVel) {
+				curVel += 5;
+			}
+
 			//player.GetBody()->ApplyForceToCenter(b2Vec2(400000.f * Timer::deltaTime * speed, 0.f), true);
-			player.GetBody()->SetLinearVelocity(b2Vec2(120.f * Timer::deltaTime * speed, player.GetBody()->GetLinearVelocity().y));
+			player.GetBody()->SetLinearVelocity(b2Vec2(curVel * Timer::deltaTime * speed, player.GetBody()->GetLinearVelocity().y));
 
 			RayCastCallback checkRay;
 			m_physicsWorld->RayCast(&checkRay, player.GetPosition() + b2Vec2(13, 0), player.GetPosition() + b2Vec2(15, 0));
@@ -1993,6 +2005,10 @@ void CascadeVillage::KeyboardHold()
 				}
 			}
 
+		}
+
+		if (!Input::GetKey(Key::A) && !Input::GetKey(Key::D)) {
+			curVel = 0;
 		}
 
 		RayCastCallback jumpRay;
