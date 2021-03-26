@@ -12,6 +12,10 @@ double diffTime;
 int batFrameNum = 0;
 float curVel = 0.f;
 
+int houseStartTime = clock();
+double houseDiffTime;
+int houseFrameNum = 0;
+
 CascadeVillage::CascadeVillage(std::string name)
 	: Scene(name)
 {
@@ -554,6 +558,23 @@ void CascadeVillage::InitScene(float windowWidth, float windowHeight)
 			float(tempSpr.GetHeight() - shrinkY), vec2(0.f, 0.f), true, TRIGGER, PLAYER);
 		tempPhsBody.SetColor(vec4(1.f, 0.f, 0.f, 0.3f));
 		tempPhsBody.SetName("Trigger");
+	}
+
+	{ //House Entity
+	/*Scene::CreateSprite(m_sceneReg, "HelloWorld.png", 100, 60, 0.5f, vec3(0.f, 0.f, 0.f));*/
+
+	//Creates entity
+		auto entity = ECS::CreateEntity();
+		houseEntity = entity;
+		//Add components
+		ECS::AttachComponent<Sprite>(entity);
+		ECS::AttachComponent<Transform>(entity);
+
+		//Set up the components
+		std::string fileName = "jumpBoost/Boost1.png";
+		ECS::GetComponent<Sprite>(entity).LoadSprite(fileName, 256, 256);
+		ECS::GetComponent<Sprite>(entity).SetTransparency(0.8f);
+		ECS::GetComponent<Transform>(entity).SetPosition(vec3(-1400.f, 584.f, 2.f));
 	}
 
 	readSaveFile();
@@ -1156,6 +1177,103 @@ void CascadeVillage::Update()
 		ECS::GetComponent<Sprite>(MainEntities::MainPlayer()).SetWidth(64);
 
 	diffTime = (clock() - startTime) / (double)(CLOCKS_PER_SEC);
+	houseDiffTime = (clock() - houseStartTime) / (double)(CLOCKS_PER_SEC);
+
+	if (houseDiffTime > 0.1) {
+
+		std::string fileName = "house/Animated House1.png";
+
+		houseFrameNum += 1;
+		houseStartTime = clock();
+
+		switch (houseFrameNum) {
+		case 1:
+			fileName = "house/Animated House1.png";
+			break;
+		case 2:
+			fileName = "house/Animated House2.png";
+			break;
+		case 3:
+			fileName = "house/Animated House3.png";
+			break;
+		case 4:
+			fileName = "house/Animated House4.png";
+			break;
+		case 5:
+			fileName = "house/Animated House5.png";
+			break;
+		case 6:
+			fileName = "house/Animated House6.png";
+			break;
+		case 7:
+			fileName = "house/Animated House7.png";
+			break;
+		case 8:
+			fileName = "house/Animated House8.png";
+			break;
+		case 9:
+			fileName = "house/Animated House9.png";
+			break;
+		case 10:
+			fileName = "house/Animated House10.png";
+			break;
+		case 11:
+			fileName = "house/Animated House11.png";
+			break;
+		case 12:
+			fileName = "house/Animated House12.png";
+			break;
+		case 13:
+			fileName = "house/Animated House13.png";
+			break;
+		case 14:
+			fileName = "house/Animated House14.png";
+			break;
+		case 15:
+			fileName = "house/Animated House15.png";
+			break;
+		case 16:
+			fileName = "house/Animated House16.png";
+			break;
+		case 17:
+			fileName = "house/Animated House17.png";
+			break;
+		case 18:
+			fileName = "house/Animated House18.png";
+			break;
+		case 19:
+			fileName = "house/Animated House19.png";
+			break;
+		case 20:
+			fileName = "house/Animated House20.png";
+			break;
+		case 21:
+			fileName = "house/Animated House21.png";
+			break;
+		case 22:
+			fileName = "house/Animated House22.png";
+			break;
+		case 23:
+			fileName = "house/Animated House23.png";
+			break;
+		case 24:
+			fileName = "house/Animated House24.png";
+			break;
+		case 25:
+			fileName = "house/Animated House25.png";
+			break;
+		case 26:
+			fileName = "house/Animated House26.png";
+			break;
+		default:
+			fileName = "house/Animated House27.png";
+			houseFrameNum = 0;
+			break;
+		}
+
+		ECS::GetComponent<Sprite>(houseEntity).LoadSprite(fileName, 256, 256);
+
+	}
 
 	if (diffTime > 0.1) {
 		batFrameNum += 1;
@@ -1195,7 +1313,7 @@ void CascadeVillage::Update()
 						break;
 					default:
 						fileName = "bat/MR1.png";
-						batFrameNum = 1;
+						batFrameNum = 0;
 						break;
 					}
 				}
@@ -1221,7 +1339,7 @@ void CascadeVillage::Update()
 						break;
 					default:
 						fileName = "bat/ML1.png";
-						batFrameNum = 1;
+						batFrameNum = 0;
 						break;
 					}
 				}

@@ -169,6 +169,7 @@
     <ClInclude Include="include\imgui\imstb_truetype.h" />
     <ClInclude Include="Input.h" />
     <ClInclude Include="JSON.h" />
+    <ClInclude Include="JumpPowerupTrigger.h" />
     <ClInclude Include="LoadTrigger.h" />
     <ClInclude Include="JumpTextTrigger.h" />
     <ClInclude Include="MainEntities.h" />
@@ -239,6 +240,7 @@
     <ClCompile Include="include\imgui\imgui_widgets.cpp" />
     <ClCompile Include="Input.cpp" />
     <ClCompile Include="JSON.cpp" />
+    <ClCompile Include="JumpPowerupTrigger.cpp" />
     <ClCompile Include="LoadTrigger.cpp" />
     <ClCompile Include="JumpTextTrigger.cpp" />
     <ClCompile Include="main.cpp" />

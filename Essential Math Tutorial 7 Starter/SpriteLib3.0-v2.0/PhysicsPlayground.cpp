@@ -13,9 +13,14 @@
 std::vector<int> batVec3;
 
 int startTime3 = clock();
+int startTimeJumpBoost = clock();
+int jumpBoostFrame = 0;
+double diffTimeJumpBoost;
 double diffTime3;
 int batFrameNum3 = 0;
 float curVel3 = 0.f;
+
+bool hasJumpBoostUnlocked = false;
 
 PhysicsPlayground::PhysicsPlayground(std::string name)
 	: Scene(name)
@@ -132,6 +137,23 @@ void PhysicsPlayground::InitScene(float windowWidth, float windowHeight)
 		ECS::GetComponent<Sprite>(entity).LoadSprite(fileName, 65, 15);
 		ECS::GetComponent<Sprite>(entity).SetTransparency(0.8f);
 		ECS::GetComponent<Transform>(entity).SetPosition(vec3(0.f, 0.f, 2.f));
+	}
+
+	{ //Jump Boost Collectable
+		/*Scene::CreateSprite(m_sceneReg, "HelloWorld.png", 100, 60, 0.5f, vec3(0.f, 0.f, 0.f));*/
+
+		//Creates entity
+		auto entity = ECS::CreateEntity();
+		jumpBoostEntity = entity;
+		//Add components
+		ECS::AttachComponent<Sprite>(entity);
+		ECS::AttachComponent<Transform>(entity);
+
+		//Set up the components
+		std::string fileName = "jumpBoost/Boost1.png";
+		ECS::GetComponent<Sprite>(entity).LoadSprite(fileName, 32, 32);
+		ECS::GetComponent<Sprite>(entity).SetTransparency(0.8f);
+		ECS::GetComponent<Transform>(entity).SetPosition(vec3(160.f, 80.f, 2.f));
 	}
 
 
@@ -601,6 +623,42 @@ void PhysicsPlayground::InitScene(float windowWidth, float windowHeight)
 		tempPhsBody.SetName("Trigger");
 	}
 
+	/*//Jump Boost Collect Trigger
+	{
+		//Creates entity
+		auto entity = ECS::CreateEntity();
+		jumpBoostEnitity = entity;
+		//Add components
+		ECS::AttachComponent<Transform>(entity);
+		ECS::AttachComponent<PhysicsBody>(entity);
+		ECS::AttachComponent<Trigger*>(entity);
+		ECS::AttachComponent<Sprite>(entity);
+
+		//Sets up components
+		std::string fileName = "jumpBoost/Boost1.png";
+		ECS::GetComponent<Sprite>(entity).LoadSprite(fileName, 64, 64);
+		ECS::GetComponent<Sprite>(entity).SetTransparency(1.0f);
+		ECS::GetComponent<Transform>(entity).SetPosition(vec3(160.f, 80.f, 0.5f));
+		ECS::GetComponent<Trigger*>(entity) = new JumpPowerupTrigger();
+		ECS::GetComponent<Trigger*>(entity)->SetTriggerEntity(entity);
+
+
+		auto& tempPhsBody = ECS::GetComponent<PhysicsBody>(entity);
+
+		float shrinkX = 0.f;
+		float shrinkY = 0.f;
+		b2Body* tempBody;
+		b2BodyDef tempDef;
+		tempDef.type = b2_staticBody;
+		tempDef.position.Set(float32(160.f), float32(80.f));
+
+		tempBody = m_physicsWorld->CreateBody(&tempDef);
+		//Size of body doesnt match sprite. Reference the other trigger to see how to set up.
+		tempPhsBody = PhysicsBody(entity, tempBody, float(40.f - shrinkX), float(40.f - shrinkY), vec2(0.f, 0.f), true, TRIGGER, PLAYER);
+		tempPhsBody.SetColor(vec4(1.f, 0.f, 0.f, 0.3f));
+		tempPhsBody.SetName("JumpBoostTrigger");
+	}*/
+
 	//Some Old Startup Stuff
 	resetGrid();
 	readSaveFile();
@@ -909,6 +967,8 @@ void PhysicsPlayground::makeBat(float xPos, float yPos, float zPos, float rotati
 	ECS::GetComponent<Transform>(entity).SetPosition(vec3(0.f, 0.f, zPos));
 	auto& tempSpr = ECS::GetComponent<Sprite>(entity);
 	auto& tempPhsBody = ECS::GetComponent<PhysicsBody>(entity);
+
+	batVec3.push_back(entity);
 
 	float shrinkX = 0.f;
 	float shrinkY = 0.f;
@@ -1368,6 +1428,7 @@ void PhysicsPlayground::Update()
 {
 
 	auto& player = ECS::GetComponent<Player>(MainEntities::MainPlayer());
+	auto pl = ECS::GetComponent<PhysicsBody>(MainEntities::MainPlayer());
 	player.Update();
 	player.canYouFuckingJump = ECS::GetComponent<CanJump>(MainEntities::MainPlayer()).m_canJump;
 	player.haveYouPressedSpace = spacePressed;
@@ -1431,13 +1492,62 @@ void PhysicsPlayground::Update()
 		lastHealth = health;
 	}
 
+	if (pl.GetPosition().x > 130 && pl.GetPosition().x  < 190 && pl.GetPosition().y < 100) {
+		hasJumpBoostUnlocked = true;
+		ECS::GetComponent<Sprite>(jumpBoostEntity).SetTransparency(0.f);
+	}
+
 	diffTime3 = (clock() - startTime3) / (double)(CLOCKS_PER_SEC);
+	diffTimeJumpBoost = (clock() - startTimeJumpBoost) / (double)(CLOCKS_PER_SEC);
+
+	//std::cout << diffTimeJumpBoost << "   " << jumpBoostFrame << std::endl;
+
+	if (diffTimeJumpBoost > 0.2) {
+
+		std::string fileName = "jumpBoost/boost1.png";
+
+		startTimeJumpBoost = clock();
+
+		jumpBoostFrame = jumpBoostFrame + 1;
+
+		switch (jumpBoostFrame) {
+		case 1:
+			fileName = "jumpBoost/boost1.png";
+			break;
+		case 2:
+			fileName = "jumpBoost/boost2.png";
+			break;
+		case 3:
+			fileName = "jumpBoost/boost3.png";
+			break;
+		case 4:
+			fileName = "jumpBoost/boost4.png";
+			break;
+		case 5:
+			fileName = "jumpBoost/boost5.png";
+			break;
+		case 6:
+			fileName = "jumpBoost/boost6.png";
+			break;
+		case 7:
+			fileName = "jumpBoost/boost7.png";
+			break;
+		default:
+			fileName = "jumpBoost/boost8.png";
+			jumpBoostFrame = 0;
+			break;
+		}
+
+		ECS::GetComponent<Sprite>(jumpBoostEntity).LoadSprite(fileName, 32, 32);
+
+	}
 
 	if (diffTime3 > 0.1) {
 		batFrameNum3 += 1;
 		startTime3 = clock();
 		for (int i = 0; i < batVec3.size(); i++) {
-			std::cout << "Size: " << batVec3.size() << std::endl;
+			//std::cout << "Size: " << batVec3.size() << std::endl;
+			//std::cout << "X: " << ECS::GetComponent<PhysicsBody>(jumpBoostEnitity).GetPosition().x << " Y: " << ECS::GetComponent<PhysicsBody>(jumpBoostEnitity).GetPosition().y << std::endl;
 
 			auto entity = batVec3[i];
 			std::string fileName = "bat/MR1.png";
@@ -1471,7 +1581,7 @@ void PhysicsPlayground::Update()
 						break;
 					default:
 						fileName = "bat/MR1.png";
-						batFrameNum3 = 1;
+						batFrameNum3 = 0;
 						break;
 					}
 				}
@@ -1497,7 +1607,7 @@ void PhysicsPlayground::Update()
 						break;
 					default:
 						fileName = "bat/ML1.png";
-						batFrameNum3 = 1;
+						batFrameNum3 = 0;
 						break;
 					}
 				}

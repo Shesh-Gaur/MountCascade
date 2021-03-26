@@ -13,6 +13,10 @@ double diffTime2;
 int batFrameNum2 = 0;
 float curVel2 = 0.f;
 
+int bossStartTime = clock();
+double bossDiffTime;
+int bossFrameNum = 0;
+
 BossPhase1::BossPhase1(std::string name)
 	: Scene(name)
 {
@@ -752,6 +756,8 @@ void BossPhase1::makeBat(float xPos, float yPos, float zPos, float rotation, flo
 	auto& tempSpr = ECS::GetComponent<Sprite>(entity);
 	auto& tempPhsBody = ECS::GetComponent<PhysicsBody>(entity);
 
+	batVec2.push_back(entity);
+
 	float shrinkX = 0.f;
 	float shrinkY = 0.f;
 	b2Body* tempBody;
@@ -1120,6 +1126,85 @@ void BossPhase1::Update()
 
 	diffTime2 = (clock() - startTime2) / (double)(CLOCKS_PER_SEC);
 
+	bossDiffTime = (clock() - bossStartTime) / (double)(CLOCKS_PER_SEC);
+
+	std::cout << "Vel: " << ECS::GetComponent<PhysicsBody>(boss).GetVelocity().x << " Frame: " << bossFrameNum << " Dif Time: " << bossDiffTime << std::endl;
+
+	if (bossDiffTime > 0.2) {
+
+		std::string fileName = "golem/idleframe1";
+
+		bossFrameNum += 1;
+		bossStartTime = clock();
+
+		//idle
+		//attack
+		//run
+
+		if (ECS::GetComponent<PhysicsBody>(boss).GetVelocity().x > 10) {
+			switch (bossFrameNum) {
+			case 1:
+				fileName = "golem/golemoppositerunframe1.png";
+				break;
+			case 2:
+				fileName = "golem/golemoppositerunframe2.png";
+				break;
+			case 3:
+				fileName = "golem/golemoppositerunframe3.png";
+				break;
+			case 4:
+				fileName = "golem/golemoppositerunframe4.png";
+				break;
+			case 5:
+				fileName = "golem/golemoppositerunframe5.png";
+				break;
+			default:
+				fileName = "golem/golemoppositerunframe6.png";
+				bossFrameNum = 0;
+				break;
+			}
+		}
+		else if (ECS::GetComponent<PhysicsBody>(boss).GetVelocity().x < -10) {
+			switch (bossFrameNum) {
+			case 1:
+				fileName = "golem/runframe1.png";
+				break;
+			case 2:
+				fileName = "golem/runframe2.png";
+				break;
+			case 3:
+				fileName = "golem/runframe3.png";
+				break;
+			case 4:
+				fileName = "golem/runframe4.png";
+				break;
+			case 5:
+				fileName = "golem/runframe5.png";
+				break;
+			default:
+				fileName = "golem/runframe6.png";
+				bossFrameNum = 0;
+				break;
+			}
+		}
+		else {
+			switch (bossFrameNum) {
+			case 1:
+				fileName = "golem/idleframe1.png";
+				break;
+			case 2:
+				fileName = "golem/idleframe2.png";
+				break;
+			default:
+				fileName = "golem/idleframe3.png";
+				bossFrameNum = 0;
+				break;
+			}
+		}
+
+		ECS::GetComponent<Sprite>(boss).LoadSprite(fileName, 142, 127);
+	}
+
 	if (diffTime2 > 0.1) {
 		batFrameNum2 += 1;
 		startTime2 = clock();
@@ -1158,7 +1243,7 @@ void BossPhase1::Update()
 						break;
 					default:
 						fileName = "bat/MR1.png";
-						batFrameNum2 = 1;
+						batFrameNum2 = 0;
 						break;
 					}
 				}
@@ -1184,7 +1269,7 @@ void BossPhase1::Update()
 						break;
 					default:
 						fileName = "bat/ML1.png";
-						batFrameNum2 = 1;
+						batFrameNum2 = 0;
 						break;
 					}
 				}

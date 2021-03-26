@@ -92,6 +92,8 @@ public:
 	int lastHealth;
 	int lastDash;
 
+	int houseEntity;
+
 protected:
 	bool m_firstWindow = false;
 	bool m_secondWindow = false;

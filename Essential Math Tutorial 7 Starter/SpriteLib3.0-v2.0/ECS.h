@@ -21,6 +21,7 @@
 #include "WallJumpTextTrigger.h"
 #include "AttackTextTrigger.h"
 #include "CanJump.h"
+#include "JumpPowerupTrigger.h"
 
 
 class ECS abstract

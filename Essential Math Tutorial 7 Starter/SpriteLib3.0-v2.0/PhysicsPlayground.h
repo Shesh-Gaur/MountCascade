@@ -93,6 +93,8 @@ public:
 	float bgtimerSpeed = 0.25f;
 	float bgtimer = 0.f;
 
+	int jumpBoostEntity;
+
 protected:
 	bool m_firstWindow = false;
 	bool m_secondWindow = false;
