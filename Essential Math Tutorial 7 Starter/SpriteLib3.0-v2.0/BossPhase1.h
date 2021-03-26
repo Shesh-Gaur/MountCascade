@@ -44,6 +44,7 @@ public:
 	void RunLevelEditor();
 	void cameraTrackPlayer();
 	void ZoomCamera();
+	void bossMoveBehaviour();
 
 	float cameraZoomDefault = 75.f;
 	float cameraZoom = 75.f;
@@ -122,7 +123,7 @@ protected:
 	int healthBar;
 	int dashBar;
 	int dummy;
-
+	int boss;
 
 
 };
