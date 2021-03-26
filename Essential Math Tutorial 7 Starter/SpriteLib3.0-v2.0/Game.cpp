@@ -42,7 +42,7 @@ void Game::InitGame()
 
 
 	//Sets active scene reference to our scene
-	m_activeScene = m_scenes[4];
+	m_activeScene = m_scenes[1];
 
 	m_activeScene->InitScene(float(BackEnd::GetWindowWidth()), float(BackEnd::GetWindowHeight()));
 
@@ -246,6 +246,11 @@ void Game::KeyboardDown()
 	else if (Input::GetKeyDown(Key::X))
 	{
 		SwapScene(1);
+
+	}
+	else if (Input::GetKeyDown(Key::C))
+	{
+		SwapScene(4);
 
 	}
 }

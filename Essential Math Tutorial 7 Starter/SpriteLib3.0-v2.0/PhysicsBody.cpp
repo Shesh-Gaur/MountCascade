@@ -196,6 +196,18 @@ void PhysicsBody::Update(Transform * trans)
 
 		}
 	}
+	else if (name == "Boss")
+	{
+
+
+		b2Vec2 direction2 = (ECS::GetComponent<PhysicsBody>(MainEntities::MainPlayer()).GetPosition() - GetPosition());
+		float distance2 = sqrt((direction2.x * direction2.x) + (direction2.y * direction2.y));
+		float speed2 = 15.f;
+		GetBody()->SetLinearVelocity(b2Vec2(direction2.x * speed2 * getDeltaTime(), GetBody()->GetLinearVelocity().y));
+		SetRotationAngleDeg(0);
+
+
+	}
 	//Make sure that movement doesn't happen in contact step
 	if (moveLater)
 	{

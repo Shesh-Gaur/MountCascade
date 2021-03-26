@@ -12,10 +12,10 @@ PhysicsPlayground::PhysicsPlayground(std::string name)
 	: Scene(name)
 {
 	
-	m_gravity = b2Vec2(0.f, -45.f);
-	m_physicsWorld->SetGravity(m_gravity);
+	//m_gravity = b2Vec2(0.f, -105.f);
+	//m_physicsWorld->SetGravity(m_gravity);
 
-	m_physicsWorld->SetContactListener(&listener);
+	//m_physicsWorld->SetContactListener(&listener);
 	
 
 
@@ -25,7 +25,7 @@ void PhysicsPlayground::InitScene(float windowWidth, float windowHeight)
 {
 	m_physicsWorld = new b2World(m_gravity);
 	m_name = "Mt.Cascade";
-	m_gravity = b2Vec2(0.f, -45.f);
+	m_gravity = b2Vec2(0.f, -95.f); //Use this if ya wanna change gravity
 	m_physicsWorld->SetGravity(m_gravity);
 	m_physicsWorld->SetContactListener(&listener);
 
@@ -65,8 +65,6 @@ void PhysicsPlayground::InitScene(float windowWidth, float windowHeight)
 		//ECS::GetComponent<Camera>(entity).Orthographic(aspectRatio, temp.x, temp.y, temp.z, temp.w, -100.f, 100.f);
 
 		ECS::GetComponent<Camera>(entity).Perspective(fov, aspectRatio, 3.0f, 50.f);
-
-
 
 		//Attaches the camera to vert and horiz scrolls
 		ECS::GetComponent<HorizontalScroll>(entity).SetCam(&ECS::GetComponent<Camera>(entity));
@@ -1458,6 +1456,7 @@ void PhysicsPlayground::Update()
 	//animateBackground();
 	cameraTrackPlayer();
 	ZoomCamera();
+	ECS::GetComponent<PhysicsBody>(MainEntities::MainPlayer()).SetGravityScale(-m_gravity.y * Timer::deltaTime);
 	//std::cout << "\n" << airDashCounter;
 	if (levelEditor == false)
 	{
@@ -1489,6 +1488,7 @@ void PhysicsPlayground::Update()
 		}
 		
 	}
+
 }
 
 void PhysicsPlayground::GUI()

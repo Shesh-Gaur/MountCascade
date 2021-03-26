@@ -9,10 +9,10 @@ CascadeVillage::CascadeVillage(std::string name)
 	: Scene(name)
 {
 
-	m_gravity = b2Vec2(0.f, -45.f);
-	m_physicsWorld->SetGravity(m_gravity);
+	//m_gravity = b2Vec2(0.f, -45.f);
+	//m_physicsWorld->SetGravity(m_gravity);
 
-	m_physicsWorld->SetContactListener(&listener);
+	//m_physicsWorld->SetContactListener(&listener);
 
 
 
@@ -23,7 +23,7 @@ void CascadeVillage::InitScene(float windowWidth, float windowHeight)
 
 	m_physicsWorld = new b2World(m_gravity);
 	m_name = "Mt.Cascade";
-	m_gravity = b2Vec2(0.f, -45.f);
+	m_gravity = b2Vec2(0.f, -95.f);
 	m_physicsWorld->SetGravity(m_gravity);
 
 	m_physicsWorld->SetContactListener(&listener);
@@ -1089,6 +1089,8 @@ void CascadeVillage::Update()
 
 	cameraTrackPlayer();
 	ZoomCamera();
+	ECS::GetComponent<PhysicsBody>(MainEntities::MainPlayer()).SetGravityScale(-m_gravity.y * Timer::deltaTime);
+
 	//std::cout << "\n" << airDashCounter;
 	
 }

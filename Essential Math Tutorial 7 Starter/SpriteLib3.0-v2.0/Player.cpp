@@ -195,7 +195,7 @@ void Player::AnimationUpdate()
 			//Check if the attack animation is done
 			if (m_animController->GetAnimation(m_animController->GetActiveAnim()).GetAnimationDone())
 			{
-				ECS::GetComponent<PhysicsBody>(theAttackTrigger).SetPosition(b2Vec2(0,0));
+				ECS::GetComponent<PhysicsBody>(theAttackTrigger).SetPosition(b2Vec2(500,1000));
 
 				//Will auto set to idle
 				m_locked = false;
