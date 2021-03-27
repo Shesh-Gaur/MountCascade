@@ -30,7 +30,7 @@ public:
 
 private:
 	float m_downscale = 2.f;
-	float m_threshold = 0.01f;
+	float m_threshold = 0.001f;
 	unsigned m_passes = 10;
 	vec2 m_pixelSize;
 };

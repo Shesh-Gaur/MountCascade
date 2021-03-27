@@ -38,6 +38,7 @@ void BossPhase1::InitScene(float windowWidth, float windowHeight)
 
 	//Attach the register
 	ECS::AttachRegister(m_sceneReg);
+	
 
 	//Sets up aspect ratio for the camera
 	float aspectRatio = windowWidth / windowHeight;
@@ -160,10 +161,27 @@ void BossPhase1::InitScene(float windowWidth, float windowHeight)
 		//Set up the components
 		std::string fileName = "Cave_back-background2.png";
 		ECS::GetComponent<Sprite>(entity).LoadSprite(fileName, 3200, 1800);
-		ECS::GetComponent<Sprite>(entity).SetTransparency(0.5f);
-		ECS::GetComponent<Transform>(entity).SetPosition(vec3(-800.f, 150.f, -40.f));
+		ECS::GetComponent<Sprite>(entity).SetTransparency(1.f);
+		ECS::GetComponent<Transform>(entity).SetPosition(vec3(-700.f, -200.f, -40.f));
 	}
 
+	//Setup new Entity
+	{
+		/*Scene::CreateSprite(m_sceneReg, "HelloWorld.png", 100, 60, 0.5f, vec3(0.f, 0.f, 0.f));*/
+
+		//Creates entity
+		auto entity = ECS::CreateEntity();
+
+		//Add components
+		ECS::AttachComponent<Sprite>(entity);
+		ECS::AttachComponent<Transform>(entity);
+
+		//Set up the components
+		std::string fileName = "Cave_back-background2.png";
+		ECS::GetComponent<Sprite>(entity).LoadSprite(fileName, 3200, 1800);
+		ECS::GetComponent<Sprite>(entity).SetTransparency(1.f);
+		ECS::GetComponent<Transform>(entity).SetPosition(vec3(0.f, -200.f, -40.f));
+	}
 	//Setup new Entity
 	{
 		/*Scene::CreateSprite(m_sceneReg, "HelloWorld.png", 100, 60, 0.5f, vec3(0.f, 0.f, 0.f));*/
@@ -182,6 +200,23 @@ void BossPhase1::InitScene(float windowWidth, float windowHeight)
 		ECS::GetComponent<Transform>(entity).SetPosition(vec3(100.f, 400.f, -50.f));
 	}
 
+	//Setup new Entity
+	{
+		/*Scene::CreateSprite(m_sceneReg, "HelloWorld.png", 100, 60, 0.5f, vec3(0.f, 0.f, 0.f));*/
+
+		//Creates entity
+		auto entity = ECS::CreateEntity();
+
+		//Add components
+		ECS::AttachComponent<Sprite>(entity);
+		ECS::AttachComponent<Transform>(entity);
+
+		//Set up the components
+		std::string fileName = "fadeIn2.png";
+		ECS::GetComponent<Sprite>(entity).LoadSprite(fileName, 2080, 2560);
+		ECS::GetComponent<Sprite>(entity).SetTransparency(1.f);
+		ECS::GetComponent<Transform>(entity).SetPosition(vec3(-100.f, 900.f, -49.f));
+	}
 
 	{ //dash bar
 		/*Scene::CreateSprite(m_sceneReg, "HelloWorld.png", 100, 60, 0.5f, vec3(0.f, 0.f, 0.f));*/
@@ -340,7 +375,7 @@ void BossPhase1::InitScene(float windowWidth, float windowHeight)
 		b2Body* tempBody;
 		b2BodyDef tempDef;
 		tempDef.type = b2_dynamicBody;
-		tempDef.position.Set(float32(0.f), float32 (500.f));
+		tempDef.position.Set(float32(-724.f), float32 (1268.f));
 
 		tempBody = m_physicsWorld->CreateBody(&tempDef);
 
@@ -439,7 +474,7 @@ void BossPhase1::InitScene(float windowWidth, float windowHeight)
 		auto& tempPhsBody = ECS::GetComponent<PhysicsBody>(entity);
 
 		float shrinkX = 0.f;
-		float shrinkY = 0.f;
+		float shrinkY = 20.f;
 		b2Body* tempBody;
 		b2BodyDef tempDef;
 		tempDef.type = b2_dynamicBody;
@@ -448,7 +483,7 @@ void BossPhase1::InitScene(float windowWidth, float windowHeight)
 		tempBody = m_physicsWorld->CreateBody(&tempDef);
 		
 		tempPhsBody = PhysicsBody(entity, tempBody, float(tempSpr.GetWidth() - shrinkX),
-			float(tempSpr.GetHeight() - shrinkY), vec2(0.f, 0.f), false, ENEMY, PLAYER | ENEMY , 1.f,10.f);
+			float(tempSpr.GetHeight() - shrinkY), vec2(0.f, -10.f), false, ENEMY, PLAYER | ENEMY , 1.f,10.f);
 		tempPhsBody.SetColor(vec4(0.f, 1.f, 0.f, 0.3f));
 		tempPhsBody.SetRotationAngleDeg(0);
 		tempPhsBody.SetName("Boss");
@@ -806,6 +841,38 @@ void BossPhase1::makeIceWall(float xPos, float yPos, float zPos, float rotation,
 
 }
 
+void BossPhase1::makeSmallMush(float xPos, float yPos, float zPos, float rotation, float width, float height)
+{
+	//Creates entity
+	auto entity = ECS::CreateEntity();
+	//Add components
+	ECS::AttachComponent<Sprite>(entity);
+	ECS::AttachComponent<Transform>(entity);
+	ECS::AttachComponent<PhysicsBody>(entity);
+
+	//Set up the components
+	std::string fileName = "smallMush.png";
+	ECS::GetComponent<Sprite>(entity).LoadSprite(fileName, width, height);
+	ECS::GetComponent<Sprite>(entity).SetTransparency(1.f);
+	ECS::GetComponent<Transform>(entity).SetPosition(vec3(0.f, 0.f, zPos));
+	auto& tempSpr = ECS::GetComponent<Sprite>(entity);
+	auto& tempPhsBody = ECS::GetComponent<PhysicsBody>(entity);
+
+	float shrinkX = 0.f;
+	float shrinkY = 0.f;
+	b2Body* tempBody;
+	b2BodyDef tempDef;
+	tempDef.type = b2_staticBody;
+	tempDef.position.Set(float32(xPos), float32(yPos));
+
+	tempBody = m_physicsWorld->CreateBody(&tempDef);
+
+	tempPhsBody = PhysicsBody(entity, tempBody, float(tempSpr.GetWidth() - shrinkX), vec2(0.f, 0.f), false, OBJECTS, 0.f, 0.f);
+	tempPhsBody.SetColor(vec4(0.f, 1.f, 0.f, 0.3f));
+	tempPhsBody.SetRotationAngleDeg(rotation);
+
+
+}
 
 void BossPhase1::writeAutoSaveFile(int file)
 {
@@ -955,23 +1022,27 @@ void BossPhase1::readSaveFile()
 		{
 			makeStalagmite2(xPos, yPos, zPos, angle, width, height);
 		}
+		else if (name == "smallMush.png")
+		{
+			makeSmallMush(xPos, yPos, zPos, angle, width, height);
+		}
 
 	}
 	editorSaveFile.close();
 
 	if (startup == true)
 	{
-		std::fstream playerSaveFile;
-		playerSaveFile.open("assets/PlayerSaves/File1.txt");
+		//std::fstream playerSaveFile;
+		//playerSaveFile.open("assets/PlayerSaves/File1.txt");
 
-		float newXPos, newYPos;
-		playerSaveFile >> newXPos;
-		playerSaveFile >> newYPos;
+		//float newXPos, newYPos;
+		//playerSaveFile >> newXPos;
+		//playerSaveFile >> newYPos;
 
-		ECS::GetComponent<PhysicsBody>(MainEntities::MainPlayer()).SetPosition(b2Vec2(newXPos, newYPos));
-		ECS::GetComponent<PhysicsBody>(playerFollow).SetPosition(b2Vec2(newXPos, newYPos));
-
-		playerSaveFile.close();
+		ECS::GetComponent<PhysicsBody>(MainEntities::MainPlayer()).SetPosition(b2Vec2(-724.f, 1268.f));
+		ECS::GetComponent<PhysicsBody>(playerFollow).SetPosition(b2Vec2(-724.f, 1268.f));
+		
+		//playerSaveFile.close();
 	}
 
 
@@ -1692,6 +1763,13 @@ void BossPhase1::RunLevelEditor()
 	{
 		entitiesCreated = true;
 		makeStalagmite2(wMousePos.x, wMousePos.y, 0.05f, 0, 128, 128);
+
+	}
+
+	else if (Input::GetKeyDown(Key::Nine))
+	{
+		entitiesCreated = true;
+		makeSmallMush(wMousePos.x, wMousePos.y, 0.05f, 0, 50, 48);
 
 	}
 	if (Input::GetKey(Key::RightArrow))
