@@ -188,7 +188,7 @@ void PhysicsBody::Update(Transform * trans)
 					knockedBack = false;
 				}
 			}
-		}
+		} 
 		else
 		{
 			SetGravityScale(-1);
@@ -198,15 +198,16 @@ void PhysicsBody::Update(Transform * trans)
 	}
 	else if (name == "Boss")
 	{
+		if (getCurrentClock() % 10 == 0) //Runs Pathfinding Calculations 12 times every 60 frames (5 Times more performant now!)
+		{
+			float direction2 = ECS::GetComponent<PhysicsBody>(MainEntities::MainPlayer()).GetPosition().x - GetPosition().x;
+			direction2 /= abs(direction2);
+			SetNextMovement(b2Vec2(direction2 * GetSpeed(), GetBody()->GetLinearVelocity().y));
+			
+		}
 
-
-		b2Vec2 direction2 = (ECS::GetComponent<PhysicsBody>(MainEntities::MainPlayer()).GetPosition() - GetPosition());
-		float distance2 = sqrt((direction2.x * direction2.x) + (direction2.y * direction2.y));
-		float speed2 = 15.f;
-		GetBody()->SetLinearVelocity(b2Vec2(direction2.x * speed2 * getDeltaTime(), GetBody()->GetLinearVelocity().y));
+		GetBody()->SetLinearVelocity(b2Vec2(GetNextMovement().x * getDeltaTime(), GetNextMovement().y * getDeltaTime()));
 		SetRotationAngleDeg(0);
-
-
 	}
 	//Make sure that movement doesn't happen in contact step
 	if (moveLater)
@@ -695,9 +696,9 @@ b2Vec2 PhysicsBody::CalculateMovement(b2Vec2 target)
 {
 	
 	b2Vec2 direction = target - GetPosition();
-	float distance = sqrt(direction.x * direction.x + direction.y * direction.y);
+	float distance = sqrt((direction.x * direction.x) + (direction.y * direction.y));
 	direction = b2Vec2(direction.x / distance, direction.y / distance);
-	direction = b2Vec2(direction.x, direction.y);
+	//direction = b2Vec2(direction.x, direction.y);
 	return direction;
 	
 

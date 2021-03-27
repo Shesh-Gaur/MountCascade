@@ -487,11 +487,12 @@ void BossPhase1::InitScene(float windowWidth, float windowHeight)
 		tempBody = m_physicsWorld->CreateBody(&tempDef);
 		
 		tempPhsBody = PhysicsBody(entity, tempBody, float(tempSpr.GetWidth() - shrinkX),
-			float(tempSpr.GetHeight() - shrinkY), vec2(0.f, -10.f), false, ENEMY, PLAYER | ENEMY , 1.f,10.f);
+			float(tempSpr.GetHeight() - shrinkY), vec2(0.f, -10.f), false, ENEMY, PLAYER | ENEMY , 1.f,8.f);
 		tempPhsBody.SetColor(vec4(0.f, 1.f, 0.f, 0.3f));
 		tempPhsBody.SetRotationAngleDeg(0);
 		tempPhsBody.SetName("Boss");
 		tempPhsBody.SetHealth(2);
+		tempPhsBody.SetSpeed(4000.f);
 
 	}
 
@@ -1199,7 +1200,7 @@ void BossPhase1::Update()
 
 	bossDiffTime = (clock() - bossStartTime) / (double)(CLOCKS_PER_SEC);
 
-	std::cout << "Vel: " << ECS::GetComponent<PhysicsBody>(boss).GetVelocity().x << " Frame: " << bossFrameNum << " Dif Time: " << bossDiffTime << std::endl;
+	//std::cout << "Vel: " << ECS::GetComponent<PhysicsBody>(boss).GetVelocity().x << " Frame: " << bossFrameNum << " Dif Time: " << bossDiffTime << std::endl;
 
 	if (bossDiffTime > 0.2) {
 

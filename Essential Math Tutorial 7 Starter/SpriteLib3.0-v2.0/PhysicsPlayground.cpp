@@ -1274,10 +1274,12 @@ void PhysicsPlayground::loadNear()
 				body = body->GetNext();
 			}
 			
-			if (ECS::GetComponent<PhysicsBody>(MainEntities::MainPlayer()).GetPosition().x + 300 > xPos - (width/2) && ECS::GetComponent<PhysicsBody>(MainEntities::MainPlayer()).GetPosition().x - 300 < xPos + (width / 2))
+			if (ECS::GetComponent<PhysicsBody>(MainEntities::MainPlayer()).GetPosition().x + 400 > xPos - (width/2) && ECS::GetComponent<PhysicsBody>(MainEntities::MainPlayer()).GetPosition().x - 400 < xPos + (width / 2))
 			{
 				if (alreadyCreated == false)
 				{
+					std::cout << "\n" << m_physicsWorld->GetBodyCount();
+
 					if (name == "greyBox.jpg")
 					{
 						makeBox(xPos, yPos, zPos, angle, width, height);
@@ -1309,40 +1311,7 @@ void PhysicsPlayground::loadNear()
 				}
 
 			}
-			else if (ECS::GetComponent<PhysicsBody>(MainEntities::MainPlayer()).GetPosition().y > yPos - (height / 2) && ECS::GetComponent<PhysicsBody>(MainEntities::MainPlayer()).GetPosition().y  < yPos + (height / 2))
-			{
-				if (alreadyCreated == false)
-				{
-					if (name == "greyBox.jpg")
-					{
-						makeBox(xPos, yPos, zPos, angle, width, height);
-					}
-					else if (name == "boxSprite.jpg")
-					{
-						makeBox2(xPos, yPos, zPos, angle, width, height);
-					}
-					else if (name == "LinkStandby.png")
-					{
-						makeDummy(xPos, yPos, zPos, angle, width, height);
-					}
-					else if (name == "BackgroundMush.png")
-					{
-						makeMushroom(xPos, yPos, zPos, angle, width, height);
-					}
-					else if (name == "iceWall.jpg")
-					{
-						makeIceWall(xPos, yPos, zPos, angle, width, height);
-					}
-					else if (name == "Rock_Foreground_-_1.png")
-					{
-						makeStalagmite1(xPos, yPos, zPos, angle, width, height);
-					}
-					else if (name == "Rock_Foreground_-_2.png")
-					{
-						makeStalagmite2(xPos, yPos, zPos, angle, width, height);
-					}
-				}
-			}
+			
 			else
 			{
 
