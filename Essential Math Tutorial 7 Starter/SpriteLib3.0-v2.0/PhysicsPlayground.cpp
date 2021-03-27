@@ -421,6 +421,7 @@ void PhysicsPlayground::InitScene(float windowWidth, float windowHeight)
 		ECS::GetComponent<Transform>(entity).SetPosition(vec3(-400.f, 300.f, -49.f));
 	}
 
+
 	////Setup new Boss
 	//{
 	//	/*Scene::CreateSprite(m_sceneReg, "HelloWorld.png", 100, 60, 0.5f, vec3(0.f, 0.f, 0.f));*/
@@ -2439,6 +2440,7 @@ void PhysicsPlayground::KeyboardHold()
 							jumpForce += 60000 * Timer::deltaTime;
 							spacePressed = true;
 							//std::cout << "\n" << jumpForce;
+							//Here
 						}
 						else
 						{

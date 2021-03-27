@@ -27,7 +27,7 @@ Game::~Game()
 void Game::InitGame()
 {
 	//Initializes the backend with window width and height values
-	BackEnd::InitBackEnd(1440.f, 810.f);
+	BackEnd::InitBackEnd(1920.f, 1080.f);
 
 	//Grabs the initialized window
 	m_window = BackEnd::GetWindow();
