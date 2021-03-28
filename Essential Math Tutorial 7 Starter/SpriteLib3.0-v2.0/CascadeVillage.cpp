@@ -16,6 +16,12 @@ int houseStartTime = clock();
 double houseDiffTime;
 int houseFrameNum = 0;
 
+
+bool activatePuni = false;
+int puniStartTime = 0;
+double puniDiffTime = 0;
+int puniCurFrame = 0;
+
 CascadeVillage::CascadeVillage(std::string name)
 	: Scene(name)
 {
@@ -292,6 +298,37 @@ void CascadeVillage::InitScene(float windowWidth, float windowHeight)
 		ECS::GetComponent<Sprite>(entity).LoadSprite(fileName, 6200, 1800);
 		ECS::GetComponent<Sprite>(entity).SetTransparency(1.f);
 		ECS::GetComponent<Transform>(entity).SetPosition(vec3(300.f, 150.f, -70.f));
+	}
+
+	{ //Punisher Entity
+
+	//Creates entity
+		auto entity = ECS::CreateEntity();
+		puni = entity;
+		//Add components
+		ECS::AttachComponent<Sprite>(entity);
+		ECS::AttachComponent<Transform>(entity);
+
+		//Set up the components
+		std::string fileName = "punisher/Punisher-Cooking1.png";
+		ECS::GetComponent<Sprite>(entity).LoadSprite(fileName, 128, 128);
+		ECS::GetComponent<Sprite>(entity).SetTransparency(1.0f);
+		ECS::GetComponent<Transform>(entity).SetPosition(vec3(-950.f, 320.f, 0.01f));
+	}
+
+	{ //Punisher Text Entity
+
+		auto entity = ECS::CreateEntity();
+		puniText = entity;
+		//Add components
+		ECS::AttachComponent<Sprite>(entity);
+		ECS::AttachComponent<Transform>(entity);
+
+		//Set up the components
+		std::string fileName = "punisher/mushroomintroduction.png";
+		ECS::GetComponent<Sprite>(entity).LoadSprite(fileName, 128, 128);
+		ECS::GetComponent<Sprite>(entity).SetTransparency(0.0f);
+		ECS::GetComponent<Transform>(entity).SetPosition(vec3(-825.f, 300.f, 0.01f));
 	}
 
 
@@ -1178,6 +1215,103 @@ void CascadeVillage::Update()
 
 	diffTime = (clock() - startTime) / (double)(CLOCKS_PER_SEC);
 	houseDiffTime = (clock() - houseStartTime) / (double)(CLOCKS_PER_SEC);
+
+	puniDiffTime = (clock() - puniStartTime) / (double)(CLOCKS_PER_SEC);
+
+	if (ECS::GetComponent<PhysicsBody>(MainEntities::MainPlayer()).GetPosition().x > -980 && !activatePuni) {
+		activatePuni = true;
+		puniStartTime = clock();
+		ECS::GetComponent<Sprite>(puniText).SetTransparency(1.f);
+	}
+
+	if (activatePuni && puniDiffTime > 0.12) {
+		std::string fileName = "punisher/Punisher-Cooking1.png";
+		puniStartTime = clock();
+		puniCurFrame += 1;
+
+		switch (puniCurFrame) {
+		case 1:
+			fileName = "punisher/Punisher-Cooking1.png";
+			break;
+		case 2:
+			fileName = "punisher/Punisher-Cooking2.png";
+			break;
+		case 3:
+			fileName = "punisher/Punisher-Cooking3.png";
+			break;
+		case 4:
+			fileName = "punisher/Punisher-Cooking4.png";
+			break;
+		case 5:
+			fileName = "punisher/Punisher-Cooking5.png";
+			break;
+		case 6:
+			fileName = "punisher/Punisher-Cooking6.png";
+			break;
+		case 7:
+			fileName = "punisher/Punisher-Cooking7.png";
+			break;
+		case 8:
+			fileName = "punisher/Punisher-Cooking8.png";
+			break;
+		case 9:
+			fileName = "punisher/Punisher-Cooking9.png";
+			break;
+		case 10:
+			fileName = "punisher/Punisher-Cooking10.png";
+			break;
+		case 11:
+			fileName = "punisher/Punisher-Cooking11.png";
+			break;
+		case 12:
+			fileName = "punisher/Punisher-Cooking12.png";
+			break;
+		case 13:
+			fileName = "punisher/Punisher-Cooking13.png";
+			break;
+		case 14:
+			fileName = "punisher/Punisher-Cooking14.png";
+			break;
+		case 15:
+			fileName = "punisher/Punisher-Cooking15.png";
+			break;
+		case 16:
+			fileName = "punisher/Punisher-Cooking16.png";
+			break;
+		case 17:
+			fileName = "punisher/Punisher-Cooking17.png";
+			break;
+		case 18:
+			fileName = "punisher/Punisher-Cooking18.png";
+			break;
+		case 19:
+			fileName = "punisher/Punisher-Cooking19.png";
+			break;
+		case 20:
+			fileName = "punisher/Punisher-Cooking20.png";
+			break;
+		case 21:
+			fileName = "punisher/Punisher-Cooking21.png";
+			break;
+		case 22:
+			fileName = "punisher/Punisher-Cooking22.png";
+			break;
+		case 23:
+			fileName = "punisher/Punisher-Cooking23.png";
+			break;
+		case 24:
+			fileName = "punisher/Punisher-Cooking24.png";
+			break;
+		case 25:
+			fileName = "punisher/Punisher-Cooking25.png";
+			break;
+		default:
+			fileName = "punisher/Punisher-Cooking26.png";
+			break;
+		}
+
+		ECS::GetComponent<Sprite>(puni).LoadSprite(fileName, 128, 128);
+	}
 
 	if (houseDiffTime > 0.1) {
 

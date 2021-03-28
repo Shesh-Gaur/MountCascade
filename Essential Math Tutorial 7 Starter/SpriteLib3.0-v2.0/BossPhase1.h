@@ -126,5 +126,6 @@ protected:
 	int dummy;
 	int boss;
 
+	int punisher;
 
 };

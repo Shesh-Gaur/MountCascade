@@ -123,4 +123,7 @@ protected:
 	int dashBar;
 	int dummy;
 
+	int puni;
+	int puniText;
+
 };
