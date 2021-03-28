@@ -44,7 +44,7 @@ public:
 	void RunLevelEditor();
 	void cameraTrackPlayer();
 	void ZoomCamera();
-
+	void updateUI();
 	float cameraZoomDefault = 75.f;
 	float cameraZoom = 75.f;
 	float aRatio;
@@ -93,7 +93,8 @@ public:
 	int lastDash;
 
 	int houseEntity;
-
+	float hpTrans = 1.f;
+	float dashTrans = 1.f;
 protected:
 	bool m_firstWindow = false;
 	bool m_secondWindow = false;

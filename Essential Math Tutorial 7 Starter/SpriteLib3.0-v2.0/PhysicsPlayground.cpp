@@ -691,12 +691,12 @@ void PhysicsPlayground::InitScene(float windowWidth, float windowHeight)
 			//if (nodeRay.m_fixture == nullptr || nodeRay.m_fixture->GetBody()->GetType() == b2_dynamicBody)
 			//{
 
-			if (nodeRay.m_fixture == nullptr)
+			if (nodeRay.m_fixture == nullptr || ECS::GetComponent<PhysicsBody>((int)nodeRay.m_fixture->GetBody()->GetUserData()).GetName() == "Decor")
 			{
-
-				//makeNode(x, y ,1);
-				//Adds a blank node to the list
-				makeGrid(b2Vec2(x, y));
+					makeNode(x, y ,1);
+					//Adds a blank node to the list
+					makeGrid(b2Vec2(x, y));
+				
 
 			}
 
@@ -865,7 +865,7 @@ void PhysicsPlayground::makeMushroom(float xPos, float yPos, float zPos, float r
 	tempPhsBody = PhysicsBody(entity, tempBody, float(tempSpr.GetWidth() - shrinkX), vec2(0.f, 0.f), false, OBJECTS, 0.f, 0.f);
 	tempPhsBody.SetColor(vec4(0.f, 1.f, 0.f, 0.3f));
 	tempPhsBody.SetRotationAngleDeg(rotation);
-
+	tempPhsBody.SetName("Decor");
 }
 
 void PhysicsPlayground::makeStalagmite1(float xPos, float yPos, float zPos, float rotation, float width, float height)
@@ -899,6 +899,7 @@ void PhysicsPlayground::makeStalagmite1(float xPos, float yPos, float zPos, floa
 	tempPhsBody = PhysicsBody(entity, tempBody, float(tempSpr.GetWidth() - shrinkX), vec2(0.f, 0.f), false, OBJECTS, 0.f, 0.f);
 	tempPhsBody.SetColor(vec4(0.f, 1.f, 0.f, 0.3f));
 	tempPhsBody.SetRotationAngleDeg(rotation);
+	tempPhsBody.SetName("Decor");
 
 }
 
@@ -933,6 +934,7 @@ void PhysicsPlayground::makeStalagmite2(float xPos, float yPos, float zPos, floa
 	tempPhsBody = PhysicsBody(entity, tempBody, float(tempSpr.GetWidth() - shrinkX), vec2(0.f, 0.f), false, OBJECTS, 0.f, 0.f);
 	tempPhsBody.SetColor(vec4(0.f, 1.f, 0.f, 0.3f));
 	tempPhsBody.SetRotationAngleDeg(rotation);
+	tempPhsBody.SetName("Decor");
 
 }
 
@@ -1355,66 +1357,12 @@ void PhysicsPlayground::cameraTrackPlayer()
 void PhysicsPlayground::ZoomCamera()
 {
 
-		//if (fov > 60)
-		//{
-		//	fov -= 0.5f * Timer::deltaTime;
-
-		//	ECS::GetComponent<Camera>(MainEntities::MainCamera()).Perspective(fov, aRatio, nPlane, 1000.f);
-		//	ECS::GetComponent<Camera>(MainEntities::MainCamera()).SetPosition(ECS::GetComponent<Camera>(MainEntities::MainCamera()).GetPosition());
-
-
-		//}
-	
-	//else
-	//{
-	//	if (fov < 70)
-	//	{
-	//		fov += 0.5f * Timer::deltaTime;
-
-	//		ECS::GetComponent<Camera>(MainEntities::MainCamera()).Perspective(fov, aRatio, nPlane, 1000.f);
-	//		ECS::GetComponent<Camera>(MainEntities::MainCamera()).SetPosition(ECS::GetComponent<Camera>(MainEntities::MainCamera()).GetPosition());
-
-
-	//	}
-
-
-	//}
-
-		//if (fov < 70)
-		//{
-		//	fov += 100.f * Timer::deltaTime;
-		//	ECS::GetComponent<Camera>(MainEntities::MainCamera()).Perspective(fov, aRatio, nPlane, 1000.f);
-
-
-		//}
-
 }
 
-
-
-
-
-void PhysicsPlayground::Update()
+void PhysicsPlayground::updateUI()
 {
 
 	auto& player = ECS::GetComponent<Player>(MainEntities::MainPlayer());
-	auto pl = ECS::GetComponent<PhysicsBody>(MainEntities::MainPlayer());
-	player.Update();
-	player.canYouFuckingJump = ECS::GetComponent<CanJump>(MainEntities::MainPlayer()).m_canJump;
-	player.haveYouPressedSpace = spacePressed;
-	if (player.m_attacking && player.haveYouPressedSpace == false) {
-		ECS::GetComponent<Sprite>(MainEntities::MainPlayer()).SetWidth(128);
-	}
-	else if (player.m_dashing) {
-		ECS::GetComponent<Sprite>(MainEntities::MainPlayer()).SetWidth(448);
-	}
-	else if (player.m_dead) {
-		ECS::GetComponent<Sprite>(MainEntities::MainPlayer()).SetWidth(96);
-	}
-	else
-		ECS::GetComponent<Sprite>(MainEntities::MainPlayer()).SetWidth(64);
-
-
 
 	if (round(lastDash) != round(airDashCounter)) {
 		if (airDashCounter >= 3) { //full dash bar
@@ -1439,7 +1387,7 @@ void PhysicsPlayground::Update()
 		}
 		lastDash = airDashCounter;
 		dashTrans = 2.f;
-		std::cout << "\n" << dashTrans;
+
 		//std::cout << std::endl << airDashCounter << std::endl;
 	}
 
@@ -1467,19 +1415,50 @@ void PhysicsPlayground::Update()
 
 	}
 
-	if (hpTrans > 0.f )
+	if (hpTrans > 0.f)
 	{
 		hpTrans -= 1.f * Timer::deltaTime;
-		
+
 	}
 
 	if (dashTrans > 0.f)
 	{
 		dashTrans -= 1.f * Timer::deltaTime;
 	}
-	
+
 	ECS::GetComponent<Sprite>(healthBar).SetTransparency(hpTrans);
 	ECS::GetComponent<Sprite>(dashBar).SetTransparency(dashTrans);
+
+
+	auto& playerBody = ECS::GetComponent<PhysicsBody>(MainEntities::MainPlayer());
+
+	ECS::GetComponent<Transform>(dashBar).SetPosition(vec3(playerBody.GetPosition().x, playerBody.GetPosition().y, 0.01) + vec3(0, 25, 0.01f));
+	ECS::GetComponent<Transform>(healthBar).SetPosition(vec3(playerBody.GetPosition().x, playerBody.GetPosition().y, 0.01) + vec3(0, 33, 0.01f));
+
+
+}
+
+
+
+void PhysicsPlayground::Update()
+{
+
+	auto& player = ECS::GetComponent<Player>(MainEntities::MainPlayer());
+	auto pl = ECS::GetComponent<PhysicsBody>(MainEntities::MainPlayer());
+	player.Update();
+	player.canYouFuckingJump = ECS::GetComponent<CanJump>(MainEntities::MainPlayer()).m_canJump;
+	player.haveYouPressedSpace = spacePressed;
+	if (player.m_attacking && player.haveYouPressedSpace == false) {
+		ECS::GetComponent<Sprite>(MainEntities::MainPlayer()).SetWidth(128);
+	}
+	else if (player.m_dashing) {
+		ECS::GetComponent<Sprite>(MainEntities::MainPlayer()).SetWidth(448);
+	}
+	else if (player.m_dead) {
+		ECS::GetComponent<Sprite>(MainEntities::MainPlayer()).SetWidth(96);
+	}
+	else
+		ECS::GetComponent<Sprite>(MainEntities::MainPlayer()).SetWidth(64);
 
 
 	if (pl.GetPosition().x > 130 && pl.GetPosition().x  < 190 && pl.GetPosition().y < 100) {
@@ -1618,12 +1597,16 @@ void PhysicsPlayground::Update()
 	{
 		int currentEnemy = (int)ECS::GetComponent<PhysicsBody>(MainEntities::MainPlayer()).GetBody()->GetContactList()->contact->GetFixtureB()->GetBody()->GetUserData();
 
-		if (ECS::GetComponent<PhysicsBody>(currentEnemy).GetName() == "Bat" && startAttackCooldown == false)
+		if (ECS::GetComponent<PhysicsBody>(currentEnemy).GetName() == "Bat" )
 		{
-			health--;
+			if (startAttackCooldown == false)
+			{
+				health--;
+				startAttackCooldown = true;
+			}
 			b2Vec2 towardPlayer = ECS::GetComponent<PhysicsBody>(currentEnemy).CalculateMovement(ECS::GetComponent<PhysicsBody>(MainEntities::MainPlayer()).GetPosition());
 			ECS::GetComponent<PhysicsBody>(MainEntities::MainPlayer()).GetBody()->ApplyLinearImpulseToCenter(b2Vec2(towardPlayer.x * 200000, towardPlayer.y * 200000), true); //Knocks back the player, but gets immediately canceled by player movement
-			startAttackCooldown = true;
+			
 		}
 
 	}
@@ -1642,6 +1625,7 @@ void PhysicsPlayground::Update()
 	//animateBackground();
 	cameraTrackPlayer();
 	ZoomCamera();
+	updateUI();
 	ECS::GetComponent<PhysicsBody>(MainEntities::MainPlayer()).SetGravityScale(-m_gravity.y * Timer::deltaTime);
 	//std::cout << "\n" << airDashCounter;
 	if (levelEditor == false)
@@ -2212,11 +2196,8 @@ void PhysicsPlayground::RunLevelEditor()
 
 void PhysicsPlayground::KeyboardHold()
 {
+
 	auto& player = ECS::GetComponent<PhysicsBody>(MainEntities::MainPlayer());
-
-	ECS::GetComponent<Transform>(dashBar).SetPosition(vec3(player.GetPosition().x, player.GetPosition().y,0.01) + vec3(0, 25, 0.01f));
-
-	ECS::GetComponent<Transform>(healthBar).SetPosition(vec3(player.GetPosition().x, player.GetPosition().y, 0.01) + vec3(0, 30, 0.01f));
 
 
 	if (levelEditor == true)
@@ -2304,7 +2285,7 @@ void PhysicsPlayground::KeyboardHold()
 		{
 
 			if (curVel3 < maxVel) {
-				curVel3 += 5;
+				curVel3 += 5; //Should * Timer::deltatime
 			}
 
 			//player.GetBody()->ApplyForceToCenter(b2Vec2(400000.f * Timer::deltaTime * speed, 0.f), true);

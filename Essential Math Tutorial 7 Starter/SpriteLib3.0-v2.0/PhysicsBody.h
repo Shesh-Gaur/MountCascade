@@ -179,14 +179,15 @@ private:
 	float m_height = 0.f;
 	
 	float health = 5.f;
-	std::string name;
+	std::string name = "Object";
 	b2Vec2 nextMovement;
 	//Do you draw the bodies?
 	static bool m_drawBodies;
-	float speed = 3000;
+	float speed = 120;
 	float knockbackDefault = 1.f;
 	float knockbackTimer = knockbackDefault;
 	bool knockedBack = false;
+
 	bool playerSpotted = false;
 	bool batExists = true;
 };

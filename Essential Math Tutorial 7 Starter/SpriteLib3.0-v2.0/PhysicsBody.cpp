@@ -165,29 +165,33 @@ void PhysicsBody::Update(Transform * trans)
 
 			if (getCurrentClock() % 5 == 0) //Runs Pathfinding Calculations 12 times every 60 frames (5 Times more performant now!)
 			{
-				if (knockedBack == false)
-				{
-					dispatchAI();
-					SetNextMovement(CalculateMovement(getPathSet()[getPathCount() - 1].position));
-				}
+
+				dispatchAI();
+				SetNextMovement(CalculateMovement(getPathSet()[getPathCount() - 1].position));
+				//std::cout << "\n" << sqrt(GetBody()->GetLinearVelocity().y * GetBody()->GetLinearVelocity().y + GetBody()->GetLinearVelocity().x * GetBody()->GetLinearVelocity().x);
 			}
 
-			if (knockedBack == false)
+
+			GetBody()->ApplyLinearImpulseToCenter(b2Vec2(GetNextMovement().x * GetSpeed() * getDeltaTime(), GetNextMovement().y * GetSpeed() * getDeltaTime()), true);
+
+			if (sqrt(GetBody()->GetLinearVelocity().y * GetBody()->GetLinearVelocity().y + GetBody()->GetLinearVelocity().x * GetBody()->GetLinearVelocity().x) > GetSpeed()/5)
 			{
-				GetBody()->SetLinearVelocity(b2Vec2(GetNextMovement().x * GetSpeed() * getDeltaTime(), GetNextMovement().y * GetSpeed() * getDeltaTime()));
+				GetBody()->ApplyLinearImpulseToCenter(-b2Vec2(GetNextMovement().x * GetSpeed()  * getDeltaTime(), GetNextMovement().y * GetSpeed() * getDeltaTime()), true);
+				
 			}
-			else
+
+				
+
+			
+			
+			if (knockedBack == true)
 			{
 				b2Vec2 knockDir = -CalculateMovement(ECS::GetComponent<PhysicsBody>(MainEntities::MainPlayer()).GetPosition());
-				GetBody()->SetLinearVelocity(b2Vec2(knockDir.x * 30 * knockbackTimer, knockDir.y * 30 * knockbackTimer));
-				knockbackTimer -= 1 / knockbackTimer * getDeltaTime();
-
-				if (knockbackTimer <= 0)
-				{
-					knockbackTimer = knockbackDefault;
-					knockedBack = false;
-				}
+				GetBody()->ApplyLinearImpulseToCenter(b2Vec2(knockDir.x *2000 * getDeltaTime(), knockDir.y * 2000 * getDeltaTime()), true);
+				knockedBack = false;
 			}
+
+			
 		} 
 		else
 		{

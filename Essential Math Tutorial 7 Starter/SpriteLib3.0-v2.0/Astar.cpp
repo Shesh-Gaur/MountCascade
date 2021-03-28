@@ -263,6 +263,7 @@ void CalculatePath()
 			for (int g = 0; g < allNodes[closedSet[p]].nborsCount; g++)
 			{
 				//Checks if the end node is a neighbor / has been found
+
 				if (allNodes[allNodes[closedSet[p]].neighbors[g]].isEnd() == true)
 				{
 					allNodes[allNodes[closedSet[p]].neighbors[g]].parent = closedSet[p];

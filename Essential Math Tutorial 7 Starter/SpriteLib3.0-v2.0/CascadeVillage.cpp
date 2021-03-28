@@ -434,7 +434,7 @@ void CascadeVillage::InitScene(float windowWidth, float windowHeight)
 		//Sets up components
 		std::string fileName = "boxSprite.jpg";
 		ECS::GetComponent<Sprite>(entity).LoadSprite(fileName, 56, 60);
-		ECS::GetComponent<Sprite>(entity).SetTransparency(0.5f);
+		ECS::GetComponent<Sprite>(entity).SetTransparency(0.f);
 		ECS::GetComponent<Transform>(entity).SetPosition(vec3(30.f, -20.f, 0.002f));
 		ECS::GetComponent<Trigger*>(entity) = new AttackTrigger();
 		ECS::GetComponent<Trigger*>(entity)->SetTriggerEntity(entity);
@@ -637,7 +637,7 @@ void CascadeVillage::InitScene(float windowWidth, float windowHeight)
 		b2Body* tempBody;
 		b2BodyDef tempDef;
 		tempDef.type = b2_staticBody;
-		tempDef.position.Set(float32(700.f), float32(-120.f));
+		tempDef.position.Set(float32(680.f), float32(-100.f));
 
 		tempBody = m_physicsWorld->CreateBody(&tempDef);
 
@@ -1300,7 +1300,79 @@ void CascadeVillage::ZoomCamera()
 }
 
 
+void CascadeVillage::updateUI()
+{
+	auto& player = ECS::GetComponent<Player>(MainEntities::MainPlayer());
 
+	if (round(lastDash) != round(airDashCounter)) {
+		if (airDashCounter >= 3) { //full dash bar
+			std::string fileName = "ui/Dash3.png";
+			player.canDash = true;
+			ECS::GetComponent<Sprite>(dashBar).LoadSprite(fileName, 22, 5);
+		}
+		else if (airDashCounter >= 2) {
+			std::string fileName = "ui/Dash2.png";
+			player.canDash = true;
+			ECS::GetComponent<Sprite>(dashBar).LoadSprite(fileName, 22, 5);
+		}
+		else if (airDashCounter >= 1) {
+			std::string fileName = "ui/Dash1.png";
+			player.canDash = true;
+			ECS::GetComponent<Sprite>(dashBar).LoadSprite(fileName, 22, 5);
+		}
+		else { //empty dash bar
+			std::string fileName = "ui/Dash0.png";
+			player.canDash = false;
+			ECS::GetComponent<Sprite>(dashBar).LoadSprite(fileName, 22, 5);
+		}
+		lastDash = airDashCounter;
+		dashTrans = 2.f;
+		//std::cout << std::endl << airDashCounter << std::endl;
+	}
+
+	if (lastHealth != health) {
+		if (health >= 3) { //full health bar
+			std::string fileName = "ui/Health3.png";
+			ECS::GetComponent<Sprite>(healthBar).LoadSprite(fileName, 22, 5);
+		}
+		else if (health >= 2) {
+			std::string fileName = "ui/Health2.png";
+			ECS::GetComponent<Sprite>(healthBar).LoadSprite(fileName, 22, 5);
+		}
+		else if (health >= 1) {
+			std::string fileName = "ui/Health1.png";
+			ECS::GetComponent<Sprite>(healthBar).LoadSprite(fileName, 22, 5);
+		}
+		else { //empty health bar
+			std::string fileName = "ui/Health0.png";
+			player.m_dead = true;
+			ECS::GetComponent<Sprite>(healthBar).LoadSprite(fileName, 22, 5);
+		}
+		lastHealth = health;
+		hpTrans = 2.f;
+	}
+
+	if (hpTrans > 0.f)
+	{
+		hpTrans -= 1.f * Timer::deltaTime;
+
+	}
+
+	if (dashTrans > 0.f)
+	{
+		dashTrans -= 1.f * Timer::deltaTime;
+	}
+
+	ECS::GetComponent<Sprite>(healthBar).SetTransparency(hpTrans);
+	ECS::GetComponent<Sprite>(dashBar).SetTransparency(dashTrans);
+
+	auto& playerBody = ECS::GetComponent<PhysicsBody>(MainEntities::MainPlayer());
+
+	ECS::GetComponent<Transform>(dashBar).SetPosition(vec3(playerBody.GetPosition().x, playerBody.GetPosition().y, 0.01) + vec3(0, 25, 0.01f));
+	ECS::GetComponent<Transform>(healthBar).SetPosition(vec3(playerBody.GetPosition().x, playerBody.GetPosition().y, 0.01) + vec3(0, 33, 0.01f));
+
+
+}
 
 void CascadeVillage::Update()
 {
@@ -1593,52 +1665,7 @@ void CascadeVillage::Update()
 	}
 
 
-	if (lastDash != airDashCounter) {
-		if (airDashCounter >= 3) { //full dash bar
-			std::string fileName = "ui/Dash3.png";
-			player.canDash = true;
-			ECS::GetComponent<Sprite>(dashBar).LoadSprite(fileName, 65, 15);
-		}
-		else if (airDashCounter >= 2) {
-			std::string fileName = "ui/Dash2.png";
-			player.canDash = true;
-			ECS::GetComponent<Sprite>(dashBar).LoadSprite(fileName, 65, 15);
-		}
-		else if (airDashCounter >= 1) {
-			std::string fileName = "ui/Dash1.png";
-			player.canDash = true;
-			ECS::GetComponent<Sprite>(dashBar).LoadSprite(fileName, 65, 15);
-		}
-		else { //empty dash bar
-			std::string fileName = "ui/Dash0.png";
-			player.canDash = false;
-			ECS::GetComponent<Sprite>(dashBar).LoadSprite(fileName, 65, 15);
-		}
-		lastDash = airDashCounter;
-		//std::cout << std::endl << airDashCounter << std::endl;
-	}
-
-	if (lastHealth != health) {
-		if (health >= 3) { //full health bar
-			std::string fileName = "ui/Health3.png";
-			ECS::GetComponent<Sprite>(healthBar).LoadSprite(fileName, 65, 15);
-		}
-		else if (health >= 2) {
-			std::string fileName = "ui/Health2.png";
-			ECS::GetComponent<Sprite>(healthBar).LoadSprite(fileName, 65, 15);
-		}
-		else if (health >= 1) {
-			std::string fileName = "ui/Health1.png";
-			ECS::GetComponent<Sprite>(healthBar).LoadSprite(fileName, 65, 15);
-		}
-		else { //empty health bar
-			std::string fileName = "ui/Health0.png";
-			player.m_dead = true;
-			ECS::GetComponent<Sprite>(healthBar).LoadSprite(fileName, 65, 15);
-		}
-		lastHealth = health;
-	}
-
+	
 	if (startup == false)
 	{
 		startup = true;
@@ -1672,6 +1699,7 @@ void CascadeVillage::Update()
 
 	cameraTrackPlayer();
 	ZoomCamera();
+	updateUI();
 	ECS::GetComponent<PhysicsBody>(MainEntities::MainPlayer()).SetGravityScale(-m_gravity.y * Timer::deltaTime);
 
 	//std::cout << "\n" << airDashCounter;
@@ -2215,10 +2243,6 @@ void CascadeVillage::KeyboardHold()
 {
 
 	auto& player = ECS::GetComponent<PhysicsBody>(MainEntities::MainPlayer());
-
-	ECS::GetComponent<Transform>(dashBar).SetPosition(ECS::GetComponent<Camera>(MainEntities::MainCamera()).GetPosition() + vec3(180, -100, 2));
-
-	ECS::GetComponent<Transform>(healthBar).SetPosition(ECS::GetComponent<Camera>(MainEntities::MainCamera()).GetPosition() + vec3(180, 130, 2));
 
 
 	if (levelEditor == true)

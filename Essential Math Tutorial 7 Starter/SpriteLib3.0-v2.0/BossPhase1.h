@@ -46,7 +46,7 @@ public:
 	void cameraTrackPlayer();
 	void ZoomCamera();
 	void bossMoveBehaviour();
-
+	void updateUI();
 	float cameraZoomDefault = 75.f;
 	float cameraZoom = 75.f;
 	float aRatio;
@@ -96,6 +96,8 @@ public:
 	bool bossStarted = false;
 	float screenShakeTimerDefault = 0.1f;
 	float screenShakeTimer = 0.f;
+	float hpTrans = 1.f;
+	float dashTrans = 1.f;
 protected:
 	bool m_firstWindow = false;
 	bool m_secondWindow = false;

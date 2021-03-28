@@ -45,6 +45,7 @@ public:
 	void ZoomCamera();
 	void animateBackground();
 	void loadNear();
+	void updateUI();
 	float cameraZoomDefault = 75.f;
 	float cameraZoom = 75.f;
 	float aRatio;
