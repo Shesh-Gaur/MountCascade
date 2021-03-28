@@ -94,6 +94,9 @@ public:
 	float bgtimer = 0.f;
 
 	int jumpBoostEntity;
+	float zthing = 2.f;
+	float hpTrans = 1.f;
+	float dashTrans = 1.f;
 
 protected:
 	bool m_firstWindow = false;

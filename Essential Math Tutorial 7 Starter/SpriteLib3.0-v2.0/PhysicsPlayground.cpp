@@ -99,7 +99,7 @@ void PhysicsPlayground::InitScene(float windowWidth, float windowHeight)
 		//Set up the components
 		std::string fileName = "LevelEditorUI/Level Editor Enabled.png";
 		ECS::GetComponent<Sprite>(entity).LoadSprite(fileName, 240, 125);
-		ECS::GetComponent<Sprite>(entity).SetTransparency(0.8f);
+		ECS::GetComponent<Sprite>(entity).SetTransparency(1.f);
 		ECS::GetComponent<Transform>(entity).SetPosition(vec3(0.f, 0.f, 2.f));
 	}
 
@@ -117,8 +117,8 @@ void PhysicsPlayground::InitScene(float windowWidth, float windowHeight)
 
 		//Set up the components
 		std::string fileName = "LevelEditorUI/Level Editor Enabled.png";
-		ECS::GetComponent<Sprite>(entity).LoadSprite(fileName, 240, 125);
-		ECS::GetComponent<Sprite>(entity).SetTransparency(0.8f);
+		ECS::GetComponent<Sprite>(entity).LoadSprite(fileName, 80, 42);
+		ECS::GetComponent<Sprite>(entity).SetTransparency(1.f);
 		ECS::GetComponent<Transform>(entity).SetPosition(vec3(0.f, 0.f, 2.f));
 	}
 
@@ -134,7 +134,7 @@ void PhysicsPlayground::InitScene(float windowWidth, float windowHeight)
 
 		//Set up the components
 		std::string fileName = "ui/Health3.png";
-		ECS::GetComponent<Sprite>(entity).LoadSprite(fileName, 65, 15);
+		ECS::GetComponent<Sprite>(entity).LoadSprite(fileName, 22, 5);
 		ECS::GetComponent<Sprite>(entity).SetTransparency(0.8f);
 		ECS::GetComponent<Transform>(entity).SetPosition(vec3(0.f, 0.f, 2.f));
 	}
@@ -174,7 +174,7 @@ void PhysicsPlayground::InitScene(float windowWidth, float windowHeight)
 		std::string fileName = "BeachBall.png";
 		ECS::GetComponent<Sprite>(entity).LoadSprite(fileName, 10, 10);
 		ECS::GetComponent<Sprite>(entity).SetTransparency(0.f);
-		ECS::GetComponent<Transform>(entity).SetPosition(vec3(0.f, 0.f, 0.02f));
+		ECS::GetComponent<Transform>(entity).SetPosition(vec3(0.f, 0.f, 2.f));
 		auto& tempSpr = ECS::GetComponent<Sprite>(entity);
 		auto& tempPhsBody = ECS::GetComponent<PhysicsBody>(entity);
 
@@ -1416,51 +1416,71 @@ void PhysicsPlayground::Update()
 
 
 
-	if (lastDash != airDashCounter) {
+	if (round(lastDash) != round(airDashCounter)) {
 		if (airDashCounter >= 3) { //full dash bar
 			std::string fileName = "ui/Dash3.png";
 			player.canDash = true;
-			ECS::GetComponent<Sprite>(dashBar).LoadSprite(fileName, 65, 15);
+			ECS::GetComponent<Sprite>(dashBar).LoadSprite(fileName, 22, 5);
 		}
 		else if (airDashCounter >= 2) {
 			std::string fileName = "ui/Dash2.png";
 			player.canDash = true;
-			ECS::GetComponent<Sprite>(dashBar).LoadSprite(fileName, 65, 15);
+			ECS::GetComponent<Sprite>(dashBar).LoadSprite(fileName, 22, 5);
 		}
 		else if (airDashCounter >= 1) {
 			std::string fileName = "ui/Dash1.png";
 			player.canDash = true;
-			ECS::GetComponent<Sprite>(dashBar).LoadSprite(fileName, 65, 15);
+			ECS::GetComponent<Sprite>(dashBar).LoadSprite(fileName, 22, 5);
 		}
 		else { //empty dash bar
 			std::string fileName = "ui/Dash0.png";
 			player.canDash = false;
-			ECS::GetComponent<Sprite>(dashBar).LoadSprite(fileName, 65, 15);
+			ECS::GetComponent<Sprite>(dashBar).LoadSprite(fileName, 22, 5);
 		}
 		lastDash = airDashCounter;
+		dashTrans = 2.f;
+		std::cout << "\n" << dashTrans;
 		//std::cout << std::endl << airDashCounter << std::endl;
 	}
 
 	if (lastHealth != health) {
 		if (health >= 3) { //full health bar
 			std::string fileName = "ui/Health3.png";
-			ECS::GetComponent<Sprite>(healthBar).LoadSprite(fileName, 65, 15);
+			ECS::GetComponent<Sprite>(healthBar).LoadSprite(fileName, 22, 5);
 		}
 		else if (health >= 2) {
 			std::string fileName = "ui/Health2.png";
-			ECS::GetComponent<Sprite>(healthBar).LoadSprite(fileName, 65, 15);
+			ECS::GetComponent<Sprite>(healthBar).LoadSprite(fileName, 22, 5);
 		}
 		else if (health >= 1) {
 			std::string fileName = "ui/Health1.png";
-			ECS::GetComponent<Sprite>(healthBar).LoadSprite(fileName, 65, 15);
+			ECS::GetComponent<Sprite>(healthBar).LoadSprite(fileName, 22, 5);
 		}
 		else { //empty health bar
 			std::string fileName = "ui/Health0.png";
 			player.m_dead = true;
-			ECS::GetComponent<Sprite>(healthBar).LoadSprite(fileName, 65, 15);
+			ECS::GetComponent<Sprite>(healthBar).LoadSprite(fileName, 22, 5);
 		}
+
 		lastHealth = health;
+		hpTrans = 2.f;
+
 	}
+
+	if (hpTrans > 0.f )
+	{
+		hpTrans -= 1.f * Timer::deltaTime;
+		
+	}
+
+	if (dashTrans > 0.f)
+	{
+		dashTrans -= 1.f * Timer::deltaTime;
+	}
+	
+	ECS::GetComponent<Sprite>(healthBar).SetTransparency(hpTrans);
+	ECS::GetComponent<Sprite>(dashBar).SetTransparency(dashTrans);
+
 
 	if (pl.GetPosition().x > 130 && pl.GetPosition().x  < 190 && pl.GetPosition().y < 100) {
 		hasJumpBoostUnlocked = true;
@@ -2194,9 +2214,9 @@ void PhysicsPlayground::KeyboardHold()
 {
 	auto& player = ECS::GetComponent<PhysicsBody>(MainEntities::MainPlayer());
 
-	ECS::GetComponent<Transform>(dashBar).SetPosition(ECS::GetComponent<Camera>(MainEntities::MainCamera()).GetPosition() + vec3(200, -50, 2));
+	ECS::GetComponent<Transform>(dashBar).SetPosition(vec3(player.GetPosition().x, player.GetPosition().y,0.01) + vec3(0, 25, 0.01f));
 
-	ECS::GetComponent<Transform>(healthBar).SetPosition(ECS::GetComponent<Camera>(MainEntities::MainCamera()).GetPosition() + vec3(200, -70, 2));
+	ECS::GetComponent<Transform>(healthBar).SetPosition(vec3(player.GetPosition().x, player.GetPosition().y, 0.01) + vec3(0, 30, 0.01f));
 
 
 	if (levelEditor == true)
@@ -2376,7 +2396,12 @@ void PhysicsPlayground::KeyboardHold()
 				{
 					airDashCounter += 2.f * Timer::deltaTime;
 				}
-
+				else
+				{
+					airDashCounter = airDashDefault;
+					
+				}
+				
 				if (Input::GetKeyDown(Key::Space))
 				{
 					spaceReleased = false;

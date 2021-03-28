@@ -264,7 +264,7 @@ void CascadeVillage::InitScene(float windowWidth, float windowHeight)
 		b2Body* tempBody;
 		b2BodyDef tempDef;
 		tempDef.type = b2_dynamicBody;
-		tempDef.position.Set(float32(-1167.f), float32(346.f));
+		tempDef.position.Set(float32(-1100.f), float32(346.f));
 
 		tempBody = m_physicsWorld->CreateBody(&tempDef);
 
@@ -300,8 +300,96 @@ void CascadeVillage::InitScene(float windowWidth, float windowHeight)
 		ECS::GetComponent<Transform>(entity).SetPosition(vec3(300.f, 150.f, -70.f));
 	}
 
+	//Setup new Entity
+	{
+		/*Scene::CreateSprite(m_sceneReg, "HelloWorld.png", 100, 60, 0.5f, vec3(0.f, 0.f, 0.f));*/
 	{ //Punisher Entity
 
+		//Creates entity
+		auto entity = ECS::CreateEntity();
+
+		//Add components
+		ECS::AttachComponent<Sprite>(entity);
+		ECS::AttachComponent<Transform>(entity);
+
+		//Set up the components
+		std::string fileName = "Cascade_Village_-_Sky.png";
+		ECS::GetComponent<Sprite>(entity).LoadSprite(fileName, 2920, 2080);
+		ECS::GetComponent<Sprite>(entity).SetTransparency(1.f);
+		ECS::GetComponent<Transform>(entity).SetPosition(vec3(-1000.f,-150.f, -60.f));
+	}
+
+	//Setup new Entity
+	{
+		/*Scene::CreateSprite(m_sceneReg, "HelloWorld.png", 100, 60, 0.5f, vec3(0.f, 0.f, 0.f));*/
+
+		//Creates entity
+		auto entity = ECS::CreateEntity();
+
+		//Add components
+		ECS::AttachComponent<Sprite>(entity);
+		ECS::AttachComponent<Transform>(entity);
+
+		//Set up the components
+		std::string fileName = "Cascade_Village_-_Sky2.png";
+		ECS::GetComponent<Sprite>(entity).LoadSprite(fileName, 2920, 2080);
+		ECS::GetComponent<Sprite>(entity).SetTransparency(1.f);
+		ECS::GetComponent<Transform>(entity).SetPosition(vec3(1920.f, -150.f, -60.f));
+	}
+
+	//Setup new Entity
+	{
+		/*Scene::CreateSprite(m_sceneReg, "HelloWorld.png", 100, 60, 0.5f, vec3(0.f, 0.f, 0.f));*/
+
+		//Creates entity
+		auto entity = ECS::CreateEntity();
+
+		//Add components
+		ECS::AttachComponent<Sprite>(entity);
+		ECS::AttachComponent<Transform>(entity);
+
+		//Set up the components
+		std::string fileName = "Cascade_Village_-_Mountains.png";
+		ECS::GetComponent<Sprite>(entity).LoadSprite(fileName, 1920, 1080);
+		ECS::GetComponent<Sprite>(entity).SetTransparency(1.f);
+		ECS::GetComponent<Transform>(entity).SetPosition(vec3(-1000.f, -100.f, -50.f));
+	}
+
+	//Setup new Entity
+	{
+		/*Scene::CreateSprite(m_sceneReg, "HelloWorld.png", 100, 60, 0.5f, vec3(0.f, 0.f, 0.f));*/
+
+		//Creates entity
+		auto entity = ECS::CreateEntity();
+
+		//Add components
+		ECS::AttachComponent<Sprite>(entity);
+		ECS::AttachComponent<Transform>(entity);
+
+		//Set up the components
+		std::string fileName = "Cascade_Village_-_Mountains.png";
+		ECS::GetComponent<Sprite>(entity).LoadSprite(fileName, 1920, 1080);
+		ECS::GetComponent<Sprite>(entity).SetTransparency(1.f);
+		ECS::GetComponent<Transform>(entity).SetPosition(vec3(920.f, -100.f, -50.f));
+	}
+
+	//Setup new Entity
+	{
+		/*Scene::CreateSprite(m_sceneReg, "HelloWorld.png", 100, 60, 0.5f, vec3(0.f, 0.f, 0.f));*/
+
+		//Creates entity
+		auto entity = ECS::CreateEntity();
+
+		//Add components
+		ECS::AttachComponent<Sprite>(entity);
+		ECS::AttachComponent<Transform>(entity);
+
+		//Set up the components
+		std::string fileName = "Cascade_Village_-_Mountains (1).png";
+		ECS::GetComponent<Sprite>(entity).LoadSprite(fileName, 1920, 1080);
+		ECS::GetComponent<Sprite>(entity).SetTransparency(1.f);
+		ECS::GetComponent<Transform>(entity).SetPosition(vec3(-800.f, 420.f, -40.f));
+	}
 	//Creates entity
 		auto entity = ECS::CreateEntity();
 		puni = entity;
@@ -407,7 +495,7 @@ void CascadeVillage::InitScene(float windowWidth, float windowHeight)
 		//Size of body doesnt match sprite. Reference the other trigger to see how to set up.
 		tempPhsBody = PhysicsBody(entity, tempBody, float(40.f - shrinkX), float(40.f - shrinkY), vec2(0.f, 0.f), true, TRIGGER, PLAYER);
 		tempPhsBody.SetColor(vec4(1.f, 0.f, 0.f, 0.3f));
-		tempPhsBody.SetName("JumpTextTrigger");
+		tempPhsBody.SetName("Trigger");
 	}
 
 	//Dash Text Tutorial Trigger
@@ -441,7 +529,7 @@ void CascadeVillage::InitScene(float windowWidth, float windowHeight)
 		//Size of body doesnt match sprite. Reference the other trigger to see how to set up.
 		tempPhsBody = PhysicsBody(entity, tempBody, float(40.f - shrinkX), float(40.f - shrinkY), vec2(0.f, 0.f), true, TRIGGER, PLAYER);
 		tempPhsBody.SetColor(vec4(1.f, 0.f, 0.f, 0.3f));
-		tempPhsBody.SetName("DashTextTrigger");
+		tempPhsBody.SetName("Trigger");
 	}
 
 	//Wall Jump Text Tutorial Trigger
@@ -476,7 +564,7 @@ void CascadeVillage::InitScene(float windowWidth, float windowHeight)
 		//Size of body doesnt match sprite. Reference the other trigger to see how to set up.
 		tempPhsBody = PhysicsBody(entity, tempBody, float(40.f - shrinkX), float(40.f - shrinkY), vec2(0.f, 0.f), true, TRIGGER, PLAYER);
 		tempPhsBody.SetColor(vec4(1.f, 0.f, 0.f, 0.3f));
-		tempPhsBody.SetName("WallJumpTextTrigger");
+		tempPhsBody.SetName("Trigger");
 	}
 
 	//Attack Text Tutorial Trigger
@@ -511,7 +599,7 @@ void CascadeVillage::InitScene(float windowWidth, float windowHeight)
 		//Size of body doesnt match sprite. Reference the other trigger to see how to set up.
 		tempPhsBody = PhysicsBody(entity, tempBody, float(40.f - shrinkX), float(40.f - shrinkY), vec2(0.f, 0.f), true, TRIGGER, PLAYER);
 		tempPhsBody.SetColor(vec4(1.f, 0.f, 0.f, 0.3f));
-		tempPhsBody.SetName("AttackTextTrigger");
+		tempPhsBody.SetName("Trigger");
 	}
 
 	//Setup trigger
@@ -609,9 +697,9 @@ void CascadeVillage::InitScene(float windowWidth, float windowHeight)
 
 		//Set up the components
 		std::string fileName = "jumpBoost/Boost1.png";
-		ECS::GetComponent<Sprite>(entity).LoadSprite(fileName, 256, 256);
-		ECS::GetComponent<Sprite>(entity).SetTransparency(0.8f);
-		ECS::GetComponent<Transform>(entity).SetPosition(vec3(-1400.f, 584.f, 2.f));
+		ECS::GetComponent<Sprite>(entity).LoadSprite(fileName, 512, 512);
+		ECS::GetComponent<Sprite>(entity).SetTransparency(1.f);
+		ECS::GetComponent<Transform>(entity).SetPosition(vec3(-1321.f, 575.f, 0.021f));
 	}
 
 	readSaveFile();
@@ -681,7 +769,7 @@ void CascadeVillage::makeBox(float xPos, float yPos, float zPos, float rotation,
 	ECS::AttachComponent<PhysicsBody>(entity);
 
 	//Sets up components
-	std::string fileName = "greyBox.jpg";
+	std::string fileName = "greyBox2.jpg";
 	ECS::GetComponent<Sprite>(entity).LoadSprite(fileName, width, height);
 	ECS::GetComponent<Transform>(entity).SetPosition(vec3(0.f, 0.f, zPos));
 
@@ -972,6 +1060,8 @@ void CascadeVillage::writeAutoSaveFile(int file)
 	char x;
 	unsigned int entityNum = 0;
 	std::ofstream editorSaveFile;
+	bool firstLineDone = false;
+
 	if (file == 1)
 	{
 		editorSaveFile.open("assets/EditorSaves/CascadeVillage/backupSaves/BackupSaveFile1.txt");
@@ -1000,14 +1090,21 @@ void CascadeVillage::writeAutoSaveFile(int file)
 	{
 		if (ECS::GetComponent<PhysicsBody>((int)body->GetUserData()).GetBody()->GetType() == b2_staticBody && ECS::GetComponent<PhysicsBody>((int)body->GetUserData()).GetName() != "Trigger")
 		{
-			editorSaveFile << ECS::GetComponent<PhysicsBody>((int)body->GetUserData()).GetPosition().x;
+			if (firstLineDone == true)
+			{
+				editorSaveFile << "\n" << ECS::GetComponent<PhysicsBody>((int)body->GetUserData()).GetPosition().x;
+			}
+			else
+			{
+				editorSaveFile << ECS::GetComponent<PhysicsBody>((int)body->GetUserData()).GetPosition().x;
+				firstLineDone = true;
+			}
 			editorSaveFile << "\t" << ECS::GetComponent<PhysicsBody>((int)body->GetUserData()).GetPosition().y;
 			editorSaveFile << "\t" << ECS::GetComponent<Transform>((int)body->GetUserData()).GetPosition().z;
 			editorSaveFile << "\t" << ECS::GetComponent<PhysicsBody>((int)body->GetUserData()).GetRotationAngleDeg();
 			editorSaveFile << "\t" << ECS::GetComponent<Sprite>((int)body->GetUserData()).GetWidth();
 			editorSaveFile << "\t" << ECS::GetComponent<Sprite>((int)body->GetUserData()).GetHeight();
-			editorSaveFile << "\t" << ECS::GetComponent<Sprite>((int)body->GetUserData()).GetFileName() << "\n";
-
+			editorSaveFile << "\t" << ECS::GetComponent<Sprite>((int)body->GetUserData()).GetFileName();
 
 		}
 
@@ -1026,19 +1123,30 @@ void CascadeVillage::writeSaveFile()
 	std::ofstream editorSaveFile;
 	editorSaveFile.open("assets/EditorSaves/CascadeVillage/LevelEditorSave.txt");
 	b2Body* body = m_physicsWorld->GetBodyList();
+	bool firstLineDone = false;
+
 
 
 	for (int f = 0; f < m_physicsWorld->GetBodyCount(); f++)
 	{
 		if (ECS::GetComponent<PhysicsBody>((int)body->GetUserData()).GetBody()->GetType() == b2_staticBody && ECS::GetComponent<PhysicsBody>((int)body->GetUserData()).GetName() != "Trigger")
 		{
-			editorSaveFile << ECS::GetComponent<PhysicsBody>((int)body->GetUserData()).GetPosition().x;
+			if (firstLineDone == true)
+			{
+				editorSaveFile << "\n" << ECS::GetComponent<PhysicsBody>((int)body->GetUserData()).GetPosition().x;
+			}
+			else
+			{
+				editorSaveFile << ECS::GetComponent<PhysicsBody>((int)body->GetUserData()).GetPosition().x;
+				firstLineDone = true;
+			}
 			editorSaveFile << "\t" << ECS::GetComponent<PhysicsBody>((int)body->GetUserData()).GetPosition().y;
 			editorSaveFile << "\t" << ECS::GetComponent<Transform>((int)body->GetUserData()).GetPosition().z;
 			editorSaveFile << "\t" << ECS::GetComponent<PhysicsBody>((int)body->GetUserData()).GetRotationAngleDeg();
 			editorSaveFile << "\t" << ECS::GetComponent<Sprite>((int)body->GetUserData()).GetWidth();
 			editorSaveFile << "\t" << ECS::GetComponent<Sprite>((int)body->GetUserData()).GetHeight();
-			editorSaveFile << "\t" << ECS::GetComponent<Sprite>((int)body->GetUserData()).GetFileName() << "\n";
+			editorSaveFile << "\t" << ECS::GetComponent<Sprite>((int)body->GetUserData()).GetFileName();
+
 		}
 
 
@@ -1068,7 +1176,7 @@ void CascadeVillage::readSaveFile()
 		editorSaveFile >> height;
 		editorSaveFile >> name;
 
-		if (name == "greyBox.jpg")
+		if (name == "greyBox2.jpg")
 		{
 			makeBox(xPos, yPos, zPos, angle, width, height);
 		}
@@ -1315,97 +1423,97 @@ void CascadeVillage::Update()
 
 	if (houseDiffTime > 0.1) {
 
-		std::string fileName = "house/Animated House1.png";
+		std::string fileName = "house/Animated_House1.png";
 
 		houseFrameNum += 1;
 		houseStartTime = clock();
 
 		switch (houseFrameNum) {
 		case 1:
-			fileName = "house/Animated House1.png";
+			fileName = "house/Animated_House1.png";
 			break;
 		case 2:
-			fileName = "house/Animated House2.png";
+			fileName = "house/Animated_House2.png";
 			break;
 		case 3:
-			fileName = "house/Animated House3.png";
+			fileName = "house/Animated_House3.png";
 			break;
 		case 4:
-			fileName = "house/Animated House4.png";
+			fileName = "house/Animated_House4.png";
 			break;
 		case 5:
-			fileName = "house/Animated House5.png";
+			fileName = "house/Animated_House5.png";
 			break;
 		case 6:
-			fileName = "house/Animated House6.png";
+			fileName = "house/Animated_House6.png";
 			break;
 		case 7:
-			fileName = "house/Animated House7.png";
+			fileName = "house/Animated_House7.png";
 			break;
 		case 8:
-			fileName = "house/Animated House8.png";
+			fileName = "house/Animated_House8.png";
 			break;
 		case 9:
-			fileName = "house/Animated House9.png";
+			fileName = "house/Animated_House9.png";
 			break;
 		case 10:
-			fileName = "house/Animated House10.png";
+			fileName = "house/Animated_House10.png";
 			break;
 		case 11:
-			fileName = "house/Animated House11.png";
+			fileName = "house/Animated_House11.png";
 			break;
 		case 12:
-			fileName = "house/Animated House12.png";
+			fileName = "house/Animated_House12.png";
 			break;
 		case 13:
-			fileName = "house/Animated House13.png";
+			fileName = "house/Animated_House13.png";
 			break;
 		case 14:
-			fileName = "house/Animated House14.png";
+			fileName = "house/Animated_House14.png";
 			break;
 		case 15:
-			fileName = "house/Animated House15.png";
+			fileName = "house/Animated_House15.png";
 			break;
 		case 16:
-			fileName = "house/Animated House16.png";
+			fileName = "house/Animated_House16.png";
 			break;
 		case 17:
-			fileName = "house/Animated House17.png";
+			fileName = "house/Animated_House17.png";
 			break;
 		case 18:
-			fileName = "house/Animated House18.png";
+			fileName = "house/Animated_House18.png";
 			break;
 		case 19:
-			fileName = "house/Animated House19.png";
+			fileName = "house/Animated_House19.png";
 			break;
 		case 20:
-			fileName = "house/Animated House20.png";
+			fileName = "house/Animated_House20.png";
 			break;
 		case 21:
-			fileName = "house/Animated House21.png";
+			fileName = "house/Animated_House21.png";
 			break;
 		case 22:
-			fileName = "house/Animated House22.png";
+			fileName = "house/Animated_House22.png";
 			break;
 		case 23:
-			fileName = "house/Animated House23.png";
+			fileName = "house/Animated_House23.png";
 			break;
 		case 24:
-			fileName = "house/Animated House24.png";
+			fileName = "house/Animated_House24.png";
 			break;
 		case 25:
-			fileName = "house/Animated House25.png";
+			fileName = "house/Animated_House25.png";
 			break;
 		case 26:
-			fileName = "house/Animated House26.png";
+			fileName = "house/Animated_House26.png";
 			break;
 		default:
-			fileName = "house/Animated House27.png";
+			fileName = "house/Animated_House27.png";
 			houseFrameNum = 0;
 			break;
 		}
 
-		ECS::GetComponent<Sprite>(houseEntity).LoadSprite(fileName, 256, 256);
+		ECS::GetComponent<Sprite>(houseEntity).LoadSprite(fileName, 512, 512);
 
 	}
 
