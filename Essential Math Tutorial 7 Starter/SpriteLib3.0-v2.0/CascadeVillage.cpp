@@ -303,7 +303,6 @@ void CascadeVillage::InitScene(float windowWidth, float windowHeight)
 	//Setup new Entity
 	{
 		/*Scene::CreateSprite(m_sceneReg, "HelloWorld.png", 100, 60, 0.5f, vec3(0.f, 0.f, 0.f));*/
-	{ //Punisher Entity
 
 		//Creates entity
 		auto entity = ECS::CreateEntity();
@@ -391,6 +390,7 @@ void CascadeVillage::InitScene(float windowWidth, float windowHeight)
 		ECS::GetComponent<Transform>(entity).SetPosition(vec3(-800.f, 420.f, -40.f));
 	}
 	//Creates entity
+	{
 		auto entity = ECS::CreateEntity();
 		puni = entity;
 		//Add components
