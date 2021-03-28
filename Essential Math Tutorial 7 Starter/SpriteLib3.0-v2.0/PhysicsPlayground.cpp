@@ -39,7 +39,7 @@ void PhysicsPlayground::InitScene(float windowWidth, float windowHeight)
 {
 	m_physicsWorld = new b2World(m_gravity);
 	m_name = "Mt.Cascade";
-	m_gravity = b2Vec2(0.f, -95.f); //Use this if ya wanna change gravity
+	m_gravity = b2Vec2(0.f, -45.f); //Use this if ya wanna change gravity
 	m_physicsWorld->SetGravity(m_gravity);
 	m_physicsWorld->SetContactListener(&listener);
 
@@ -391,6 +391,24 @@ void PhysicsPlayground::InitScene(float windowWidth, float windowHeight)
 
 		//Creates entity
 		auto entity = ECS::CreateEntity();
+
+		//Add components
+		ECS::AttachComponent<Sprite>(entity);
+		ECS::AttachComponent<Transform>(entity);
+
+		//Set up the components
+		std::string fileName = "Cave_back-background4.png";
+		ECS::GetComponent<Sprite>(entity).LoadSprite(fileName, 3200, 1800);
+		ECS::GetComponent<Sprite>(entity).SetTransparency(1.f);
+		ECS::GetComponent<Transform>(entity).SetPosition(vec3(700.f, 150.f, -48.f));
+	}
+
+	//Setup new Entity
+	{
+		/*Scene::CreateSprite(m_sceneReg, "HelloWorld.png", 100, 60, 0.5f, vec3(0.f, 0.f, 0.f));*/
+
+		//Creates entity
+		auto entity = ECS::CreateEntity();
 		mushbg = entity;
 		//Add components
 		ECS::AttachComponent<Sprite>(entity);
@@ -693,7 +711,7 @@ void PhysicsPlayground::InitScene(float windowWidth, float windowHeight)
 
 			if (nodeRay.m_fixture == nullptr || ECS::GetComponent<PhysicsBody>((int)nodeRay.m_fixture->GetBody()->GetUserData()).GetName() == "Decor")
 			{
-					makeNode(x, y ,1);
+					//makeNode(x, y ,1);
 					//Adds a blank node to the list
 					makeGrid(b2Vec2(x, y));
 				
@@ -1276,7 +1294,7 @@ void PhysicsPlayground::loadNear()
 				body = body->GetNext();
 			}
 			
-			if (ECS::GetComponent<PhysicsBody>(MainEntities::MainPlayer()).GetPosition().x + 400 > xPos - (width/2) && ECS::GetComponent<PhysicsBody>(MainEntities::MainPlayer()).GetPosition().x - 400 < xPos + (width / 2))
+			if (ECS::GetComponent<PhysicsBody>(MainEntities::MainPlayer()).GetPosition().x + 500 > xPos - (width/2) && ECS::GetComponent<PhysicsBody>(MainEntities::MainPlayer()).GetPosition().x - 500 < xPos + (width / 2))
 			{
 				if (alreadyCreated == false)
 				{
@@ -1626,7 +1644,7 @@ void PhysicsPlayground::Update()
 	cameraTrackPlayer();
 	ZoomCamera();
 	updateUI();
-	ECS::GetComponent<PhysicsBody>(MainEntities::MainPlayer()).SetGravityScale(-m_gravity.y * Timer::deltaTime);
+	//ECS::GetComponent<PhysicsBody>(MainEntities::MainPlayer()).SetGravityScale(-m_gravity.y * Timer::deltaTime);
 	//std::cout << "\n" << airDashCounter;
 	if (levelEditor == false)
 	{

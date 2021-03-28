@@ -29,7 +29,7 @@ void JumpTextTrigger::OnEnter()
 		//Set up the components
 		std::string fileName = "ui/placeholder.png";
 		ECS::GetComponent<Sprite>(entity).LoadSprite(fileName, 100, 100);
-		ECS::GetComponent<Sprite>(entity).SetTransparency(0.8f);
+		ECS::GetComponent<Sprite>(entity).SetTransparency(0.f);
 		ECS::GetComponent<Transform>(entity).SetPosition(vec3(20.f, 80.f, 2.f));
 
 		isJTTRan = true;

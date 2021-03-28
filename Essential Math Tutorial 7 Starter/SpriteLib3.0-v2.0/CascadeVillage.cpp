@@ -40,7 +40,7 @@ void CascadeVillage::InitScene(float windowWidth, float windowHeight)
 
 	m_physicsWorld = new b2World(m_gravity);
 	m_name = "Mt.Cascade";
-	m_gravity = b2Vec2(0.f, -95.f);
+	m_gravity = b2Vec2(0.f, -45.f);
 	m_physicsWorld->SetGravity(m_gravity);
 
 	m_physicsWorld->SetContactListener(&listener);
@@ -401,7 +401,7 @@ void CascadeVillage::InitScene(float windowWidth, float windowHeight)
 		std::string fileName = "punisher/Punisher-Cooking1.png";
 		ECS::GetComponent<Sprite>(entity).LoadSprite(fileName, 128, 128);
 		ECS::GetComponent<Sprite>(entity).SetTransparency(1.0f);
-		ECS::GetComponent<Transform>(entity).SetPosition(vec3(-950.f, 320.f, 0.01f));
+		ECS::GetComponent<Transform>(entity).SetPosition(vec3(-450.f, 160.f, 0.01f));
 	}
 
 	{ //Punisher Text Entity
@@ -416,7 +416,7 @@ void CascadeVillage::InitScene(float windowWidth, float windowHeight)
 		std::string fileName = "punisher/mushroomintroduction.png";
 		ECS::GetComponent<Sprite>(entity).LoadSprite(fileName, 128, 128);
 		ECS::GetComponent<Sprite>(entity).SetTransparency(0.0f);
-		ECS::GetComponent<Transform>(entity).SetPosition(vec3(-825.f, 300.f, 0.01f));
+		ECS::GetComponent<Transform>(entity).SetPosition(vec3(-325.f, 160.f, 0.01f));
 	}
 
 
@@ -840,14 +840,14 @@ void CascadeVillage::makeDummy(float xPos, float yPos, float zPos, float rotatio
 	ECS::AttachComponent<PhysicsBody>(entity);
 
 	//Set up the components
-	std::string fileName = "LinkStandby.png";
+	std::string fileName = "Dummy/Dummy.png";
 	ECS::GetComponent<Sprite>(entity).LoadSprite(fileName, width, height);
 	ECS::GetComponent<Sprite>(entity).SetTransparency(1.f);
 	ECS::GetComponent<Transform>(entity).SetPosition(vec3(0.f, 0.f, zPos));
 	auto& tempSpr = ECS::GetComponent<Sprite>(entity);
 	auto& tempPhsBody = ECS::GetComponent<PhysicsBody>(entity);
 
-	float shrinkX = 0.f;
+	float shrinkX = 25.f;
 	float shrinkY = 0.f;
 	b2Body* tempBody;
 	b2BodyDef tempDef;
@@ -965,6 +965,109 @@ void CascadeVillage::makeStalagmite2(float xPos, float yPos, float zPos, float r
 
 }
 
+void CascadeVillage::makeTree(float xPos, float yPos, float zPos, float rotation, float width, float height)
+{
+	/*Scene::CreateSprite(m_sceneReg, "HelloWorld.png", 100, 60, 0.5f, vec3(0.f, 0.f, 0.f));*/
+
+	//Creates entity
+	auto entity = ECS::CreateEntity();
+	//Add components
+	ECS::AttachComponent<Sprite>(entity);
+	ECS::AttachComponent<Transform>(entity);
+	ECS::AttachComponent<PhysicsBody>(entity);
+
+	//Set up the components
+	std::string fileName = "Tree1Dead.png";
+	ECS::GetComponent<Sprite>(entity).LoadSprite(fileName, width, height);
+	ECS::GetComponent<Sprite>(entity).SetTransparency(1.f);
+	ECS::GetComponent<Transform>(entity).SetPosition(vec3(0.f, 0.f, zPos));
+	auto& tempSpr = ECS::GetComponent<Sprite>(entity);
+	auto& tempPhsBody = ECS::GetComponent<PhysicsBody>(entity);
+
+	float shrinkX = 40.f;
+	float shrinkY = 40.f;
+	b2Body* tempBody;
+	b2BodyDef tempDef;
+	tempDef.type = b2_staticBody;
+	tempDef.position.Set(float32(xPos), float32(yPos));
+
+	tempBody = m_physicsWorld->CreateBody(&tempDef);
+
+	tempPhsBody = PhysicsBody(entity, tempBody, float(tempSpr.GetWidth() - shrinkX), vec2(0.f, 0.f), false, OBJECTS, 0.f, 0.f);
+	tempPhsBody.SetColor(vec4(0.f, 1.f, 0.f, 0.3f));
+	tempPhsBody.SetRotationAngleDeg(rotation);
+
+}
+
+
+void CascadeVillage::makeRock(float xPos, float yPos, float zPos, float rotation, float width, float height)
+{
+	/*Scene::CreateSprite(m_sceneReg, "HelloWorld.png", 100, 60, 0.5f, vec3(0.f, 0.f, 0.f));*/
+
+	//Creates entity
+	auto entity = ECS::CreateEntity();
+	//Add components
+	ECS::AttachComponent<Sprite>(entity);
+	ECS::AttachComponent<Transform>(entity);
+	ECS::AttachComponent<PhysicsBody>(entity);
+
+	//Set up the components
+	std::string fileName = "LargeRock1Moss.png";
+	ECS::GetComponent<Sprite>(entity).LoadSprite(fileName, width, height);
+	ECS::GetComponent<Sprite>(entity).SetTransparency(1.f);
+	ECS::GetComponent<Transform>(entity).SetPosition(vec3(0.f, 0.f, zPos));
+	auto& tempSpr = ECS::GetComponent<Sprite>(entity);
+	auto& tempPhsBody = ECS::GetComponent<PhysicsBody>(entity);
+
+	float shrinkX = 40.f;
+	float shrinkY = 40.f;
+	b2Body* tempBody;
+	b2BodyDef tempDef;
+	tempDef.type = b2_staticBody;
+	tempDef.position.Set(float32(xPos), float32(yPos));
+
+	tempBody = m_physicsWorld->CreateBody(&tempDef);
+
+	tempPhsBody = PhysicsBody(entity, tempBody, float(tempSpr.GetWidth() - shrinkX), vec2(0.f, 0.f), false, OBJECTS, 0.f, 0.f);
+	tempPhsBody.SetColor(vec4(0.f, 1.f, 0.f, 0.3f));
+	tempPhsBody.SetRotationAngleDeg(rotation);
+
+}
+
+void CascadeVillage::makeRock2(float xPos, float yPos, float zPos, float rotation, float width, float height)
+{
+	/*Scene::CreateSprite(m_sceneReg, "HelloWorld.png", 100, 60, 0.5f, vec3(0.f, 0.f, 0.f));*/
+
+	//Creates entity
+	auto entity = ECS::CreateEntity();
+	//Add components
+	ECS::AttachComponent<Sprite>(entity);
+	ECS::AttachComponent<Transform>(entity);
+	ECS::AttachComponent<PhysicsBody>(entity);
+
+	//Set up the components
+	std::string fileName = "MediumRock2.png";
+	ECS::GetComponent<Sprite>(entity).LoadSprite(fileName, width, height);
+	ECS::GetComponent<Sprite>(entity).SetTransparency(1.f);
+	ECS::GetComponent<Transform>(entity).SetPosition(vec3(0.f, 0.f, zPos));
+	auto& tempSpr = ECS::GetComponent<Sprite>(entity);
+	auto& tempPhsBody = ECS::GetComponent<PhysicsBody>(entity);
+
+	float shrinkX = 40.f;
+	float shrinkY = 40.f;
+	b2Body* tempBody;
+	b2BodyDef tempDef;
+	tempDef.type = b2_staticBody;
+	tempDef.position.Set(float32(xPos), float32(yPos));
+
+	tempBody = m_physicsWorld->CreateBody(&tempDef);
+
+	tempPhsBody = PhysicsBody(entity, tempBody, float(tempSpr.GetWidth() - shrinkX), vec2(0.f, 0.f), false, OBJECTS, 0.f, 0.f);
+	tempPhsBody.SetColor(vec4(0.f, 1.f, 0.f, 0.3f));
+	tempPhsBody.SetRotationAngleDeg(rotation);
+
+}
+
 void CascadeVillage::makeNode(float xPos, float yPos, float transparency)
 {
 	//Creates entity
@@ -1054,6 +1157,108 @@ void CascadeVillage::makeIceWall(float xPos, float yPos, float zPos, float rotat
 
 }
 
+void CascadeVillage::loadNear()
+{
+
+	float xPos, yPos, zPos, angle, width, height;
+	std::string name;
+	unsigned int entityNum = 0;
+	std::fstream editorSaveFile;
+	bool alreadyCreated = false;
+
+
+
+	editorSaveFile.open("assets/EditorSaves/CascadeVillage/LevelEditorSave.txt");
+	while (editorSaveFile.good())
+	{
+
+
+		alreadyCreated = false;
+		editorSaveFile >> xPos;
+		editorSaveFile >> yPos;
+		editorSaveFile >> zPos;
+		editorSaveFile >> angle;
+		editorSaveFile >> width;
+		editorSaveFile >> height;
+		editorSaveFile >> name;
+
+		b2Body* body = m_physicsWorld->GetBodyList();
+		for (int f = 0; f < m_physicsWorld->GetBodyCount(); f++)
+		{
+
+			if (ECS::GetComponent<PhysicsBody>((int)body->GetUserData()).GetBody()->GetType() == b2_staticBody && ECS::GetComponent<PhysicsBody>((int)body->GetUserData()).GetName() != "Trigger")
+			{
+				if (ECS::GetComponent<PhysicsBody>((int)body->GetUserData()).GetPosition().x == xPos && ECS::GetComponent<PhysicsBody>((int)body->GetUserData()).GetPosition().y == yPos)
+				{
+
+					alreadyCreated = true;
+				}
+			}
+			body = body->GetNext();
+		}
+
+		if (ECS::GetComponent<PhysicsBody>(MainEntities::MainPlayer()).GetPosition().x + 500 > xPos - (width / 2) && ECS::GetComponent<PhysicsBody>(MainEntities::MainPlayer()).GetPosition().x - 500 < xPos + (width / 2))
+		{
+			if (alreadyCreated == false)
+			{
+				std::cout << "\n" << m_physicsWorld->GetBodyCount();
+
+				if (name == "greyBox2.jpg")
+				{
+					makeBox(xPos, yPos, zPos, angle, width, height);
+				}
+				else if (name == "boxSprite.jpg")
+				{
+					makeBox2(xPos, yPos, zPos, angle, width, height);
+				}
+				else if (name == "Dummy/Dummy.png")
+				{
+					makeDummy(xPos, yPos, zPos, angle, width, height);
+				}
+				else if (name == "Tree1Dead.png")
+				{
+					makeTree(xPos, yPos, zPos, angle, width, height);
+				}
+				else if (name == "iceWall.jpg")
+				{
+					makeIceWall(xPos, yPos, zPos, angle, width, height);
+				}
+				else if (name == "LargeRock1Moss.png")
+				{
+					makeRock(xPos, yPos, zPos, angle, width, height);
+				}
+				else if (name == "MediumRock2.png")
+				{
+					makeRock2(xPos, yPos, zPos, angle, width, height);
+				}
+			}
+
+		}
+
+		else
+		{
+
+			b2Body* body = m_physicsWorld->GetBodyList();
+			for (int f = 0; f < m_physicsWorld->GetBodyCount(); f++)
+			{
+
+				if (ECS::GetComponent<PhysicsBody>((int)body->GetUserData()).GetBody()->GetType() == b2_staticBody && ECS::GetComponent<PhysicsBody>((int)body->GetUserData()).GetName() != "Trigger")
+				{
+					if (ECS::GetComponent<PhysicsBody>((int)body->GetUserData()).GetPosition().x == xPos && ECS::GetComponent<PhysicsBody>((int)body->GetUserData()).GetPosition().y == yPos)
+					{
+						//std::cout << "\n" << (int)body->GetUserData();
+						PhysicsBody::m_bodiesToDelete.push_back((int)body->GetUserData());
+					}
+				}
+				body = body->GetNext();
+			}
+
+		}
+
+
+	}
+	editorSaveFile.close();
+}
 
 void CascadeVillage::writeAutoSaveFile(int file)
 {
@@ -1184,25 +1389,25 @@ void CascadeVillage::readSaveFile()
 		{
 			makeBox2(xPos, yPos, zPos, angle, width, height);
 		}
-		else if (name == "LinkStandby.png")
+		else if (name == "Dummy/Dummy.png")
 		{
 			makeDummy(xPos, yPos, zPos, angle, width, height);
 		}
-		else if (name == "BackgroundMush.png")
+		else if (name == "Tree1Dead.png")
 		{
-			makeMushroom(xPos, yPos, zPos, angle, width, height);
+			makeTree(xPos, yPos, zPos, angle, width, height);
 		}
 		else if (name == "iceWall.jpg")
 		{
 			makeIceWall(xPos, yPos, zPos, angle, width, height);
 		}
-		else if (name == "Rock_Foreground_-_1.png")
+		else if (name == "LargeRock1Moss.png")
 		{
-			makeStalagmite1(xPos, yPos, zPos, angle, width, height);
+			makeRock(xPos, yPos, zPos, angle, width, height);
 		}
-		else if (name == "Rock_Foreground_-_2.png")
+		else if (name == "MediumRock2.png")
 		{
-			makeStalagmite2(xPos, yPos, zPos, angle, width, height);
+			makeRock2(xPos, yPos, zPos, angle, width, height);
 		}
 
 	}
@@ -1398,7 +1603,7 @@ void CascadeVillage::Update()
 
 	puniDiffTime = (clock() - puniStartTime) / (double)(CLOCKS_PER_SEC);
 
-	if (ECS::GetComponent<PhysicsBody>(MainEntities::MainPlayer()).GetPosition().x > -980 && !activatePuni) {
+	if (ECS::GetComponent<PhysicsBody>(MainEntities::MainPlayer()).GetPosition().x > -450 && !activatePuni) {
 		activatePuni = true;
 		puniStartTime = clock();
 		ECS::GetComponent<Sprite>(puniText).SetTransparency(1.f);
@@ -1700,8 +1905,38 @@ void CascadeVillage::Update()
 	cameraTrackPlayer();
 	ZoomCamera();
 	updateUI();
-	ECS::GetComponent<PhysicsBody>(MainEntities::MainPlayer()).SetGravityScale(-m_gravity.y * Timer::deltaTime);
+	//ECS::GetComponent<PhysicsBody>(MainEntities::MainPlayer()).SetGravityScale(-m_gravity.y * Timer::deltaTime);
+	
+	if (levelEditor == false)
+	{
+		levelEditorStartup = false;
 
+		if (Timer::currentClock % 60 == 0)
+		{
+			loadNear();
+
+		}
+	}
+	else
+	{
+		if (levelEditorStartup == false)
+		{
+
+			b2Body* body = m_physicsWorld->GetBodyList();
+			for (int f = 0; f < m_physicsWorld->GetBodyCount(); f++)
+			{
+
+				if (ECS::GetComponent<PhysicsBody>((int)body->GetUserData()).GetBody()->GetType() == b2_staticBody && ECS::GetComponent<PhysicsBody>((int)body->GetUserData()).GetName() != "Trigger")
+				{
+					PhysicsBody::m_bodiesToDelete.push_back((int)body->GetUserData());
+				}
+				body = body->GetNext();
+			}
+			readSaveFile();
+			levelEditorStartup = true;
+		}
+
+	}
 	//std::cout << "\n" << airDashCounter;
 	
 }
@@ -2093,7 +2328,7 @@ void CascadeVillage::RunLevelEditor()
 	else if (Input::GetKeyDown(Key::Four))
 	{
 		entitiesCreated = true;
-		makeMushroom(wMousePos.x, wMousePos.y, 0.05f, 0, 73, 99);
+		makeTree(wMousePos.x, wMousePos.y, 0.05f, 0, 128, 128);
 
 	}
 	else if (Input::GetKeyDown(Key::Five))
@@ -2112,13 +2347,13 @@ void CascadeVillage::RunLevelEditor()
 	else if (Input::GetKeyDown(Key::Seven))
 	{
 		entitiesCreated = true;
-		makeStalagmite1(wMousePos.x, wMousePos.y, 0.05f, 0, 128, 128);
+		makeRock(wMousePos.x, wMousePos.y, 0.05f, 0, 128, 128);
 
 	}
 	else if (Input::GetKeyDown(Key::Eight))
 	{
 		entitiesCreated = true;
-		makeStalagmite2(wMousePos.x, wMousePos.y, 0.05f, 0, 128, 128);
+		makeRock2(wMousePos.x, wMousePos.y, 0.05f, 0, 128, 128);
 
 	}
 	if (Input::GetKey(Key::RightArrow))

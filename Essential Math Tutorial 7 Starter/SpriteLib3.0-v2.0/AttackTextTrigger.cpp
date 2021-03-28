@@ -30,7 +30,7 @@ void AttackTextTrigger::OnEnter()
 		//Set up the components
 		std::string fileName = "ui/placeholder.png";
 		ECS::GetComponent<Sprite>(entity).LoadSprite(fileName, 100, 100);
-		ECS::GetComponent<Sprite>(entity).SetTransparency(0.8f);
+		ECS::GetComponent<Sprite>(entity).SetTransparency(0.f);
 		ECS::GetComponent<Transform>(entity).SetPosition(vec3(1630.f, 300.f, 2.f));
 		isATTRan = true;
 	}

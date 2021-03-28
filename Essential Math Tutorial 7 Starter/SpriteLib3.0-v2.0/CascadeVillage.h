@@ -41,10 +41,16 @@ public:
 	void makeNode(float xPos, float yPos, float transparency);
 	void makeBat(float xPos, float yPos, float zPos, float rotation, float width, float height);
 	void makeIceWall(float xPos, float yPos, float zPos, float rotation, float width, float height);
+	void makeTree(float xPos, float yPos, float zPos, float rotation, float width, float height);
+	void makeRock(float xPos, float yPos, float zPos, float rotation, float width, float height);
+	void makeRock2(float xPos, float yPos, float zPos, float rotation, float width, float height);
+
+
 	void RunLevelEditor();
 	void cameraTrackPlayer();
 	void ZoomCamera();
 	void updateUI();
+	void loadNear();
 	float cameraZoomDefault = 75.f;
 	float cameraZoom = 75.f;
 	float aRatio;
@@ -53,7 +59,7 @@ public:
 
 	//Important Variables
 	float mousePosX, mousePosY;
-	bool levelEditor, startup = false;
+	bool levelEditor, levelEditorStartup = false, startup = false;
 
 	float saveUITimer;
 	bool objectAlreadySelected;
