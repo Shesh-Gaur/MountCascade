@@ -701,7 +701,21 @@ void CascadeVillage::InitScene(float windowWidth, float windowHeight)
 		ECS::GetComponent<Sprite>(entity).SetTransparency(1.f);
 		ECS::GetComponent<Transform>(entity).SetPosition(vec3(-1321.f, 575.f, 0.021f));
 	}
+	{ //background mountain 1
 
+	//Creates entity
+		auto entity = ECS::CreateEntity();
+
+		//Add components
+		ECS::AttachComponent<Sprite>(entity);
+		ECS::AttachComponent<Transform>(entity);
+
+		//Set up the components
+		std::string fileName = "mountain1.png";
+		ECS::GetComponent<Sprite>(entity).LoadSprite(fileName, 512, 512);
+		ECS::GetComponent<Sprite>(entity).SetTransparency(1.f);
+		ECS::GetComponent<Transform>(entity).SetPosition(vec3(-1321.f, 575.f, -51.f));
+	}
 	readSaveFile();
 	resetGrid();
 	for (int y = 0; y < (gWidth * 50); y += 50)
@@ -1413,7 +1427,7 @@ void CascadeVillage::readSaveFile()
 	}
 	editorSaveFile.close();
 
-	if (startup == true)
+	/*if (startup == true)
 	{
 		std::fstream playerSaveFile;
 		playerSaveFile.open("assets/PlayerSaves/File1.txt");
@@ -1424,9 +1438,9 @@ void CascadeVillage::readSaveFile()
 
 		ECS::GetComponent<PhysicsBody>(MainEntities::MainPlayer()).SetPosition(b2Vec2(newXPos, newYPos));
 		ECS::GetComponent<PhysicsBody>(playerFollow).SetPosition(b2Vec2(newXPos, newYPos));
-
+			
 		playerSaveFile.close();
-	}
+	}*/
 
 	
 }
