@@ -15,6 +15,8 @@ public:
 	void InitScene(float windowWidth, float windowHeight) override;
 
 	void Update() override;
+	void SavePlayerLoc();
+	b2Vec2 LoadPlayerLoc();
 
 	void GUI() override;
 

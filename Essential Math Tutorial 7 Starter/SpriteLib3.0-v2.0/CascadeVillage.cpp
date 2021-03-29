@@ -1593,6 +1593,39 @@ void CascadeVillage::updateUI()
 
 }
 
+void CascadeVillage::SavePlayerLoc() {
+	std::ofstream fstre;
+	std::string fileLoc = "assets/PlayerSaves/File2.txt";
+
+	int tempx = ECS::GetComponent<PhysicsBody>(MainEntities::MainPlayer()).GetPosition().x;
+	int tempy = ECS::GetComponent<PhysicsBody>(MainEntities::MainPlayer()).GetPosition().y;
+
+	fstre.open(fileLoc);
+	if (!fstre) {
+		std::cout << "Failed to save player location!" << std::endl;
+	}
+	else {
+		fstre << tempx << " " << tempy;
+	}
+}
+
+b2Vec2 CascadeVillage::LoadPlayerLoc() {
+	std::fstream fstre;
+	std::string fileLoc = "assets/PlayerSaves/File2.txt";
+	int tempx;
+	int tempy;
+
+	fstre.open(fileLoc);
+	if (!fstre) {
+		std::cout << "Failed to load player location!" << std::endl;
+	}
+	else {
+		fstre >> tempx >> tempy;
+	}
+
+	return b2Vec2(tempx, tempy);
+}
+
 void CascadeVillage::Update()
 {
 	
@@ -1617,9 +1650,17 @@ void CascadeVillage::Update()
 
 	puniDiffTime = (clock() - puniStartTime) / (double)(CLOCKS_PER_SEC);
 
+	if (health <= 0) {
+		std::cout << "Resetting player location" << std::endl;
+		health = 3;
+		ECS::GetComponent<PhysicsBody>(MainEntities::MainPlayer()).SetPosition(LoadPlayerLoc());
+	}
+
 	if (ECS::GetComponent<PhysicsBody>(MainEntities::MainPlayer()).GetPosition().x > -450 && !activatePuni) {
 		activatePuni = true;
 		puniStartTime = clock();
+		health = 3;
+		SavePlayerLoc();
 		ECS::GetComponent<Sprite>(puniText).SetTransparency(1.f);
 	}
 

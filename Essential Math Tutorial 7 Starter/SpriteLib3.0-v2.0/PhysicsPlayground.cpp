@@ -22,6 +22,11 @@ float curVel3 = 0.f;
 
 bool hasJumpBoostUnlocked = false;
 
+bool activatePuni2 = false;
+int puni2StartTime = 0;
+double puni2DiffTime = 0;
+int puni2CurFrame = 0;
+
 PhysicsPlayground::PhysicsPlayground(std::string name)
 	: Scene(name)
 {
@@ -83,6 +88,20 @@ void PhysicsPlayground::InitScene(float windowWidth, float windowHeight)
 		//Attaches the camera to vert and horiz scrolls
 		ECS::GetComponent<HorizontalScroll>(entity).SetCam(&ECS::GetComponent<Camera>(entity));
 		ECS::GetComponent<VerticalScroll>(entity).SetCam(&ECS::GetComponent<Camera>(entity));
+	}
+
+	{
+		auto entity = ECS::CreateEntity();
+		puni2 = entity;
+		//Add components
+		ECS::AttachComponent<Sprite>(entity);
+		ECS::AttachComponent<Transform>(entity);
+
+		//Set up the components
+		std::string fileName = "punisher/Punisher-Cooking1.png";
+		ECS::GetComponent<Sprite>(entity).LoadSprite(fileName, 128, 128);
+		ECS::GetComponent<Sprite>(entity).SetTransparency(1.0f);
+		ECS::GetComponent<Transform>(entity).SetPosition(vec3(-610.f, 55.f, 0.01f));
 	}
 
 	//Setup new Entity
@@ -1456,7 +1475,38 @@ void PhysicsPlayground::updateUI()
 
 }
 
+void PhysicsPlayground::SavePlayerLoc() {
+	std::ofstream fstre;
+	std::string fileLoc = "assets/PlayerSaves/File2.txt";
 
+	int tempx = ECS::GetComponent<PhysicsBody>(MainEntities::MainPlayer()).GetPosition().x;
+	int tempy = ECS::GetComponent<PhysicsBody>(MainEntities::MainPlayer()).GetPosition().y;
+
+	fstre.open(fileLoc);
+	if (!fstre) {
+		std::cout << "Failed to save player location!" << std::endl;
+	}
+	else {
+		fstre << tempx << " " << tempy;
+	}
+}
+
+b2Vec2 PhysicsPlayground::LoadPlayerLoc() {
+	std::fstream fstre;
+	std::string fileLoc = "assets/PlayerSaves/File2.txt";
+	int tempx;
+	int tempy;
+
+	fstre.open(fileLoc);
+	if (!fstre) {
+		std::cout << "Failed to load player location!" << std::endl;
+	}
+	else {
+		fstre >> tempx >> tempy;
+	}
+
+	return b2Vec2(tempx, tempy);
+}
 
 void PhysicsPlayground::Update()
 {
@@ -1487,7 +1537,110 @@ void PhysicsPlayground::Update()
 	diffTime3 = (clock() - startTime3) / (double)(CLOCKS_PER_SEC);
 	diffTimeJumpBoost = (clock() - startTimeJumpBoost) / (double)(CLOCKS_PER_SEC);
 
+	puni2DiffTime = (clock() - puni2StartTime) / (double)(CLOCKS_PER_SEC);
+
+	if (ECS::GetComponent<PhysicsBody>(MainEntities::MainPlayer()).GetPosition().x > -620 && !activatePuni2) {
+		activatePuni2 = true;
+		puni2StartTime = clock();
+		health = 3;
+		SavePlayerLoc();
+	}
+
+	if (activatePuni2 && puni2DiffTime > 0.12) {
+		std::string fileName = "punisher/Punisher-Cooking1.png";
+		puni2StartTime = clock();
+		puni2CurFrame += 1;
+
+		switch (puni2CurFrame) {
+		case 1:
+			fileName = "punisher/Punisher-Cooking1.png";
+			break;
+		case 2:
+			fileName = "punisher/Punisher-Cooking2.png";
+			break;
+		case 3:
+			fileName = "punisher/Punisher-Cooking3.png";
+			break;
+		case 4:
+			fileName = "punisher/Punisher-Cooking4.png";
+			break;
+		case 5:
+			fileName = "punisher/Punisher-Cooking5.png";
+			break;
+		case 6:
+			fileName = "punisher/Punisher-Cooking6.png";
+			break;
+		case 7:
+			fileName = "punisher/Punisher-Cooking7.png";
+			break;
+		case 8:
+			fileName = "punisher/Punisher-Cooking8.png";
+			break;
+		case 9:
+			fileName = "punisher/Punisher-Cooking9.png";
+			break;
+		case 10:
+			fileName = "punisher/Punisher-Cooking10.png";
+			break;
+		case 11:
+			fileName = "punisher/Punisher-Cooking11.png";
+			break;
+		case 12:
+			fileName = "punisher/Punisher-Cooking12.png";
+			break;
+		case 13:
+			fileName = "punisher/Punisher-Cooking13.png";
+			break;
+		case 14:
+			fileName = "punisher/Punisher-Cooking14.png";
+			break;
+		case 15:
+			fileName = "punisher/Punisher-Cooking15.png";
+			break;
+		case 16:
+			fileName = "punisher/Punisher-Cooking16.png";
+			break;
+		case 17:
+			fileName = "punisher/Punisher-Cooking17.png";
+			break;
+		case 18:
+			fileName = "punisher/Punisher-Cooking18.png";
+			break;
+		case 19:
+			fileName = "punisher/Punisher-Cooking19.png";
+			break;
+		case 20:
+			fileName = "punisher/Punisher-Cooking20.png";
+			break;
+		case 21:
+			fileName = "punisher/Punisher-Cooking21.png";
+			break;
+		case 22:
+			fileName = "punisher/Punisher-Cooking22.png";
+			break;
+		case 23:
+			fileName = "punisher/Punisher-Cooking23.png";
+			break;
+		case 24:
+			fileName = "punisher/Punisher-Cooking24.png";
+			break;
+		case 25:
+			fileName = "punisher/Punisher-Cooking25.png";
+			break;
+		default:
+			fileName = "punisher/Punisher-Cooking26.png";
+			break;
+		}
+
+		ECS::GetComponent<Sprite>(puni2).LoadSprite(fileName, 128, 128);
+	}
+
 	//std::cout << diffTimeJumpBoost << "   " << jumpBoostFrame << std::endl;
+
+	if (health <= 0) {
+		health = 3;
+		ECS::GetComponent<PhysicsBody>(MainEntities::MainPlayer()).SetPosition(LoadPlayerLoc());
+	}
 
 	if (diffTimeJumpBoost > 0.2) {
 
