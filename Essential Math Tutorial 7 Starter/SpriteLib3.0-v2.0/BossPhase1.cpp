@@ -22,6 +22,10 @@ int punStartTime = 0;
 double punDiffTime = 0;
 int punCurFrame = 0;
 
+bool isBossAttacking = false;
+int bossLastVel = 0;
+int bossAttackAnimNum = 0;
+
 BossPhase1::BossPhase1(std::string name)
 	: Scene(name)
 {
@@ -1285,6 +1289,38 @@ void BossPhase1::updateUI()
 
 }
 
+void BossPhase1::SavePlayerLoc() {
+	std::ofstream fstre;
+	std::string fileLoc = "assets/PlayerSaves/File2.txt";
+
+	int tempx = ECS::GetComponent<PhysicsBody>(MainEntities::MainPlayer()).GetPosition().x;
+	int tempy = ECS::GetComponent<PhysicsBody>(MainEntities::MainPlayer()).GetPosition().y;
+
+	fstre.open(fileLoc);
+	if (!fstre) {
+		std::cout << "Failed to save player location!" << std::endl;
+	}
+	else {
+		fstre << tempx << " " << tempy;
+	}
+}
+
+b2Vec2 BossPhase1::LoadPlayerLoc() {
+	std::fstream fstre;
+	std::string fileLoc = "assets/PlayerSaves/File2.txt";
+	int tempx = 0;
+	int tempy = 0;
+
+	fstre.open(fileLoc);
+	if (!fstre) {
+		std::cout << "Failed to load player location!" << std::endl;
+	}
+	else {
+		fstre >> tempx >> tempy;
+	}
+
+	return b2Vec2(tempx,tempy);
+}
 
 void BossPhase1::Update()
 {
@@ -1315,6 +1351,8 @@ void BossPhase1::Update()
 
 	if (ECS::GetComponent<PhysicsBody>(MainEntities::MainPlayer()).GetPosition().x > -600 && !activatePunisher) {
 		activatePunisher = true;
+		SavePlayerLoc();
+		health = 3;
 		punStartTime = clock();
 	}
 
@@ -1417,8 +1455,58 @@ void BossPhase1::Update()
 		//idle
 		//attack
 		//run
-
-		if (ECS::GetComponent<PhysicsBody>(boss).GetVelocity().x > 10) {
+		if (isBossAttacking) {
+			bossAttackAnimNum++;
+			if (bossLastVel < 0) {
+				switch (bossAttackAnimNum) { //left
+				case 1:
+					fileName = "golem/attackanim1.png";
+					break;
+				case 2:
+					fileName = "golem/attackanim2.png";
+					break;
+				case 3:
+					fileName = "golem/attackanim3.png";
+					break;
+				case 4:
+					fileName = "golem/attackanim4.png";
+					break;
+				case 5:
+					fileName = "attackanim15.png";
+					break;
+				default:
+					fileName = "attackanim16.png";
+					bossAttackAnimNum = 0;
+					isBossAttacking = false;
+					break;
+				}
+			}
+			else { //right
+				switch (bossAttackAnimNum) {
+				case 1:
+					fileName = "golem/attackanim1r.png";
+					break;
+				case 2:
+					fileName = "golem/attackanim2r.png";
+					break;
+				case 3:
+					fileName = "golem/attackanim3r.png";
+					break;
+				case 4:
+					fileName = "golem/attackanim4r.png";
+					break;
+				case 5:
+					fileName = "golem/attackanim5r.png";
+					break;
+				default:
+					fileName = "golem/attackanim6r.png";
+					bossAttackAnimNum = 0;
+					isBossAttacking = false;
+					break;
+				}
+			}
+		} 
+		else if (ECS::GetComponent<PhysicsBody>(boss).GetVelocity().x > 10) {
 			switch (bossFrameNum) {
 			case 1:
 				fileName = "golem/golemoppositerunframe1.png";
@@ -1480,6 +1568,7 @@ void BossPhase1::Update()
 		}
 
 		ECS::GetComponent<Sprite>(boss).LoadSprite(fileName, 142, 127);
+		bossLastVel = ECS::GetComponent<PhysicsBody>(boss).GetVelocity().x;
 	}
 
 	if (diffTime2 > 0.1) {
@@ -1562,6 +1651,12 @@ void BossPhase1::Update()
 	{
 		startup = true;
 
+	}
+
+	if (health <= 0) {
+		std::cout << "Resetting player location at: " << LoadPlayerLoc().x << " " << LoadPlayerLoc().y << std::endl;
+		health = 3;
+		ECS::GetComponent<PhysicsBody>(MainEntities::MainPlayer()).SetPosition(LoadPlayerLoc());
 	}
 
 	if (ECS::GetComponent<PhysicsBody>(MainEntities::MainPlayer()).GetBody()->GetContactList() != NULL)
