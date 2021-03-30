@@ -1517,16 +1517,20 @@ void PhysicsPlayground::Update()
 	player.canYouFuckingJump = ECS::GetComponent<CanJump>(MainEntities::MainPlayer()).m_canJump;
 	player.haveYouPressedSpace = spacePressed;
 	if (player.m_attacking && player.haveYouPressedSpace == false) {
-		ECS::GetComponent<Sprite>(MainEntities::MainPlayer()).SetWidth(128);
+		ECS::GetComponent<Sprite>(MainEntities::MainPlayer()).SetWidth(256);
+		ECS::GetComponent<Sprite>(MainEntities::MainPlayer()).SetHeight(128);
 	}
 	else if (player.m_dashing) {
 		ECS::GetComponent<Sprite>(MainEntities::MainPlayer()).SetWidth(448);
+		ECS::GetComponent<Sprite>(MainEntities::MainPlayer()).SetHeight(64);
 	}
 	else if (player.m_dead) {
 		ECS::GetComponent<Sprite>(MainEntities::MainPlayer()).SetWidth(96);
+		ECS::GetComponent<Sprite>(MainEntities::MainPlayer()).SetHeight(64);
 	}
 	else
 		ECS::GetComponent<Sprite>(MainEntities::MainPlayer()).SetWidth(64);
+		if (!player.m_attacking) ECS::GetComponent<Sprite>(MainEntities::MainPlayer()).SetHeight(64);
 
 
 	if (pl.GetPosition().x > 130 && pl.GetPosition().x  < 190 && pl.GetPosition().y < 100) {
