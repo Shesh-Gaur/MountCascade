@@ -1928,7 +1928,7 @@ void CascadeVillage::Update()
 	ZoomCamera();
 	updateUI();
 	CheckTransition();
-	//ECS::GetComponent<PhysicsBody>(MainEntities::MainPlayer()).SetGravityScale(-m_gravity.y * Timer::deltaTime);
+	ECS::GetComponent<PhysicsBody>(MainEntities::MainPlayer()).SetGravityScale(-m_gravity.y * Timer::deltaTime);
 	
 	if (levelEditor == false)
 	{
