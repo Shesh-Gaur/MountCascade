@@ -186,3 +186,50 @@ void Scene::SetWindowSize(float windowWidth, float windowHeight)
 															tempCam.GetOrthoSize().z, tempCam.GetOrthoSize().w,
 															tempCam.GetNear(), tempCam.GetFar());
 }
+
+void Scene::CheckTransition()
+{
+	if (MainEntities::MainLoading() != 0)
+	{
+		if (ECS::GetComponent<Sprite>(MainEntities::MainLoading()).GetTransparency() >= 1.f)
+		{
+
+			ECS::GetComponent<PhysicsBody>(MainEntities::MainPlayer()).GetBody()->SetLinearVelocity(b2Vec2(0.f, -10.f));
+
+
+		}
+		else if (ECS::GetComponent<Sprite>(MainEntities::MainLoading()).GetTransparency() >= 0.1f)
+		{
+			if (transitionStarted == false)
+			{
+
+				playerLoadingPos = ECS::GetComponent<PhysicsBody>(MainEntities::MainPlayer()).GetPosition() + b2Vec2(0.f, 50.f);
+				transitionStarted = true;
+			}
+			ECS::GetComponent<Sprite>(MainEntities::MainLoading()).SetTransparency(ECS::GetComponent<Sprite>(MainEntities::MainLoading()).GetTransparency() + 2.f * Timer::deltaTime);
+			ECS::GetComponent<PhysicsBody>(MainEntities::MainPlayer()).SetPosition(playerLoadingPos);
+		}
+	}
+}
+
+void Scene::makeLoadingScreen()
+{
+
+		/*Scene::CreateSprite(m_sceneReg, "HelloWorld.png", 100, 60, 0.5f, vec3(0.f, 0.f, 0.f));*/
+
+		//Creates entity
+		auto entity = ECS::CreateEntity();
+		ECS::SetIsMainLoading(entity, true);
+		//Add components
+		ECS::AttachComponent<Sprite>(entity);
+		ECS::AttachComponent<Transform>(entity);
+
+		//Set up the components
+		std::string fileName = "black.png";
+		ECS::GetComponent<Sprite>(entity).LoadSprite(fileName, 2920, 2080);
+		ECS::GetComponent<Sprite>(entity).SetTransparency(0.f);
+		ECS::GetComponent<Transform>(entity).SetPosition(vec3(-1000.f, -150.f, -60.f));
+	
+
+
+}

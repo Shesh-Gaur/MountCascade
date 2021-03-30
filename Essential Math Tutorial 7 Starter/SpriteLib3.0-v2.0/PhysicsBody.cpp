@@ -143,6 +143,69 @@ void PhysicsBody::Update(Transform * trans)
 	if (name == "Bat")
 	{
 
+			animationFrame += 7.f * getDeltaTime();
+		
+			//std::cout << "\n" << animationFrame;
+				std::string fileName = "bat/MR1.png";
+
+					if (GetVelocity().x > 0) {
+						switch ((int)round(animationFrame)) {
+						case 0:
+							fileName = "bat/MR1.png";
+							break;
+						case 1:
+							fileName = "bat/MR2.png";
+							break;
+						case 2:
+							fileName = "bat/MR3.png";
+							break;
+						case 3:
+							fileName = "bat/MR4.png";
+							break;
+						case 4:
+							fileName = "bat/MR5.png";
+							break;
+						case 5:
+							fileName = "bat/MR6.png";
+							break;
+						default:
+							fileName = "bat/MR1.png";
+							animationFrame = 0;
+							break;
+						}
+					}
+					else if (GetVelocity().x <= 0) {
+						switch ((int)round(animationFrame)) {
+						case 0:
+							fileName = "bat/ML1.png";
+							break;
+						case 1:
+							fileName = "bat/ML2.png";
+							break;
+						case 2:
+							fileName = "bat/ML3.png";
+							break;
+						case 3:
+							fileName = "bat/ML4.png";
+							break;
+						case 4:
+							fileName = "bat/ML5.png";
+							break;
+						case 5:
+							fileName = "bat/ML6.png";
+							break;
+						default:
+							fileName = "bat/ML1.png";
+							animationFrame = 0;
+							break;
+						}
+					}
+
+					ECS::GetComponent<Sprite>((int)GetBody()->GetUserData()).LoadSprite(fileName, 16, 16);
+				
+
+			
+		
 		if (playerSpotted == false && getCurrentClock() % 10 == 0)
 		{
 			RayCastCallback viewRay;
@@ -174,9 +237,10 @@ void PhysicsBody::Update(Transform * trans)
 
 			GetBody()->ApplyLinearImpulseToCenter(b2Vec2(GetNextMovement().x * GetSpeed() * getDeltaTime(), GetNextMovement().y * GetSpeed() * getDeltaTime()), true);
 
+
 			if (sqrt(GetBody()->GetLinearVelocity().y * GetBody()->GetLinearVelocity().y + GetBody()->GetLinearVelocity().x * GetBody()->GetLinearVelocity().x) > GetSpeed()/5)
 			{
-				GetBody()->ApplyLinearImpulseToCenter(-b2Vec2(GetNextMovement().x * GetSpeed()  * getDeltaTime(), GetNextMovement().y * GetSpeed() * getDeltaTime()), true);
+				GetBody()->ApplyLinearImpulseToCenter(-b2Vec2(GetBody()->GetLinearVelocity().x * (GetSpeed()/32) * getDeltaTime(), GetBody()->GetLinearVelocity().y * (GetSpeed()/32) * getDeltaTime()), true);
 				
 			}
 
@@ -187,7 +251,7 @@ void PhysicsBody::Update(Transform * trans)
 			if (knockedBack == true)
 			{
 				b2Vec2 knockDir = -CalculateMovement(ECS::GetComponent<PhysicsBody>(MainEntities::MainPlayer()).GetPosition());
-				GetBody()->ApplyLinearImpulseToCenter(b2Vec2(knockDir.x *2000 * getDeltaTime(), knockDir.y * 2000 * getDeltaTime()), true);
+				GetBody()->ApplyLinearImpulseToCenter(b2Vec2(knockDir.x * 900000 * getDeltaTime(), knockDir.y * 900000 * getDeltaTime()), true);
 				knockedBack = false;
 			}
 
@@ -692,7 +756,7 @@ void PhysicsBody::TakeDamage(float dmg,int ent)
 
 			//SetPosition(b2Vec2(-10000,0), false);
 
-			//m_bodiesToDelete.push_back(ent);
+			m_bodiesToDelete.push_back(ent);
 		}
 	
 }

@@ -470,7 +470,7 @@ void BossPhase1::InitScene(float windowWidth, float windowHeight)
 
 		//Sets up components
 		std::string fileName = "boxSprite.jpg";
-		ECS::GetComponent<Sprite>(entity).LoadSprite(fileName, 56, 60);
+		ECS::GetComponent<Sprite>(entity).LoadSprite(fileName, 56, 75);
 		ECS::GetComponent<Sprite>(entity).SetTransparency(0.f);
 		ECS::GetComponent<Transform>(entity).SetPosition(vec3(30.f, -20.f, 0.002f));
 		ECS::GetComponent<Trigger*>(entity) = new AttackTrigger();
@@ -484,6 +484,7 @@ void BossPhase1::InitScene(float windowWidth, float windowHeight)
 		//ECS::GetComponent<Trigger*>(entity)->AddTargetEntity(dummy);
 
 
+		auto& tempSpr = ECS::GetComponent<Sprite>(entity);
 
 		auto& tempPhsBody = ECS::GetComponent<PhysicsBody>(entity);
 
@@ -496,7 +497,7 @@ void BossPhase1::InitScene(float windowWidth, float windowHeight)
 
 		tempBody = m_physicsWorld->CreateBody(&tempDef);
 		//Size of body doesnt match sprite. Reference the other trigger to see how to set up.
-		tempPhsBody = PhysicsBody(entity, tempBody, float(40.f - shrinkX), float(40.f - shrinkY), vec2(0.f, 0.f), true, TRIGGER, ENEMY);
+		tempPhsBody = PhysicsBody(entity, tempBody, float(tempSpr.GetWidth() - shrinkX), float(tempSpr.GetHeight() - shrinkY), vec2(0.f, 0.f), true, TRIGGER, ENEMY);
 		tempPhsBody.SetColor(vec4(1.f, 0.f, 0.f, 0.3f));
 		tempPhsBody.SetName("Trigger");
 	}
@@ -539,6 +540,8 @@ void BossPhase1::InitScene(float windowWidth, float windowHeight)
 
 	readSaveFile();
 	resetGrid();
+	makeLoadingScreen();
+
 	for (int y = 0; y < (gWidth * 50); y += 50)
 	{
 		for (int x = 0 - 800; x < (gLength * 50) - 800; x += 50)
@@ -1533,6 +1536,8 @@ void BossPhase1::Update()
 				bossFrameNum = 0;
 				break;
 			}
+			ECS::GetComponent<Sprite>(boss).LoadSprite(fileName, 157, 118);
+
 		}
 		else if (ECS::GetComponent<PhysicsBody>(boss).GetVelocity().x < -10) {
 			switch (bossFrameNum) {
@@ -1556,6 +1561,8 @@ void BossPhase1::Update()
 				bossFrameNum = 0;
 				break;
 			}
+			ECS::GetComponent<Sprite>(boss).LoadSprite(fileName, 157, 118);
+
 		}
 		else {
 			switch (bossFrameNum) {
@@ -1571,85 +1578,13 @@ void BossPhase1::Update()
 				break;
 			}
 		}
-
 		ECS::GetComponent<Sprite>(boss).LoadSprite(fileName, 142, 127);
 		bossLastVel = ECS::GetComponent<PhysicsBody>(boss).GetVelocity().x;
 	}
 
-	if (diffTime2 > 0.1) {
-		batFrameNum2 += 1;
-		startTime2 = clock();
-		for (int i = 0; i < batVec2.size(); i++) {
-			std::cout << "Size: " << batVec2.size() << std::endl;
+	
 
-			auto entity = batVec2[i];
-			std::string fileName = "bat/MR1.png";
-
-
-			if (!ECS::GetComponent<PhysicsBody>(entity).GetExists()) {
-				batVec2.erase(batVec2.begin() + i);
-				PhysicsBody::m_bodiesToDelete.push_back(entity);
-
-			}
-			else {
-				if (ECS::GetComponent<PhysicsBody>(entity).GetVelocity().x > 0) {
-					switch (batFrameNum2) {
-					case 1:
-						fileName = "bat/MR1.png";
-						break;
-					case 2:
-						fileName = "bat/MR2.png";
-						break;
-					case 3:
-						fileName = "bat/MR3.png";
-						break;
-					case 4:
-						fileName = "bat/MR4.png";
-						break;
-					case 5:
-						fileName = "bat/MR5.png";
-						break;
-					case 6:
-						fileName = "bat/MR6.png";
-						break;
-					default:
-						fileName = "bat/MR1.png";
-						batFrameNum2 = 0;
-						break;
-					}
-				}
-				else if (ECS::GetComponent<PhysicsBody>(entity).GetVelocity().x <= 0) {
-					switch (batFrameNum2) {
-					case 1:
-						fileName = "bat/ML1.png";
-						break;
-					case 2:
-						fileName = "bat/ML2.png";
-						break;
-					case 3:
-						fileName = "bat/ML3.png";
-						break;
-					case 4:
-						fileName = "bat/ML4.png";
-						break;
-					case 5:
-						fileName = "bat/ML5.png";
-						break;
-					case 6:
-						fileName = "bat/ML6.png";
-						break;
-					default:
-						fileName = "bat/ML1.png";
-						batFrameNum2 = 0;
-						break;
-					}
-				}
-
-				ECS::GetComponent<Sprite>(entity).LoadSprite(fileName, 15, 15);
-			}
-
-		}
-	}
+	
 
 	
 	if (startup == false)

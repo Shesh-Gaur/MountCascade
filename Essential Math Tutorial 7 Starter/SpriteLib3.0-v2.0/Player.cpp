@@ -177,7 +177,17 @@ void Player::AnimationUpdate()
 			activeAnimation = ATTACK;
 			if (canYouFuckingJump == true)
 			{
-				ECS::GetComponent<PhysicsBody>(MainEntities::MainPlayer()).SetPosition(ECS::GetComponent<PhysicsBody>(MainEntities::MainPlayer()).GetPosition());
+				//ECS::GetComponent<PhysicsBody>(MainEntities::MainPlayer()).SetPosition(ECS::GetComponent<PhysicsBody>(MainEntities::MainPlayer()).GetPosition());
+				if (m_facing == RIGHT)
+				{
+					ECS::GetComponent<PhysicsBody>(MainEntities::MainPlayer()).GetBody()->ApplyLinearImpulseToCenter(b2Vec2(3000.f, 0.f), true);
+
+				}
+				else
+				{
+					ECS::GetComponent<PhysicsBody>(MainEntities::MainPlayer()).GetBody()->ApplyLinearImpulseToCenter(b2Vec2(-3000.f, 0.f), true);
+
+				}
 			}
 			else
 			{
@@ -185,18 +195,34 @@ void Player::AnimationUpdate()
 			}
 			if (m_facing == RIGHT)
 			{
-				ECS::GetComponent<PhysicsBody>(theAttackTrigger).SetPosition(ECS::GetComponent<PhysicsBody>(MainEntities::MainPlayer()).GetPosition() + b2Vec2(23.f, 0.f));
+				ECS::GetComponent<PhysicsBody>(theAttackTrigger).SetPosition(ECS::GetComponent<PhysicsBody>(MainEntities::MainPlayer()).GetPosition() + b2Vec2(23.f, 5.f));
+				ECS::GetComponent<PhysicsBody>(MainEntities::MainPlayer()).GetBody()->ApplyLinearImpulseToCenter(b2Vec2(1000.f, -55.f), true);
+
+
 			}
 			else
 			{
-				ECS::GetComponent<PhysicsBody>(theAttackTrigger).SetPosition(ECS::GetComponent<PhysicsBody>(MainEntities::MainPlayer()).GetPosition() + b2Vec2(-23.f, 0.f));
+				ECS::GetComponent<PhysicsBody>(theAttackTrigger).SetPosition(ECS::GetComponent<PhysicsBody>(MainEntities::MainPlayer()).GetPosition() + b2Vec2(-23.f, 5.f));
+				ECS::GetComponent<PhysicsBody>(MainEntities::MainPlayer()).GetBody()->ApplyLinearImpulseToCenter(b2Vec2(-1000.f, -55.f), true);
+
+
 			}
 			
 			//Check if the attack animation is done
 			if (m_animController->GetAnimation(m_animController->GetActiveAnim()).GetAnimationDone())
 			{
 				ECS::GetComponent<PhysicsBody>(theAttackTrigger).SetPosition(b2Vec2(500,1000));
-
+				if (canYouFuckingJump == true)
+				{
+					if (m_facing == RIGHT)
+					{
+						ECS::GetComponent<PhysicsBody>(MainEntities::MainPlayer()).GetBody()->ApplyLinearImpulseToCenter(b2Vec2(-100000.f, 0.f), true);
+					}
+					else
+					{
+						ECS::GetComponent<PhysicsBody>(MainEntities::MainPlayer()).GetBody()->ApplyLinearImpulseToCenter(b2Vec2(100000.f, 0.f), true);
+					}
+				}
 				//Will auto set to idle
 				m_locked = false;
 				m_attacking = false;
