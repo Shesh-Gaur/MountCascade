@@ -190,4 +190,5 @@ private:
 
 	bool playerSpotted = false;
 	bool batExists = true;
+	float animationFrame = 0.f;
 };

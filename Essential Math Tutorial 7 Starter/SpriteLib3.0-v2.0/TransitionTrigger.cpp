@@ -21,6 +21,7 @@ int main()
 void TransitionTrigger::OnTrigger()
 {
 	Trigger::OnTrigger();
+	
 }
 
 
@@ -28,33 +29,39 @@ void TransitionTrigger::OnEnter()
 {
 
 	Trigger::OnEnter();
-
-	std::cout << "\nHEY!";
-	std::ofstream playerSaveFile;
-	playerSaveFile.open("assets/PlayerSaves/File1.txt");
-	float x, y;
-	if (nextScene == 0)
+	ECS::GetComponent<Transform>(MainEntities::MainLoading()).SetPosition(vec3(ECS::GetComponent<PhysicsBody>(MainEntities::MainPlayer()).GetPosition().x, ECS::GetComponent<PhysicsBody>(MainEntities::MainPlayer()).GetPosition().y,4));
+	if (ECS::GetComponent<Sprite>(MainEntities::MainLoading()).GetTransparency() == 0.f)
 	{
-		theGame.switchSceneCascadeVillage = true;
-		x = 1885;
-		y = 283;
-
-
+		ECS::GetComponent<Sprite>(MainEntities::MainLoading()).SetTransparency(0.1f);
 	}
-	else if (nextScene == 1)
+	if (ECS::GetComponent<Sprite>(MainEntities::MainLoading()).GetTransparency() >= 1.f)
 	{
-		theGame.switchSceneMushroomCave = true;
+		std::cout << "\nHEY!";
+		std::ofstream playerSaveFile;
+		playerSaveFile.open("assets/PlayerSaves/File1.txt");
+		float x, y;
+		if (nextScene == 0)
+		{
+			theGame.switchSceneCascadeVillage = true;
+			x = 1885;
+			y = 283;
 
-		x = -850;
-		y = 10;
 
+		}
+		else if (nextScene == 1)
+		{
+			theGame.switchSceneMushroomCave = true;
+
+			x = -850;
+			y = 10;
+
+		}
+
+		playerSaveFile << x;
+		playerSaveFile << "\t" << y;
+
+		playerSaveFile.close();
 	}
-
-	playerSaveFile << x;
-	playerSaveFile << "\t" << y;
-	
-	playerSaveFile.close();
-
 }
 
 

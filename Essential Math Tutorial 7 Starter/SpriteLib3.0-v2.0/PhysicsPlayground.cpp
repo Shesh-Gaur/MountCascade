@@ -17,7 +17,7 @@ int startTimeJumpBoost = clock();
 int jumpBoostFrame = 0;
 double diffTimeJumpBoost;
 double diffTime3;
-int batFrameNum3 = 0;
+
 float curVel3 = 0.f;
 
 bool hasJumpBoostUnlocked = false;
@@ -546,7 +546,7 @@ void PhysicsPlayground::InitScene(float windowWidth, float windowHeight)
 
 		//Sets up components
 		std::string fileName = "boxSprite.jpg";
-		ECS::GetComponent<Sprite>(entity).LoadSprite(fileName, 56, 60);
+		ECS::GetComponent<Sprite>(entity).LoadSprite(fileName, 56, 75);
 		ECS::GetComponent<Sprite>(entity).SetTransparency(0.f);
 		ECS::GetComponent<Transform>(entity).SetPosition(vec3(30.f, -20.f, 0.002f));
 		ECS::GetComponent<Trigger*>(entity) = new AttackTrigger();
@@ -569,10 +569,11 @@ void PhysicsPlayground::InitScene(float windowWidth, float windowHeight)
 		b2BodyDef tempDef;
 		tempDef.type = b2_staticBody;
 		tempDef.position.Set(float32(0.f), float32(80.f));
+		auto& tempSpr = ECS::GetComponent<Sprite>(entity);
 
 		tempBody = m_physicsWorld->CreateBody(&tempDef);
 		//Size of body doesnt match sprite. Reference the other trigger to see how to set up.
-		tempPhsBody = PhysicsBody(entity, tempBody, float(40.f - shrinkX), float(40.f - shrinkY), vec2(0.f, 0.f), true, TRIGGER, ENEMY);
+		tempPhsBody = PhysicsBody(entity, tempBody, float(tempSpr.GetWidth() - shrinkX), float(tempSpr.GetHeight() - shrinkY), vec2(0.f, 0.f), true, TRIGGER, ENEMY);
 		tempPhsBody.SetColor(vec4(1.f, 0.f, 0.f, 0.3f));
 		tempPhsBody.SetName("Trigger");
 	}
@@ -651,7 +652,7 @@ void PhysicsPlayground::InitScene(float windowWidth, float windowHeight)
 		b2Body* tempBody;
 		b2BodyDef tempDef;
 		tempDef.type = b2_staticBody;
-		tempDef.position.Set(float32(-900.f), float32(40.f));
+		tempDef.position.Set(float32(-900.f), float32(0.f));
 
 		tempBody = m_physicsWorld->CreateBody(&tempDef);
 
@@ -700,6 +701,7 @@ void PhysicsPlayground::InitScene(float windowWidth, float windowHeight)
 	//Some Old Startup Stuff
 	resetGrid();
 	readSaveFile();
+	makeLoadingScreen();
 
 	for (int y = 0; y < (gWidth * 50); y += 50)
 	{
@@ -749,8 +751,8 @@ void PhysicsPlayground::InitScene(float windowWidth, float windowHeight)
 
 
 	makeBat(-335, 200, 0.02, 0, 10, 10);
-	makeBat(-325, 200, 0.02, 0, 10, 10);
-	makeBat(-745, 400, 0.02, 0, 10, 10);
+	//makeBat(-325, 200, 0.02, 0, 10, 10);
+	//makeBat(-745, 400, 0.02, 0, 10, 10);
 	makeBat(-745, 410, 0.02, 0, 10, 10);
 	makeBat(-735, 410, 0.02, 0, 10, 10);
 
@@ -1219,17 +1221,17 @@ void PhysicsPlayground::readSaveFile()
 
 	if (startup == true)
 	{
-		std::fstream playerSaveFile;
-		playerSaveFile.open("assets/PlayerSaves/File1.txt");
+		//std::fstream playerSaveFile;
+		//playerSaveFile.open("assets/PlayerSaves/File1.txt");
 
-		float newXPos, newYPos;
-		playerSaveFile >> newXPos;
-		playerSaveFile >> newYPos;
+		//float newXPos, newYPos;
+		//playerSaveFile >> newXPos;
+		//playerSaveFile >> newYPos;
 
-		ECS::GetComponent<PhysicsBody>(MainEntities::MainPlayer()).SetPosition(b2Vec2(newXPos, newYPos));
-		ECS::GetComponent<PhysicsBody>(playerFollow).SetPosition(b2Vec2(newXPos, newYPos));
+		//ECS::GetComponent<PhysicsBody>(MainEntities::MainPlayer()).SetPosition(b2Vec2(newXPos, newYPos));
+		//ECS::GetComponent<PhysicsBody>(playerFollow).SetPosition(b2Vec2(newXPos, newYPos));
 
-		playerSaveFile.close();
+		//playerSaveFile.close();
 	}
 }
 
@@ -1395,6 +1397,7 @@ void PhysicsPlayground::ZoomCamera()
 {
 
 }
+
 
 void PhysicsPlayground::updateUI()
 {
@@ -1682,81 +1685,7 @@ void PhysicsPlayground::Update()
 
 	}
 
-	if (diffTime3 > 0.1) {
-		batFrameNum3 += 1;
-		startTime3 = clock();
-		for (int i = 0; i < batVec3.size(); i++) {
-			//std::cout << "Size: " << batVec3.size() << std::endl;
-			//std::cout << "X: " << ECS::GetComponent<PhysicsBody>(jumpBoostEnitity).GetPosition().x << " Y: " << ECS::GetComponent<PhysicsBody>(jumpBoostEnitity).GetPosition().y << std::endl;
-
-			auto entity = batVec3[i];
-			std::string fileName = "bat/MR1.png";
-
-
-			if (!ECS::GetComponent<PhysicsBody>(entity).GetExists()) {
-				batVec3.erase(batVec3.begin() + i);
-				PhysicsBody::m_bodiesToDelete.push_back(entity);
-
-			}
-			else {
-				if (ECS::GetComponent<PhysicsBody>(entity).GetVelocity().x > 0) {
-					switch (batFrameNum3) {
-					case 1:
-						fileName = "bat/MR1.png";
-						break;
-					case 2:
-						fileName = "bat/MR2.png";
-						break;
-					case 3:
-						fileName = "bat/MR3.png";
-						break;
-					case 4:
-						fileName = "bat/MR4.png";
-						break;
-					case 5:
-						fileName = "bat/MR5.png";
-						break;
-					case 6:
-						fileName = "bat/MR6.png";
-						break;
-					default:
-						fileName = "bat/MR1.png";
-						batFrameNum3 = 0;
-						break;
-					}
-				}
-				else if (ECS::GetComponent<PhysicsBody>(entity).GetVelocity().x <= 0) {
-					switch (batFrameNum3) {
-					case 1:
-						fileName = "bat/ML1.png";
-						break;
-					case 2:
-						fileName = "bat/ML2.png";
-						break;
-					case 3:
-						fileName = "bat/ML3.png";
-						break;
-					case 4:
-						fileName = "bat/ML4.png";
-						break;
-					case 5:
-						fileName = "bat/ML5.png";
-						break;
-					case 6:
-						fileName = "bat/ML6.png";
-						break;
-					default:
-						fileName = "bat/ML1.png";
-						batFrameNum3 = 0;
-						break;
-					}
-				}
-
-				ECS::GetComponent<Sprite>(entity).LoadSprite(fileName, 15, 15);
-			}
-
-		}
-	}
+	
 
 	if (startup == false)
 	{
@@ -1797,6 +1726,7 @@ void PhysicsPlayground::Update()
 	cameraTrackPlayer();
 	ZoomCamera();
 	updateUI();
+	CheckTransition();
 	//ECS::GetComponent<PhysicsBody>(MainEntities::MainPlayer()).SetGravityScale(-m_gravity.y * Timer::deltaTime);
 	//std::cout << "\n" << airDashCounter;
 	if (levelEditor == false)
@@ -2043,10 +1973,10 @@ void PhysicsPlayground::RunLevelEditor()
 	b2Vec2 wMousePos;
 	wMousePos = (b2Vec2(mousePosX / 5, mousePosY / 5));
 	wMousePos += b2Vec2(ECS::GetComponent<Camera>(MainEntities::MainCamera()).GetPosition().x, ECS::GetComponent<Camera>(MainEntities::MainCamera()).GetPosition().y);
-	ECS::GetComponent<Sprite>(rayMarker).SetTransparency(0.9f);
+	ECS::GetComponent<Sprite>(rayMarker).SetTransparency(0.8f);
 	ECS::GetComponent<Transform>(rayMarker).SetPosition(wMousePos.x, wMousePos.y, 2);
 
-	ECS::GetComponent<Sprite>(editorEnabled).SetTransparency(0.9f);
+	ECS::GetComponent<Sprite>(editorEnabled).SetTransparency(0.8f);
 	ECS::GetComponent<Transform>(editorEnabled).SetPosition(ECS::GetComponent<Camera>(MainEntities::MainCamera()).GetPosition() + vec3(-180, 130, 2));
 
 	ECS::GetComponent<Sprite>(changesSaved).SetTransparency(0.f);

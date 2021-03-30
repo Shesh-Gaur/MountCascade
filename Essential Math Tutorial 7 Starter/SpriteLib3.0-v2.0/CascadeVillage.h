@@ -53,6 +53,7 @@ public:
 	void ZoomCamera();
 	void updateUI();
 	void loadNear();
+
 	float cameraZoomDefault = 75.f;
 	float cameraZoom = 75.f;
 	float aRatio;
@@ -103,6 +104,7 @@ public:
 	int houseEntity;
 	float hpTrans = 1.f;
 	float dashTrans = 1.f;
+
 protected:
 	bool m_firstWindow = false;
 	bool m_secondWindow = false;

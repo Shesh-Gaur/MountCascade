@@ -101,7 +101,7 @@ void CascadeVillage::InitScene(float windowWidth, float windowHeight)
 		//Set up the components
 		std::string fileName = "LevelEditorUI/Level Editor Enabled.png";
 		ECS::GetComponent<Sprite>(entity).LoadSprite(fileName, 240, 125);
-		ECS::GetComponent<Sprite>(entity).SetTransparency(0.8f);
+		ECS::GetComponent<Sprite>(entity).SetTransparency(0.f);
 		ECS::GetComponent<Transform>(entity).SetPosition(vec3(0.f, 0.f, 2.f));
 	}
 
@@ -192,7 +192,7 @@ void CascadeVillage::InitScene(float windowWidth, float windowHeight)
 		//Set up the components
 		std::string fileName = "LevelEditorUI/Cursor.png";
 		ECS::GetComponent<Sprite>(entity).LoadSprite(fileName, 10, 10);
-		ECS::GetComponent<Sprite>(entity).SetTransparency(0.5f);
+		ECS::GetComponent<Sprite>(entity).SetTransparency(0.f);
 		ECS::GetComponent<Transform>(entity).SetPosition(vec3(0.f, 0.f, 0.f));
 	}
 
@@ -318,6 +318,8 @@ void CascadeVillage::InitScene(float windowWidth, float windowHeight)
 		ECS::GetComponent<Transform>(entity).SetPosition(vec3(-1000.f,-150.f, -60.f));
 	}
 
+
+
 	//Setup new Entity
 	{
 		/*Scene::CreateSprite(m_sceneReg, "HelloWorld.png", 100, 60, 0.5f, vec3(0.f, 0.f, 0.f));*/
@@ -433,7 +435,7 @@ void CascadeVillage::InitScene(float windowWidth, float windowHeight)
 
 		//Sets up components
 		std::string fileName = "boxSprite.jpg";
-		ECS::GetComponent<Sprite>(entity).LoadSprite(fileName, 56, 60);
+		ECS::GetComponent<Sprite>(entity).LoadSprite(fileName, 56, 75);
 		ECS::GetComponent<Sprite>(entity).SetTransparency(0.f);
 		ECS::GetComponent<Transform>(entity).SetPosition(vec3(30.f, -20.f, 0.002f));
 		ECS::GetComponent<Trigger*>(entity) = new AttackTrigger();
@@ -456,10 +458,11 @@ void CascadeVillage::InitScene(float windowWidth, float windowHeight)
 		b2BodyDef tempDef;
 		tempDef.type = b2_staticBody;
 		tempDef.position.Set(float32(0.f), float32(80.f));
+		auto& tempSpr = ECS::GetComponent<Sprite>(entity);
 
 		tempBody = m_physicsWorld->CreateBody(&tempDef);
 		//Size of body doesnt match sprite. Reference the other trigger to see how to set up.
-		tempPhsBody = PhysicsBody(entity, tempBody, float(40.f - shrinkX), float(40.f - shrinkY), vec2(0.f, 0.f), true, TRIGGER, ENEMY);
+		tempPhsBody = PhysicsBody(entity, tempBody, float(tempSpr.GetWidth() - shrinkX), float(tempSpr.GetHeight() - shrinkY), vec2(0.f, 0.f), true, TRIGGER, ENEMY);
 		tempPhsBody.SetColor(vec4(1.f, 0.f, 0.f, 0.3f));
 		tempPhsBody.SetName("Trigger");
 	}
@@ -718,6 +721,7 @@ void CascadeVillage::InitScene(float windowWidth, float windowHeight)
 	}
 	readSaveFile();
 	resetGrid();
+	makeLoadingScreen();
 	for (int y = 0; y < (gWidth * 50); y += 50)
 	{
 		for (int x = 0 - 800; x < (gLength * 50) - 800; x += 50)
@@ -1849,80 +1853,7 @@ void CascadeVillage::Update()
 
 	}
 
-	if (diffTime > 0.1) {
-		batFrameNum += 1;
-		startTime = clock();
-		for (int i = 0; i < batVec.size(); i++) {
-			std::cout << "Size: " << batVec.size() << std::endl;
-
-			auto entity = batVec[i];
-			std::string fileName = "bat/MR1.png";
-
-
-			if (!ECS::GetComponent<PhysicsBody>(entity).GetExists()) {
-				batVec.erase(batVec.begin() + i);
-				PhysicsBody::m_bodiesToDelete.push_back(entity);
-				
-			}
-			else {
-				if (ECS::GetComponent<PhysicsBody>(entity).GetVelocity().x > 0) {
-					switch (batFrameNum) {
-					case 1:
-						fileName = "bat/MR1.png";
-						break;
-					case 2:
-						fileName = "bat/MR2.png";
-						break;
-					case 3:
-						fileName = "bat/MR3.png";
-						break;
-					case 4:
-						fileName = "bat/MR4.png";
-						break;
-					case 5:
-						fileName = "bat/MR5.png";
-						break;
-					case 6:
-						fileName = "bat/MR6.png";
-						break;
-					default:
-						fileName = "bat/MR1.png";
-						batFrameNum = 0;
-						break;
-					}
-				}
-				else if(ECS::GetComponent<PhysicsBody>(entity).GetVelocity().x <= 0) {
-					switch (batFrameNum) {
-					case 1:
-						fileName = "bat/ML1.png";
-						break;
-					case 2:
-						fileName = "bat/ML2.png";
-						break;
-					case 3:
-						fileName = "bat/ML3.png";
-						break;
-					case 4:
-						fileName = "bat/ML4.png";
-						break;
-					case 5:
-						fileName = "bat/ML5.png";
-						break;
-					case 6:
-						fileName = "bat/ML6.png";
-						break;
-					default:
-						fileName = "bat/ML1.png";
-						batFrameNum = 0;
-						break;
-					}
-				}
-
-				ECS::GetComponent<Sprite>(entity).LoadSprite(fileName, 15, 15);
-			}
-
-		}
-	}
+	
 
 
 	
@@ -1960,6 +1891,7 @@ void CascadeVillage::Update()
 	cameraTrackPlayer();
 	ZoomCamera();
 	updateUI();
+	CheckTransition();
 	//ECS::GetComponent<PhysicsBody>(MainEntities::MainPlayer()).SetGravityScale(-m_gravity.y * Timer::deltaTime);
 	
 	if (levelEditor == false)
@@ -1992,6 +1924,10 @@ void CascadeVillage::Update()
 		}
 
 	}
+
+
+
+
 	//std::cout << "\n" << airDashCounter;
 	
 }
@@ -2207,10 +2143,10 @@ void CascadeVillage::RunLevelEditor()
 	b2Vec2 wMousePos;
 	wMousePos = (b2Vec2(mousePosX / 5, mousePosY / 5));
 	wMousePos += b2Vec2(ECS::GetComponent<Camera>(MainEntities::MainCamera()).GetPosition().x, ECS::GetComponent<Camera>(MainEntities::MainCamera()).GetPosition().y);
-	ECS::GetComponent<Sprite>(rayMarker).SetTransparency(0.9f);
+	ECS::GetComponent<Sprite>(rayMarker).SetTransparency(0.8f);
 	ECS::GetComponent<Transform>(rayMarker).SetPosition(wMousePos.x, wMousePos.y, 2);
 
-	ECS::GetComponent<Sprite>(editorEnabled).SetTransparency(0.9f);
+	ECS::GetComponent<Sprite>(editorEnabled).SetTransparency(0.8f);
 	ECS::GetComponent<Transform>(editorEnabled).SetPosition(ECS::GetComponent<Camera>(MainEntities::MainCamera()).GetPosition() + vec3(-180, 130, 2));
 
 	ECS::GetComponent<Sprite>(changesSaved).SetTransparency(0.f);
