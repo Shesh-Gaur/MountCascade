@@ -266,16 +266,184 @@ void PhysicsBody::Update(Transform * trans)
 	}
 	else if (name == "Boss")
 	{
-		if (getCurrentClock() % 10 == 0) //Runs Pathfinding Calculations 12 times every 60 frames (5 Times more performant now!)
-		{
-			float direction2 = ECS::GetComponent<PhysicsBody>(MainEntities::MainPlayer()).GetPosition().x - GetPosition().x;
-			direction2 /= abs(direction2);
-			SetNextMovement(b2Vec2(direction2 * GetSpeed(), GetBody()->GetLinearVelocity().y));
-			
-		}
 
-		GetBody()->SetLinearVelocity(b2Vec2(GetNextMovement().x * getDeltaTime(), GetNextMovement().y * getDeltaTime()));
+		animationFrame += 5.f * getDeltaTime();
+		if (attackCooldown > 0)
+		{
+			attackCooldown -= 1.f * getDeltaTime();
+		}
+		//std::cout << "\nAttack Cooldown " << attackCooldown;
+
+		std::string fileName;
+		b2Vec2 bossDistance = GetPosition() - ECS::GetComponent<PhysicsBody>(MainEntities::MainPlayer()).GetPosition();
+		if (!isAttacking && attackCooldown <= 0)
+		{
+			if (sqrt(bossDistance.x * bossDistance.x + bossDistance.y * bossDistance.y) < 100.f)
+			{
+				animationFrame = 0.f;
+
+				isAttacking = true;
+
+			}
+
+		}
+		if (!isAttacking) //Is Walking
+		{
+
+			if (recoverCooldown > 0)
+			{
+				recoverCooldown -= 1.f * getDeltaTime();
+			}
+			else
+			{
+				isCharging = true;
+
+			}
+
+			
+
+			if (GetVelocity().x > 10) {
+				switch ((int)round(animationFrame)) {
+				case 0:
+					fileName = "golem/golemoppositerunframe1.png";
+					break;
+				case 1:
+					fileName = "golem/golemoppositerunframe2.png";
+					break;
+				case 2:
+					fileName = "golem/golemoppositerunframe3.png";
+					break;
+				case 3:
+					fileName = "golem/golemoppositerunframe4.png";
+					break;
+				case 4:
+					fileName = "golem/golemoppositerunframe5.png";
+					break;
+				default:
+					fileName = "golem/golemoppositerunframe6.png";
+					animationFrame = 0;
+					break;
+				}
+				ECS::GetComponent<Sprite>((int)GetBody()->GetUserData()).LoadSprite(fileName, 157, 118);
+
+
+			}
+			else if (GetVelocity().x < -10) {
+				switch ((int)round(animationFrame)) {
+				case 0:
+					fileName = "golem/runframe1.png";
+					break;
+				case 1:
+					fileName = "golem/runframe2.png";
+					break;
+				case 2:
+					fileName = "golem/runframe3.png";
+					break;
+				case 3:
+					fileName = "golem/runframe4.png";
+					break;
+				case 4:
+					fileName = "golem/runframe5.png";
+					break;
+				default:
+					fileName = "golem/runframe6.png";
+					animationFrame = 0;
+					break;
+				}
+				ECS::GetComponent<Sprite>((int)GetBody()->GetUserData()).LoadSprite(fileName, 157, 118);
+
+			}
+			else {
+				switch ((int)round(animationFrame)) {
+				case 0:
+					fileName = "golem/idleframe1.png";
+					break;
+				case 1:
+					fileName = "golem/idleframe2.png";
+					break;
+				default:
+					fileName = "golem/idleframe3.png";
+					animationFrame = 0;
+					break;
+				}
+			}
+			ECS::GetComponent<Sprite>((int)GetBody()->GetUserData()).LoadSprite(fileName, 142, 127);
+
+			bossLastVel = GetVelocity().x;
+
+
+
+			
+			if (getCurrentClock() % 10 == 0)
+			{
+				float direction2 = ECS::GetComponent<PhysicsBody>(MainEntities::MainPlayer()).GetPosition().x - GetPosition().x;
+				direction2 /= abs(direction2);
+				SetNextMovement(b2Vec2(direction2 * GetSpeed(), GetBody()->GetLinearVelocity().y));
+			}
+			GetBody()->SetLinearVelocity(b2Vec2(GetNextMovement().x * getDeltaTime(), GetNextMovement().y * getDeltaTime()));
+			//std::cout << "\nHi, I'm WALKING rn " << animationFrame;
+
+		}
+		else //Is Attacking
+		{
+			if (bossLastVel < 0) {
+				switch ((int)round(animationFrame)) { //left
+				case 0:
+					fileName = "golem/attackanim1.png";
+					break;
+				case 1:
+					fileName = "golem/attackanim2.png";
+					break;
+				case 2:
+					fileName = "golem/attackanim3.png";
+					break;
+				case 3:
+					fileName = "golem/attackanim4.png";
+					break;
+				case 4:
+					fileName = "golem/attackanim5.png";
+					break;
+				default:
+					fileName = "golem/attackanim6.png";
+					animationFrame = 0;
+					isAttacking = false;
+					break;
+				}
+			}
+			else { //right
+				switch ((int)round(animationFrame)) {
+				case 0:
+					fileName = "golem/attackanim1r.png";
+					break;
+				case 1:
+					fileName = "golem/attackanim2r.png";
+					break;
+				case 2:
+					fileName = "golem/attackanim3r.png";
+					break;
+				case 3:
+					fileName = "golem/attackanim4r.png";
+					break;
+				case 4:
+					fileName = "golem/attackanim5r.png";
+					break;
+				default:
+					fileName = "golem/attackanim6r.png";
+					animationFrame = 0;
+					isAttacking = false;
+					break;
+				
+				}
+			}
+
+			ECS::GetComponent<Sprite>((int)GetBody()->GetUserData()).LoadSprite(fileName, 168, 148);
+			attackCooldown = attackCooldownDefault;
+			//std::cout << "\nHi, I'm attacking rn " << animationFrame;
+
+		}
 		SetRotationAngleDeg(0);
+
+
 	}
 	//Make sure that movement doesn't happen in contact step
 	if (moveLater)

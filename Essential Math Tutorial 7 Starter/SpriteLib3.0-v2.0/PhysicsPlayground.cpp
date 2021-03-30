@@ -101,7 +101,7 @@ void PhysicsPlayground::InitScene(float windowWidth, float windowHeight)
 		std::string fileName = "punisher/Punisher-Cooking1.png";
 		ECS::GetComponent<Sprite>(entity).LoadSprite(fileName, 128, 128);
 		ECS::GetComponent<Sprite>(entity).SetTransparency(1.0f);
-		ECS::GetComponent<Transform>(entity).SetPosition(vec3(-610.f, 55.f, 0.01f));
+		ECS::GetComponent<Transform>(entity).SetPosition(vec3(-750.f, 55.f, 0.01f));
 	}
 
 	//Setup new Entity
@@ -1546,7 +1546,7 @@ void PhysicsPlayground::Update()
 
 	puni2DiffTime = (clock() - puni2StartTime) / (double)(CLOCKS_PER_SEC);
 
-	if (ECS::GetComponent<PhysicsBody>(MainEntities::MainPlayer()).GetPosition().x > -620 && !activatePuni2) {
+	if (ECS::GetComponent<PhysicsBody>(MainEntities::MainPlayer()).GetPosition().x > -750 && !activatePuni2) {
 		activatePuni2 = true;
 		puni2StartTime = clock();
 		health = 3;

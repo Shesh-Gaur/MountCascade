@@ -40,7 +40,7 @@ void CascadeVillage::InitScene(float windowWidth, float windowHeight)
 
 	m_physicsWorld = new b2World(m_gravity);
 	m_name = "Mt.Cascade";
-	m_gravity = b2Vec2(0.f, -45.f);
+	m_gravity = b2Vec2(0.f, -250.f);
 	m_physicsWorld->SetGravity(m_gravity);
 
 	m_physicsWorld->SetContactListener(&listener);
@@ -1165,6 +1165,7 @@ void CascadeVillage::makeBat(float xPos, float yPos, float zPos, float rotation,
 	tempPhsBody.SetRotationAngleDeg(rotation);
 	tempPhsBody.SetName("Bat");
 	tempPhsBody.SetHealth(2);
+
 
 }
 
@@ -2338,11 +2339,12 @@ void CascadeVillage::RunLevelEditor()
 	{
 		entitiesCreated = true;
 		makeBox(wMousePos.x, wMousePos.y, 0.02f, 0, 50, 50);
+
 	}
 	else if (Input::GetKeyDown(Key::Two))
 	{
 		entitiesCreated = true;
-		makeBox2(wMousePos.x, wMousePos.y, 0.03f, 0, 50, 50);
+		makeBox2(wMousePos.x, wMousePos.y, 0.02f, 0, 64, 64);
 
 	}
 	else if (Input::GetKeyDown(Key::Three))
@@ -2525,7 +2527,7 @@ void CascadeVillage::KeyboardHold()
 		ECS::GetComponent<Transform>(editZone).SetPosition(player.GetPosition().x, player.GetPosition().y, 2);
 
 		auto& canJump = ECS::GetComponent<CanJump>(MainEntities::MainPlayer());
-		float speed = 100.f;
+		float speed = 1.5f;
 		b2Vec2 vel = b2Vec2(0.f, 0.f);
 
 		int maxVel = 120;
@@ -2537,7 +2539,7 @@ void CascadeVillage::KeyboardHold()
 			}
 
 			//player.GetBody()->ApplyForceToCenter(b2Vec2(-400000.f * Timer::deltaTime * speed, 0.f), true);
-			player.GetBody()->SetLinearVelocity(b2Vec2(-curVel * Timer::deltaTime * speed, player.GetBody()->GetLinearVelocity().y));
+			player.GetBody()->SetLinearVelocity(b2Vec2(-curVel * speed, player.GetBody()->GetLinearVelocity().y));
 
 			RayCastCallback checkRay;
 			m_physicsWorld->RayCast(&checkRay, player.GetPosition() + b2Vec2(-13, 0), player.GetPosition() + b2Vec2(-15, 0));
@@ -2597,7 +2599,7 @@ void CascadeVillage::KeyboardHold()
 			}
 
 			//player.GetBody()->ApplyForceToCenter(b2Vec2(400000.f * Timer::deltaTime * speed, 0.f), true);
-			player.GetBody()->SetLinearVelocity(b2Vec2(curVel * Timer::deltaTime * speed, player.GetBody()->GetLinearVelocity().y));
+			player.GetBody()->SetLinearVelocity(b2Vec2(curVel  * speed, player.GetBody()->GetLinearVelocity().y));
 
 			RayCastCallback checkRay;
 			m_physicsWorld->RayCast(&checkRay, player.GetPosition() + b2Vec2(13, 0), player.GetPosition() + b2Vec2(15, 0));
@@ -2690,7 +2692,7 @@ void CascadeVillage::KeyboardHold()
 				{
 					spaceReleased = false;
 					spacePressed = false;
-					player.GetBody()->ApplyLinearImpulseToCenter(b2Vec2(0.f, 180000.f), true);
+					player.GetBody()->ApplyLinearImpulseToCenter(b2Vec2(0.f, 380000.f), true);
 					airJumpCounter = airJumpDefault;
 					canJump.m_canJump = false;
 				}
