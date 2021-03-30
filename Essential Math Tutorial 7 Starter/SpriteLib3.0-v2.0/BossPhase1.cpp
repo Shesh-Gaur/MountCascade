@@ -513,14 +513,14 @@ void BossPhase1::InitScene(float windowWidth, float windowHeight)
 
 		//Set up the components
 		std::string fileName = "idleframe1.png";
-		ECS::GetComponent<Sprite>(entity).LoadSprite(fileName, 142, 127);
+		ECS::GetComponent<Sprite>(entity).LoadSprite(fileName, 256, 256);
 		ECS::GetComponent<Sprite>(entity).SetTransparency(1.f);
 		ECS::GetComponent<Transform>(entity).SetPosition(vec3(0.f, 0.f, 0.02f));
 		auto& tempSpr = ECS::GetComponent<Sprite>(entity);
 		auto& tempPhsBody = ECS::GetComponent<PhysicsBody>(entity);
 
-		float shrinkX = 0.f;
-		float shrinkY = 20.f;
+		float shrinkX = 88.f;
+		float shrinkY = 108.f;
 		b2Body* tempBody;
 		b2BodyDef tempDef;
 		tempDef.type = b2_dynamicBody;
@@ -529,7 +529,7 @@ void BossPhase1::InitScene(float windowWidth, float windowHeight)
 		tempBody = m_physicsWorld->CreateBody(&tempDef);
 		
 		tempPhsBody = PhysicsBody(entity, tempBody, float(tempSpr.GetWidth() - shrinkX),
-			float(tempSpr.GetHeight() - shrinkY), vec2(0.f, -10.f), false, ENEMY, PLAYER | ENEMY , 1.f,8.f);
+			float(tempSpr.GetHeight() - shrinkY), vec2(0.f, -54.f), false, ENEMY, PLAYER | ENEMY , 1.f,8.f);
 		tempPhsBody.SetColor(vec4(0.f, 1.f, 0.f, 0.3f));
 		tempPhsBody.SetRotationAngleDeg(0);
 		tempPhsBody.SetName("Boss");
@@ -1455,7 +1455,7 @@ void BossPhase1::Update()
 
 	if (bossDiffTime > 0.2) {
 
-		std::string fileName = "golem/idleframe1";
+		std::string fileName = "golem/256 Canvas/idleframe1";
 
 		bossFrameNum += 1;
 		bossStartTime = clock();
@@ -1468,16 +1468,16 @@ void BossPhase1::Update()
 			if (bossLastVel < 0) {
 				switch (bossAttackAnimNum) { //left
 				case 1:
-					fileName = "golem/attackanim1.png";
+					fileName = "golem/256 Canvas/attackanim1.png";
 					break;
 				case 2:
-					fileName = "golem/attackanim2.png";
+					fileName = "golem/256 Canvas/attackanim2.png";
 					break;
 				case 3:
-					fileName = "golem/attackanim3.png";
+					fileName = "golem/256 Canvas/attackanim3.png";
 					break;
 				case 4:
-					fileName = "golem/attackanim4.png";
+					fileName = "golem/256 Canvas/attackanim4.png";
 					break;
 				case 5:
 					fileName = "attackanim15.png";
@@ -1492,22 +1492,22 @@ void BossPhase1::Update()
 			else { //right
 				switch (bossAttackAnimNum) {
 				case 1:
-					fileName = "golem/attackanim1r.png";
+					fileName = "golem/256 Canvas/attackanim1r.png";
 					break;
 				case 2:
-					fileName = "golem/attackanim2r.png";
+					fileName = "golem/256 Canvas/attackanim2r.png";
 					break;
 				case 3:
-					fileName = "golem/attackanim3r.png";
+					fileName = "golem/256 Canvas/attackanim3r.png";
 					break;
 				case 4:
-					fileName = "golem/attackanim4r.png";
+					fileName = "golem/256 Canvas/attackanim4r.png";
 					break;
 				case 5:
-					fileName = "golem/attackanim5r.png";
+					fileName = "golem/256 Canvas/attackanim5r.png";
 					break;
 				default:
-					fileName = "golem/attackanim6r.png";
+					fileName = "golem/256 Canvas/attackanim6r.png";
 					bossAttackAnimNum = 0;
 					isBossAttacking = false;
 					break;
@@ -1517,68 +1517,68 @@ void BossPhase1::Update()
 		else if (ECS::GetComponent<PhysicsBody>(boss).GetVelocity().x > 10) {
 			switch (bossFrameNum) {
 			case 1:
-				fileName = "golem/golemoppositerunframe1.png";
+				fileName = "golem/256 Canvas/golemoppositerunframe1.png";
 				break;
 			case 2:
-				fileName = "golem/golemoppositerunframe2.png";
+				fileName = "golem/256 Canvas/golemoppositerunframe2.png";
 				break;
 			case 3:
-				fileName = "golem/golemoppositerunframe3.png";
+				fileName = "golem/256 Canvas/golemoppositerunframe3.png";
 				break;
 			case 4:
-				fileName = "golem/golemoppositerunframe4.png";
+				fileName = "golem/256 Canvas/golemoppositerunframe4.png";
 				break;
 			case 5:
-				fileName = "golem/golemoppositerunframe5.png";
+				fileName = "golem/256 Canvas/golemoppositerunframe5.png";
 				break;
 			default:
-				fileName = "golem/golemoppositerunframe6.png";
+				fileName = "golem/256 Canvas/golemoppositerunframe6.png";
 				bossFrameNum = 0;
 				break;
 			}
-			ECS::GetComponent<Sprite>(boss).LoadSprite(fileName, 157, 118);
+			ECS::GetComponent<Sprite>(boss).LoadSprite(fileName, 256, 256);
 
 		}
 		else if (ECS::GetComponent<PhysicsBody>(boss).GetVelocity().x < -10) {
 			switch (bossFrameNum) {
 			case 1:
-				fileName = "golem/runframe1.png";
+				fileName = "golem/256 Canvas/runframe1.png";
 				break;
 			case 2:
-				fileName = "golem/runframe2.png";
+				fileName = "golem/256 Canvas/runframe2.png";
 				break;
 			case 3:
-				fileName = "golem/runframe3.png";
+				fileName = "golem/256 Canvas/runframe3.png";
 				break;
 			case 4:
-				fileName = "golem/runframe4.png";
+				fileName = "golem/256 Canvas/runframe4.png";
 				break;
 			case 5:
-				fileName = "golem/runframe5.png";
+				fileName = "golem/256 Canvas/runframe5.png";
 				break;
 			default:
-				fileName = "golem/runframe6.png";
+				fileName = "golem/256 Canvas/runframe6.png";
 				bossFrameNum = 0;
 				break;
 			}
-			ECS::GetComponent<Sprite>(boss).LoadSprite(fileName, 157, 118);
+			ECS::GetComponent<Sprite>(boss).LoadSprite(fileName, 256, 256);
 
 		}
 		else {
 			switch (bossFrameNum) {
 			case 1:
-				fileName = "golem/idleframe1.png";
+				fileName = "golem/256 Canvas/idleframe1.png";
 				break;
 			case 2:
-				fileName = "golem/idleframe2.png";
+				fileName = "golem/256 Canvas/idleframe2.png";
 				break;
 			default:
-				fileName = "golem/idleframe3.png";
+				fileName = "golem/256 Canvas/idleframe3.png";
 				bossFrameNum = 0;
 				break;
 			}
 		}
-		ECS::GetComponent<Sprite>(boss).LoadSprite(fileName, 142, 127);
+		ECS::GetComponent<Sprite>(boss).LoadSprite(fileName, 256, 256);
 		bossLastVel = ECS::GetComponent<PhysicsBody>(boss).GetVelocity().x;
 	}
 
