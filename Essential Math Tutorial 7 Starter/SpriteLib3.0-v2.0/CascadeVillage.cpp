@@ -715,9 +715,39 @@ void CascadeVillage::InitScene(float windowWidth, float windowHeight)
 
 		//Set up the components
 		std::string fileName = "mountain1.png";
-		ECS::GetComponent<Sprite>(entity).LoadSprite(fileName, 512, 512);
+		ECS::GetComponent<Sprite>(entity).LoadSprite(fileName, 122, 188);
 		ECS::GetComponent<Sprite>(entity).SetTransparency(1.f);
-		ECS::GetComponent<Transform>(entity).SetPosition(vec3(-1321.f, 575.f, -51.f));
+		ECS::GetComponent<Transform>(entity).SetPosition(vec3(30.f, 80.f, -51.f));
+	}
+	{ //background mountain 2
+
+//Creates entity
+		auto entity = ECS::CreateEntity();
+
+		//Add components
+		ECS::AttachComponent<Sprite>(entity);
+		ECS::AttachComponent<Transform>(entity);
+
+		//Set up the components
+		std::string fileName = "mountain2.png";
+		ECS::GetComponent<Sprite>(entity).LoadSprite(fileName, 194, 161);
+		ECS::GetComponent<Sprite>(entity).SetTransparency(1.f);
+		ECS::GetComponent<Transform>(entity).SetPosition(vec3(400.f, 140.f, -51.f));
+	}
+	{ //background mountain 3
+
+//Creates entity
+		auto entity = ECS::CreateEntity();
+
+		//Add components
+		ECS::AttachComponent<Sprite>(entity);
+		ECS::AttachComponent<Transform>(entity);
+
+		//Set up the components
+		std::string fileName = "mountain3.png";
+		ECS::GetComponent<Sprite>(entity).LoadSprite(fileName, 619, 657);
+		ECS::GetComponent<Sprite>(entity).SetTransparency(1.f);
+		ECS::GetComponent<Transform>(entity).SetPosition(vec3(-140.f, 120.f, -51.f));
 	}
 	readSaveFile();
 	resetGrid();
