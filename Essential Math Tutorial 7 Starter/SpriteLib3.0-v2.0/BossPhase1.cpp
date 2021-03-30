@@ -1577,7 +1577,7 @@ void BossPhase1::Update()
 		bossLastVel = ECS::GetComponent<PhysicsBody>(boss).GetVelocity().x;
 	}
 
-	}
+	
 
 	
 
