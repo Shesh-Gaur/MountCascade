@@ -139,12 +139,38 @@ void PhysicsSystem::Draw(entt::registry * reg)
 	}
 }
 
-double accumulator = 0.f;
+//double accumulator = 0.f;
+//
+//void PhysicsSystem::Run(b2World &world)
+//{
+//	//Timestep is constant, regardless of deltatime
+//	float32 timeStep = 1.f/60.f;
+//
+//	//Box2D uses an algorithm called an integrator,
+//	//this simulates the physics algorithms at discrete points in time
+//	//we need to give it iterations for the velocity and position, along with
+//	//our timestep
+//	int32 velocityIterations = 8;
+//	int32 positionIterations = 3;
+//	//steps through the world
+//	accumulator += Timer::deltaTime;
+//	
+//	while (accumulator >= timeStep)
+//	{
+//		world.Step(timeStep, velocityIterations, positionIterations);
+//		accumulator -= timeStep;
+//		
+//
+//	}
+//
+//	CleanupBodies();
+//}
 
-void PhysicsSystem::Run(b2World & world)
+
+void PhysicsSystem::Run(b2World& world)
 {
 	//Timestep is constant, regardless of deltatime
-	float32 timeStep = 1.f/144.f;
+	float32 timeStep = 1.f / 60.f;
 
 	//Box2D uses an algorithm called an integrator,
 	//this simulates the physics algorithms at discrete points in time
@@ -153,15 +179,10 @@ void PhysicsSystem::Run(b2World & world)
 	int32 velocityIterations = 8;
 	int32 positionIterations = 3;
 	//steps through the world
-	accumulator += Timer::deltaTime;
-
-	while (accumulator > timeStep)
-	{
+	
 		world.Step(timeStep, velocityIterations, positionIterations);
-		accumulator -= timeStep;
-	}
 
-	CleanupBodies();
+		CleanupBodies();
 }
 
 void PhysicsSystem::CleanupBodies()

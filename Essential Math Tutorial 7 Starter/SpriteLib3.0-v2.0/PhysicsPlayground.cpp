@@ -10,7 +10,7 @@
 #include "TransitionTrigger.h"
 
 
-std::vector<int> batVec3;
+
 
 int startTime3 = clock();
 int startTimeJumpBoost = clock();
@@ -751,8 +751,7 @@ void PhysicsPlayground::InitScene(float windowWidth, float windowHeight)
 
 
 	makeBat(-335, 200, 0.02, 0, 10, 10);
-	//makeBat(-325, 200, 0.02, 0, 10, 10);
-	//makeBat(-745, 400, 0.02, 0, 10, 10);
+
 	makeBat(-745, 410, 0.02, 0, 10, 10);
 	makeBat(-735, 410, 0.02, 0, 10, 10);
 
@@ -1010,7 +1009,6 @@ void PhysicsPlayground::makeBat(float xPos, float yPos, float zPos, float rotati
 	auto& tempSpr = ECS::GetComponent<Sprite>(entity);
 	auto& tempPhsBody = ECS::GetComponent<PhysicsBody>(entity);
 
-	batVec3.push_back(entity);
 
 	float shrinkX = 0.f;
 	float shrinkY = 0.f;
@@ -1763,7 +1761,7 @@ void PhysicsPlayground::Update()
 		}
 		
 	}
-
+	
 }
 
 void PhysicsPlayground::GUI()

@@ -305,69 +305,69 @@ void PhysicsBody::Update(Transform * trans)
 			if (GetVelocity().x > 10) {
 				switch ((int)round(animationFrame)) {
 				case 0:
-					fileName = "golem/golemoppositerunframe1.png";
+					fileName = "golem/256 Canvas/golemoppositerunframe1.png";
 					break;
 				case 1:
-					fileName = "golem/golemoppositerunframe2.png";
+					fileName = "golem/256 Canvas/golemoppositerunframe2.png";
 					break;
 				case 2:
-					fileName = "golem/golemoppositerunframe3.png";
+					fileName = "golem/256 Canvas/golemoppositerunframe3.png";
 					break;
 				case 3:
-					fileName = "golem/golemoppositerunframe4.png";
+					fileName = "golem/256 Canvas/golemoppositerunframe4.png";
 					break;
 				case 4:
-					fileName = "golem/golemoppositerunframe5.png";
+					fileName = "golem/256 Canvas/golemoppositerunframe5.png";
 					break;
 				default:
-					fileName = "golem/golemoppositerunframe6.png";
+					fileName = "golem/256 Canvas/golemoppositerunframe6.png";
 					animationFrame = 0;
 					break;
 				}
-				ECS::GetComponent<Sprite>((int)GetBody()->GetUserData()).LoadSprite(fileName, 157, 118);
+				ECS::GetComponent<Sprite>((int)GetBody()->GetUserData()).LoadSprite(fileName, 256, 256);
 
 
 			}
 			else if (GetVelocity().x < -10) {
 				switch ((int)round(animationFrame)) {
 				case 0:
-					fileName = "golem/runframe1.png";
+					fileName = "golem/256 Canvas/runframe1.png";
 					break;
 				case 1:
-					fileName = "golem/runframe2.png";
+					fileName = "golem/256 Canvas/runframe2.png";
 					break;
 				case 2:
-					fileName = "golem/runframe3.png";
+					fileName = "golem/256 Canvas/runframe3.png";
 					break;
 				case 3:
-					fileName = "golem/runframe4.png";
+					fileName = "golem/256 Canvas/runframe4.png";
 					break;
 				case 4:
-					fileName = "golem/runframe5.png";
+					fileName = "golem/256 Canvas/runframe5.png";
 					break;
 				default:
-					fileName = "golem/runframe6.png";
+					fileName = "golem/256 Canvas/runframe6.png";
 					animationFrame = 0;
 					break;
 				}
-				ECS::GetComponent<Sprite>((int)GetBody()->GetUserData()).LoadSprite(fileName, 157, 118);
+				ECS::GetComponent<Sprite>((int)GetBody()->GetUserData()).LoadSprite(fileName, 256, 256);
 
 			}
 			else {
 				switch ((int)round(animationFrame)) {
 				case 0:
-					fileName = "golem/idleframe1.png";
+					fileName = "golem/256 Canvas/idleframe1.png";
 					break;
 				case 1:
-					fileName = "golem/idleframe2.png";
+					fileName = "golem/256 Canvas/idleframe2.png";
 					break;
 				default:
-					fileName = "golem/idleframe3.png";
+					fileName = "golem/256 Canvas/idleframe3.png";
 					animationFrame = 0;
 					break;
 				}
 			}
-			ECS::GetComponent<Sprite>((int)GetBody()->GetUserData()).LoadSprite(fileName, 142, 127);
+			ECS::GetComponent<Sprite>((int)GetBody()->GetUserData()).LoadSprite(fileName, 256, 256);
 
 			bossLastVel = GetVelocity().x;
 
@@ -389,22 +389,22 @@ void PhysicsBody::Update(Transform * trans)
 			if (bossLastVel < 0) {
 				switch ((int)round(animationFrame)) { //left
 				case 0:
-					fileName = "golem/attackanim1.png";
+					fileName = "golem/256 Canvas/attackanim1.png";
 					break;
 				case 1:
-					fileName = "golem/attackanim2.png";
+					fileName = "golem/256 Canvas/attackanim2.png";
 					break;
 				case 2:
-					fileName = "golem/attackanim3.png";
+					fileName = "golem/256 Canvas/attackanim3.png";
 					break;
 				case 3:
-					fileName = "golem/attackanim4.png";
+					fileName = "golem/256 Canvas/attackanim4.png";
 					break;
 				case 4:
-					fileName = "golem/attackanim5.png";
+					fileName = "golem/256 Canvas/attackanim5.png";
 					break;
 				default:
-					fileName = "golem/attackanim6.png";
+					fileName = "golem/256 Canvas/attackanim6.png";
 					animationFrame = 0;
 					isAttacking = false;
 					break;
@@ -413,22 +413,22 @@ void PhysicsBody::Update(Transform * trans)
 			else { //right
 				switch ((int)round(animationFrame)) {
 				case 0:
-					fileName = "golem/attackanim1r.png";
+					fileName = "golem/256 Canvas/attackanim1r.png";
 					break;
 				case 1:
-					fileName = "golem/attackanim2r.png";
+					fileName = "golem/256 Canvas/attackanim2r.png";
 					break;
 				case 2:
-					fileName = "golem/attackanim3r.png";
+					fileName = "golem/256 Canvas/attackanim3r.png";
 					break;
 				case 3:
-					fileName = "golem/attackanim4r.png";
+					fileName = "golem/256 Canvas/attackanim4r.png";
 					break;
 				case 4:
-					fileName = "golem/attackanim5r.png";
+					fileName = "golem/256 Canvas/attackanim5r.png";
 					break;
 				default:
-					fileName = "golem/attackanim6r.png";
+					fileName = "golem/256 Canvas/attackanim6r.png";
 					animationFrame = 0;
 					isAttacking = false;
 					break;
@@ -436,7 +436,7 @@ void PhysicsBody::Update(Transform * trans)
 				}
 			}
 
-			ECS::GetComponent<Sprite>((int)GetBody()->GetUserData()).LoadSprite(fileName, 168, 148);
+			ECS::GetComponent<Sprite>((int)GetBody()->GetUserData()).LoadSprite(fileName, 256, 256);
 			attackCooldown = attackCooldownDefault;
 			//std::cout << "\nHi, I'm attacking rn " << animationFrame;
 
