@@ -18,8 +18,6 @@ int jumpBoostFrame = 0;
 double diffTimeJumpBoost;
 double diffTime3;
 
-float curVel3 = 0.f;
-
 bool hasJumpBoostUnlocked = false;
 
 bool activatePuni2 = false;
@@ -2309,7 +2307,6 @@ void PhysicsPlayground::KeyboardHold()
 	}
 	else
 	{
-
 		selectedEntity = NULL;
 		ECS::GetComponent<HorizontalScroll>(MainEntities::MainCamera()).SetOffset(1.f);
 		ECS::GetComponent<VerticalScroll>(MainEntities::MainCamera()).SetOffset(1.f);
@@ -2319,228 +2316,10 @@ void PhysicsPlayground::KeyboardHold()
 		ECS::GetComponent<Sprite>(rayMarker).SetTransparency(0.f);
 		ECS::GetComponent<Sprite>(editorEnabled).SetTransparency(0.f);
 
-		ECS::GetComponent<Transform>(editZone).SetPosition(player.GetPosition().x, player.GetPosition().y,2);
-		
-		auto& canJump = ECS::GetComponent<CanJump>(MainEntities::MainPlayer());
-		float speed = 100.f;
-		b2Vec2 vel = b2Vec2(0.f, 0.f);
+		ECS::GetComponent<Transform>(editZone).SetPosition(player.GetPosition().x, player.GetPosition().y, 2);
 
-		int maxVel = 120;
+		PlayerMovement();
 
-		if (Input::GetKey(Key::A) && health > 0)
-		{
-			if (curVel3 < maxVel) {
-				curVel3 += 5;
-			}
-
-			//player.GetBody()->ApplyForceToCenter(b2Vec2(-400000.f * Timer::deltaTime * speed, 0.f), true);
-			player.GetBody()->SetLinearVelocity(b2Vec2(-curVel3 * Timer::deltaTime * speed, player.GetBody()->GetLinearVelocity().y));
-			
-			RayCastCallback checkRay;
-			m_physicsWorld->RayCast(&checkRay, player.GetPosition() + b2Vec2(-13, 0), player.GetPosition() + b2Vec2(-15, 0));
-
-			if (checkRay.m_fixture == nullptr)
-			{
-				m_physicsWorld->RayCast(&checkRay, player.GetPosition() + b2Vec2(-13, 27), player.GetPosition() + b2Vec2(-15, 27));
-				if (checkRay.m_fixture == nullptr)
-				{
-					m_physicsWorld->RayCast(&checkRay, player.GetPosition() + b2Vec2(-13, -25), player.GetPosition() + b2Vec2(-15, -25));
-				}
-			}
-
-			if (checkRay.m_fixture != nullptr && checkRay.m_fixture->GetBody()->GetType() == b2_staticBody)
-			{
-				if (ECS::GetComponent<PhysicsBody>((int)checkRay.m_fixture->GetBody()->GetUserData()).GetName() == "Ice Wall")
-				{
-					player.GetBody()->SetLinearVelocity(b2Vec2(player.GetBody()->GetLinearVelocity().x,-10));
-					canJump.m_canJump = false;
-					isTouchingIceWall = true;		
-				}
-				player.GetBody()->GetFixtureList()->SetFriction(0);
-			}
-			else
-			{
-				player.GetBody()->GetFixtureList()->SetFriction(1.1f);
-			}
-
-			if (Input::GetKeyDown(Key::Shift))
-			{
-				if (airDashCounter >= 1)
-				{
-					player.GetBody()->SetLinearVelocity(b2Vec2(0, 0));
-
-					RayCastCallback dashRay;
-					m_physicsWorld->RayCast(&dashRay, player.GetBody()->GetPosition(), player.GetBody()->GetPosition() + b2Vec2(-dashAmount, 0));
-					if (dashRay.m_fixture != NULL)
-					{
-						player.SetPosition(dashRay.m_point + b2Vec2(20.f, 0));
-					}
-					else
-					{
-						player.SetPosition(player.GetBody()->GetPosition() + b2Vec2(-dashAmount, 0));
-					}
-					airDashCounter-= 1;
-				}
-
-			}
-		}
-		if (Input::GetKey(Key::D) && health > 0)
-		{
-
-			if (curVel3 < maxVel) {
-				curVel3 += 5; //Should * Timer::deltatime
-			}
-
-			//player.GetBody()->ApplyForceToCenter(b2Vec2(400000.f * Timer::deltaTime * speed, 0.f), true);
-			player.GetBody()->SetLinearVelocity(b2Vec2(curVel3 * Timer::deltaTime * speed, player.GetBody()->GetLinearVelocity().y));
-
-			RayCastCallback checkRay;
-			m_physicsWorld->RayCast(&checkRay, player.GetPosition() + b2Vec2(13, 0), player.GetPosition() + b2Vec2(15, 0));
-
-			if (checkRay.m_fixture == nullptr)
-			{
-				m_physicsWorld->RayCast(&checkRay, player.GetPosition() + b2Vec2(13, 27), player.GetPosition() + b2Vec2(15, 27));
-				if (checkRay.m_fixture == nullptr)
-				{
-					m_physicsWorld->RayCast(&checkRay, player.GetPosition() + b2Vec2(13, -25), player.GetPosition() + b2Vec2(15, -25));
-				}
-			}
-
-			if (checkRay.m_fixture != nullptr && checkRay.m_fixture->GetBody()->GetType() == b2_staticBody)
-			{
-				if (ECS::GetComponent<PhysicsBody>((int)checkRay.m_fixture->GetBody()->GetUserData()).GetName() == "Ice Wall")
-				{
-					player.GetBody()->SetLinearVelocity(b2Vec2(player.GetBody()->GetLinearVelocity().x, -10));
-					canJump.m_canJump = false;
-					isTouchingIceWall = true;
-					
-				}
-				player.GetBody()->GetFixtureList()->SetFriction(0);
-
-			}
-			else
-			{
-				player.GetBody()->GetFixtureList()->SetFriction(1.1f);
-			}
-
-
-			if (Input::GetKeyDown(Key::Shift))
-			{
-				if (airDashCounter >= 1)
-				{
-					player.GetBody()->SetLinearVelocity(b2Vec2(0, 0));
-
-					RayCastCallback dashRay;
-					m_physicsWorld->RayCast(&dashRay, player.GetBody()->GetPosition(), player.GetBody()->GetPosition() + b2Vec2(dashAmount, 0));
-					if (dashRay.m_fixture != NULL)
-					{
-						player.SetPosition(dashRay.m_point - b2Vec2(20.f, 0));
-					}
-					else
-					{
-						player.SetPosition(player.GetBody()->GetPosition() + b2Vec2(dashAmount, 0));
-
-					}
-					airDashCounter-= 1;
-				}
-			}
-
-		}
-
-		if (!Input::GetKey(Key::A) && !Input::GetKey(Key::D)) {
-			curVel3 = 0;
-		}
-
-		RayCastCallback jumpRay;
-		m_physicsWorld->RayCast(&jumpRay, player.GetPosition() + b2Vec2(0, -32), player.GetPosition() + b2Vec2(0, -36));
-
-		if (jumpRay.m_fixture != NULL)
-		{
-
-			isTouchingIceWall = false;
-
-		}
-
-
-		if (canJump.m_canJump && !Input::GetKey(Key::D) && !Input::GetKey(Key::A)) {
-			player.GetBody()->SetLinearVelocity(speed * vel + b2Vec2(player.GetBody()->GetLinearVelocity().x * 0.9f,
-				player.GetBody()->GetLinearVelocity().y));
-		}
-		if (canJump.m_canJump)
-		{
-			spacePressed = false;
-			
-		}
-		if (isTouchingIceWall == false)
-		{
-			//std::cout << "\n" << airDashCounter;
-			if (canJump.m_canJump && health > 0)
-			{
-				if (airDashCounter <= airDashDefault && loadStarted == true)
-				{
-					airDashCounter += 2.f * Timer::deltaTime;
-				}
-				else
-				{
-					airDashCounter = airDashDefault;
-					
-				}
-				
-				if (Input::GetKeyDown(Key::Space))
-				{
-					spaceReleased = false;
-					spacePressed = false;
-					player.GetBody()->ApplyLinearImpulseToCenter(b2Vec2(0.f, 180000.f), true);
-					airJumpCounter = airJumpDefault;
-					canJump.m_canJump = false;
-				}
-			}
-			else
-			{
-
-				if (Input::GetKeyUp(Key::Space) && health > 0)
-				{
-					spaceReleased = true;
-					if (player.GetBody()->GetLinearVelocity().y > 0)
-					{
-						player.GetBody()->SetLinearVelocity(b2Vec2(player.GetBody()->GetLinearVelocity().x / 2, player.GetBody()->GetLinearVelocity().y / 2));
-
-					}
-
-				}
-				if (airJumpCounter > 0 && spaceReleased == true && health > 0)
-				{
-					if (Input::GetKey(Key::Space))
-					{
-						if (jumpForce < 250000)
-						{
-							player.GetBody()->SetLinearVelocity(b2Vec2(player.GetBody()->GetLinearVelocity().x / 2, player.GetBody()->GetLinearVelocity().y / 2));
-							jumpForce += 60000 * Timer::deltaTime;
-							spacePressed = true;
-							//std::cout << "\n" << jumpForce;
-							//Here
-						}
-						else
-						{
-							jumpForce = defaultForce;
-							spacePressed = false;
-							airJumpCounter--;
-							canJump.m_canJump = false;
-						}
-					}
-					if (Input::GetKeyUp(Key::Space) && spacePressed)
-					{
-
-						player.GetBody()->ApplyLinearImpulseToCenter(b2Vec2(0.f, jumpForce), true);
-						jumpForce = defaultForce;
-						canJump.m_canJump = false;
-						airJumpCounter--;
-					}
-
-				}
-			}
-		}
-		
 	}
 	if (Input::GetKeyDown(Key::Tab))
 	{

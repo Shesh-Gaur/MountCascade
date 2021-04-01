@@ -9,8 +9,6 @@ class PhysicsPlayground : public Scene
 {
 public:
 	PhysicsPlayground(std::string name);
-
-	bool spacePressed;
 	void InitScene(float windowWidth, float windowHeight) override;
 
 	void Update() override;
@@ -65,23 +63,6 @@ public:
 	SDL_MouseButtonEvent mouseEvnt;
 	float autosaveTimer = 0.f;
 	int autosaveInterval = 60;
-	float defaultForce = 160000.f;
-	float jumpForce = defaultForce;
-	int airJumpDefault = 1;
-	int airJumpCounter = airJumpDefault;
-	bool spaceReleased = false;
-	//bool spacePressed = false;
-	bool canDash = false;
-	float dashAmount = 60.f;
-	float airDashDefault = 3.f;
-	float airDashCounter = airDashDefault;
-	bool loadStarted = false;
-	int playerHpDefault = 3;
-	int playerHp = playerHpDefault;
-	int dummyHpDefault = 10;
-	int dummyHp = playerHpDefault;
-	int health = 3;
-	bool isTouchingIceWall = false;
 
 	int gLength = 10, gWidth = 10;
 	b2Vec2 pastPlayerPosition = b2Vec2(999, 999);

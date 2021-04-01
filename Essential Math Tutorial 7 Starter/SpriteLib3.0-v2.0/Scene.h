@@ -71,6 +71,7 @@ public:
 	b2World& GetPhysicsWorld();
 	void CheckTransition();
 	void makeLoadingScreen();
+	void PlayerMovement();
 	//Set window size (makes sure the camera aspect is proper)
 	void SetWindowSize(float windowWidth, float windowHeight);
 protected:
@@ -82,6 +83,26 @@ protected:
 	bool transitionStarted = false;
 	entt::registry* m_sceneReg = nullptr;	
 	std::string m_name = "Default Name";
+	float defaultForce = 160000.f;
+	float curVel = 0.f;
+	bool spacePressed;
+	float jumpForce = defaultForce;
+	int airJumpDefault = 1;
+	int airJumpCounter = airJumpDefault;
+	bool spaceReleased = false;
+	//bool spacePressed = false;
+	bool canDash = false;
+	float dashAmount = 60.f;
+	float airDashDefault = 3.f;
+	float airDashCounter = airDashDefault;
+
+	bool loadStarted = false;
+
+	int playerHpDefault = 3;
+	int playerHp = playerHpDefault;
+
+	int health = 3;
+	bool isTouchingIceWall = false;
 private:
 	//Hello world entity number
 	int m_helloWorldSign = 0;
