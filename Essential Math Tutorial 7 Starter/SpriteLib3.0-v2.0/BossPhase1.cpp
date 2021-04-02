@@ -434,6 +434,8 @@ void BossPhase1::InitScene(float windowWidth, float windowHeight)
 		tempPhsBody.SetFixedRotation(true);
 		tempPhsBody.SetColor(vec4(1.f, 0.f, 1.f, 0.3f));
 		tempPhsBody.SetGravityScale(1.f);
+		tempPhsBody.SetName("Player");
+
 	}
 
 

@@ -483,13 +483,81 @@ void PhysicsBody::Update(Transform * trans)
 			}
 			if (chargeLoop <= 0)
 			{
+				if (bossLastVel > 10) {
+					switch ((int)round(animationFrame)) {
+					case 0:
+						fileName = "golem/256 Canvas/golemoppositerunframe1.png";
+						break;
+					case 1:
+						fileName = "golem/256 Canvas/golemoppositerunframe2.png";
+						break;
+					case 2:
+						fileName = "golem/256 Canvas/golemoppositerunframe3.png";
+						break;
+					case 3:
+						fileName = "golem/256 Canvas/golemoppositerunframe4.png";
+						break;
+					case 4:
+						fileName = "golem/256 Canvas/golemoppositerunframe5.png";
+						break;
+					default:
+						fileName = "golem/256 Canvas/golemoppositerunframe6.png";
+						animationFrame = 0;
+						break;
+					}
+					ECS::GetComponent<Sprite>((int)GetBody()->GetUserData()).LoadSprite(fileName, 256, 256);
 
-				recoverCooldown = recoverCooldownDefault;
-				isCharging = false;
-				chargeLoop = chargeLoopDefault;
+
+				}
+				else if (bossLastVel < -10) {
+					switch ((int)round(animationFrame)) {
+					case 0:
+						fileName = "golem/256 Canvas/runframe1.png";
+						break;
+					case 1:
+						fileName = "golem/256 Canvas/runframe2.png";
+						break;
+					case 2:
+						fileName = "golem/256 Canvas/runframe3.png";
+						break;
+					case 3:
+						fileName = "golem/256 Canvas/runframe4.png";
+						break;
+					case 4:
+						fileName = "golem/256 Canvas/runframe5.png";
+						break;
+					default:
+						fileName = "golem/256 Canvas/runframe6.png";
+						animationFrame = 0;
+						break;
+					}
+
+				}
+
+				RayCastCallback wallRay;
+				GetBody()->GetWorld()->RayCast(&wallRay,GetPosition(), GetPosition() + b2Vec2(bossLastVel*1.5, 0));
+				if (wallRay.m_fixture != NULL)
+				{
+					std::cout << "\n" << ECS::GetComponent<PhysicsBody>((int)wallRay.m_fixture->GetBody()->GetUserData()).GetName();
+					if (ECS::GetComponent<PhysicsBody>((int)wallRay.m_fixture->GetBody()->GetUserData()).GetName() != "Player" && ECS::GetComponent<PhysicsBody>((int)wallRay.m_fixture->GetBody()->GetUserData()).GetName() != "Trigger")
+					{
+						recoverCooldown = recoverCooldownDefault;
+						isCharging = false;
+						chargeLoop = chargeLoopDefault;
+					}
+
+				}
+				else
+				{
+					GetBody()->SetLinearVelocity(b2Vec2(bossLastVel * 4, GetBody()->GetLinearVelocity().y));
+
+				}
+				//if ray doesn't return Null, and its not the player
+
+
 
 			}
-			ECS::GetComponent<Sprite>((int)GetBody()->GetUserData()).LoadSprite(fileName, 192, 146);
+			ECS::GetComponent<Sprite>((int)GetBody()->GetUserData()).LoadSprite(fileName, 256, 256);
 			attackCooldown = attackCooldownDefault;
 			//std::cout << "\nHi, I'm attacking rn " << animationFrame;
 
