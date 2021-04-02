@@ -434,6 +434,8 @@ void BossPhase1::InitScene(float windowWidth, float windowHeight)
 		tempPhsBody.SetFixedRotation(true);
 		tempPhsBody.SetColor(vec4(1.f, 0.f, 1.f, 0.3f));
 		tempPhsBody.SetGravityScale(1.f);
+		tempPhsBody.SetName("Player");
+
 	}
 
 
@@ -532,7 +534,7 @@ void BossPhase1::InitScene(float windowWidth, float windowHeight)
 		tempPhsBody.SetColor(vec4(0.f, 1.f, 0.f, 0.3f));
 		tempPhsBody.SetRotationAngleDeg(0);
 		tempPhsBody.SetName("Boss");
-		tempPhsBody.SetHealth(2);
+		tempPhsBody.SetHealth(15);
 		tempPhsBody.SetSpeed(70.f);
 
 	}
@@ -1435,6 +1437,35 @@ void BossPhase1::Update()
 			ECS::GetComponent<PhysicsBody>(MainEntities::MainPlayer()).GetBody()->ApplyLinearImpulseToCenter(b2Vec2(towardPlayer.x * 200000, towardPlayer.y * 200000), true); //Knocks back the player, but gets immediately canceled by player movement
 			startAttackCooldown = true;
 		}
+
+		if (ECS::GetComponent<PhysicsBody>(currentEnemy).GetName() == "Boss" && startAttackCooldown == false)
+		{
+			
+			b2Vec2 towardPlayer;
+			towardPlayer = ECS::GetComponent<PhysicsBody>(currentEnemy).CalculateMovement(ECS::GetComponent<PhysicsBody>(MainEntities::MainPlayer()).GetPosition());
+
+			if (ECS::GetComponent<PhysicsBody>(currentEnemy).isCharging == true)
+			{
+				ECS::GetComponent<PhysicsBody>(MainEntities::MainPlayer()).GetBody()->ApplyLinearImpulseToCenter(b2Vec2(towardPlayer.x * 1000000, 20000000.f), true);
+				health -=3;
+			}
+			else if (ECS::GetComponent<PhysicsBody>(currentEnemy).isAttacking == true)
+			{
+				ECS::GetComponent<PhysicsBody>(MainEntities::MainPlayer()).GetBody()->ApplyLinearImpulseToCenter(b2Vec2(towardPlayer.x * 1000000, towardPlayer.y * 1000000), true);
+				health -=2;
+
+
+			}
+			else
+			{
+				ECS::GetComponent<PhysicsBody>(MainEntities::MainPlayer()).GetBody()->ApplyLinearImpulseToCenter(b2Vec2(towardPlayer.x * 1000000, towardPlayer.y * 1000000), true);
+				health--;
+
+			}
+			ECS::GetComponent<PhysicsBody>(MainEntities::MainPlayer()).GetBody()->ApplyLinearImpulseToCenter(b2Vec2(towardPlayer.x * 1000000, towardPlayer.y * 1000000), true); //Knocks back the player, but gets immediately canceled by player movement
+			startAttackCooldown = true;
+		}
+
 
 	}
 

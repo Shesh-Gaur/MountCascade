@@ -148,6 +148,9 @@ public:
 
 	
 	static std::vector<int> m_bodiesToDelete;
+	bool isCharging = false;
+	bool isAttacking = false;
+
 private:
 	//The actual box2D body
 	b2Body* m_body = nullptr;
@@ -195,7 +198,6 @@ private:
 	float attackCooldown = attackCooldownDefault;
 	float recoverCooldownDefault = 10.f;
 	float recoverCooldown = recoverCooldownDefault;
-	bool isAttacking = false, isCharging = false;
 	float bossLastVel;
 	int chargeLoopDefault = 6.f;
 	int chargeLoop = chargeLoopDefault;
