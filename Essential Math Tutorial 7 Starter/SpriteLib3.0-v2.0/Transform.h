@@ -55,7 +55,7 @@ public:
 	void Update();
 
 	//Translation
-	vec3 m_localPosition = vec3(0.f, 700.f, 0.f);
+	vec3 m_localPosition = vec3(0.f, 0.f, 0.f);
 
 	//Rotation values
 	Degrees m_rotX = 0.f;

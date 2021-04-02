@@ -197,5 +197,6 @@ private:
 	float recoverCooldown = recoverCooldownDefault;
 	bool isAttacking = false, isCharging = false;
 	float bossLastVel;
-
+	int chargeLoopDefault = 6.f;
+	int chargeLoop = chargeLoopDefault;
 };
