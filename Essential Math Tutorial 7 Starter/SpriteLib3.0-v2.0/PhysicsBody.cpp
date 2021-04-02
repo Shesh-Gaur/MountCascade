@@ -282,7 +282,6 @@ void PhysicsBody::Update(Transform * trans)
 			if (sqrt(bossDistance.x * bossDistance.x + bossDistance.y * bossDistance.y) < 100.f)
 			{
 				animationFrame = 0.f;
-
 				isAttacking = true;
 
 			}
@@ -382,7 +381,7 @@ void PhysicsBody::Update(Transform * trans)
 				direction2 /= abs(direction2);
 				SetNextMovement(b2Vec2(direction2 * GetSpeed(), GetBody()->GetLinearVelocity().y));
 			}
-			GetBody()->SetLinearVelocity(b2Vec2(GetNextMovement().x * getDeltaTime(), GetNextMovement().y * getDeltaTime()));
+			GetBody()->SetLinearVelocity(b2Vec2(GetNextMovement().x , GetNextMovement().y ));
 			//std::cout << "\nHi, I'm WALKING rn " << animationFrame;
 
 		}

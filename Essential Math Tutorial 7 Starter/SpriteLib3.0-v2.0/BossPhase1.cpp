@@ -29,7 +29,7 @@ BossPhase1::BossPhase1(std::string name)
 	: Scene(name)
 {
 
-	m_gravity = b2Vec2(0.f, -45.f);
+	m_gravity = b2Vec2(0.f, -235.f);
 	m_physicsWorld->SetGravity(m_gravity);
 
 	m_physicsWorld->SetContactListener(&listener);
@@ -40,7 +40,7 @@ void BossPhase1::InitScene(float windowWidth, float windowHeight)
 
 	m_physicsWorld = new b2World(m_gravity);
 	m_name = "Mt.Cascade";
-	m_gravity = b2Vec2(0.f, -45.f);
+	m_gravity = b2Vec2(0.f, -235.f);
 	m_physicsWorld->SetGravity(m_gravity);
 
 	m_physicsWorld->SetContactListener(&listener);
@@ -533,7 +533,7 @@ void BossPhase1::InitScene(float windowWidth, float windowHeight)
 		tempPhsBody.SetRotationAngleDeg(0);
 		tempPhsBody.SetName("Boss");
 		tempPhsBody.SetHealth(2);
-		tempPhsBody.SetSpeed(4000.f);
+		tempPhsBody.SetSpeed(70.f);
 
 	}
 
@@ -1101,78 +1101,16 @@ void BossPhase1::readSaveFile()
 
 void BossPhase1::cameraTrackPlayer()
 {
-	
-	//RayCastCallback selectRay;
-	//m_physicsWorld->RayCast(&selectRay, wMousePos + b2Vec2(0, 20), wMousePos);
-	//if (selectRay.m_fixture == nullptr)
-	//{
-	//	m_physicsWorld->RayCast(&selectRay, wMousePos + b2Vec2(0, -20), wMousePos);
-	//	if (selectRay.m_fixture == nullptr)
-	//	{
-	//		m_physicsWorld->RayCast(&selectRay, wMousePos + b2Vec2(-20, 0), wMousePos);
-	//		if (selectRay.m_fixture == nullptr)
-	//		{
-	//			m_physicsWorld->RayCast(&selectRay, wMousePos + b2Vec2(20, 0), wMousePos);
 
+	b2Vec2 newPos = ECS::GetComponent<PhysicsBody>(MainEntities::MainPlayer()).GetPosition() + b2Vec2(mousePosX / 30, (mousePosY / 15) - 10) - ECS::GetComponent<PhysicsBody>(playerFollow).GetPosition();
+	float length = sqrt(newPos.x * newPos.x + newPos.y * newPos.y);
+	newPos = b2Vec2(newPos.x, newPos.y);
 
-	//		}
+	b2Vec2 speed = b2Vec2(10, 10);
+	ECS::GetComponent<PhysicsBody>(playerFollow).GetBody()->SetLinearVelocity(b2Vec2(newPos.x * speed.x, newPos.y * speed.y));
 
-	//	}
-
-	//}
-	if (bossStarted == true)
-	{
-		b2Vec2 newPos;
-		if (fov < 83)
-		{
-			fov += 2.5f * Timer::deltaTime;
-			
-		}
-		if (screenShakeTimer <= 0)
-		{
-			newPos = b2Vec2(-22.f, 280.f) - ECS::GetComponent<PhysicsBody>(playerFollow).GetPosition();
-			screenShakeTimer = 0;
-		}
-		else
-		{
-			newPos = b2Vec2(-22.f + ECS::GetComponent<PhysicsBody>(MainEntities::MainPlayer()).GetBody()->GetLinearVelocity().x, 280.f + ECS::GetComponent<PhysicsBody>(MainEntities::MainPlayer()).GetBody()->GetLinearVelocity().y)  - ECS::GetComponent<PhysicsBody>(playerFollow).GetPosition();
-		}
-			ECS::GetComponent<Camera>(MainEntities::MainCamera()).Perspective(fov, aRatio, nPlane, 1000.f);
-			
-			ECS::GetComponent<Camera>(MainEntities::MainCamera()).SetPosition(ECS::GetComponent<Camera>(MainEntities::MainCamera()).GetPosition());
-
-			
-			float length = sqrt(newPos.x * newPos.x + newPos.y * newPos.y);
-			newPos = b2Vec2(newPos.x, newPos.y);
-
-			b2Vec2 speed = b2Vec2(1000, 1000);
-
-			ECS::GetComponent<PhysicsBody>(playerFollow).GetBody()->SetLinearVelocity(b2Vec2(newPos.x * speed.x * Timer::deltaTime, newPos.y * speed.y * Timer::deltaTime));
-			ECS::GetComponent<PhysicsBody>(playerFollow).GetBody()->ApplyLinearImpulseToCenter(b2Vec2(0.f, 45.f * Timer::deltaTime), true);
-
-
-		
-
-		if (Input::GetKeyDown(Key::Shift) && airDashCounter >= 0)
-		{
-			screenShakeTimer = screenShakeTimerDefault;
-		}
-
-		screenShakeTimer -= 1 * Timer::deltaTime;
-		
-	}
-	else
-	{
-		b2Vec2 newPos = ECS::GetComponent<PhysicsBody>(MainEntities::MainPlayer()).GetPosition() + b2Vec2(mousePosX / 30, (mousePosY / 15) - 10) - ECS::GetComponent<PhysicsBody>(playerFollow).GetPosition();
-		float length = sqrt(newPos.x * newPos.x + newPos.y * newPos.y);
-		newPos = b2Vec2(newPos.x, newPos.y);
-
-		b2Vec2 speed = b2Vec2(1000, 1000);
-
-		ECS::GetComponent<PhysicsBody>(playerFollow).GetBody()->SetLinearVelocity(b2Vec2(newPos.x * speed.x * Timer::deltaTime, newPos.y * speed.y * Timer::deltaTime));
-		ECS::GetComponent<PhysicsBody>(playerFollow).GetBody()->ApplyLinearImpulseToCenter(b2Vec2(0.f, 45.f * Timer::deltaTime), true);
-	}
 }
+
 
 void BossPhase1::bossMoveBehaviour()
 {

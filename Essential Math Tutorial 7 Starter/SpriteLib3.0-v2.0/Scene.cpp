@@ -249,14 +249,14 @@ void Scene::PlayerMovement()
 	float speed = 10000000.f;
 	b2Vec2 vel = b2Vec2(0.f, 0.f);
 
-	float maxVel = 75.f;
+	float maxVel = 175.f;
 
 	if (Input::GetKey(Key::A) && !Input::GetKey(Key::D) && health > 0)
 	{
 		//std::cout << "\nVELOCITY" << abs(player.GetBody()->GetLinearVelocity().x);
 
 		//player.GetBody()->ApplyForceToCenter(b2Vec2(-400000.f * Timer::deltaTime * speed, 0.f), true);
-		player.GetBody()->ApplyLinearImpulseToCenter(b2Vec2(-speed * Timer::deltaTime, 0), true);
+		player.GetBody()->ApplyLinearImpulseToCenter(b2Vec2(-speed , 0), true);
 
 		if (player.GetBody()->GetLinearVelocity().x < -maxVel)
 		{
@@ -320,9 +320,10 @@ void Scene::PlayerMovement()
 		//std::cout << "\nVELOCITY" << abs(player.GetBody()->GetLinearVelocity().x);
 
 		//player.GetBody()->ApplyForceToCenter(b2Vec2(400000.f * Timer::deltaTime * speed, 0.f), true);
-		player.GetBody()->ApplyLinearImpulseToCenter(b2Vec2(speed * Timer::deltaTime, 0), true);
+		player.GetBody()->ApplyLinearImpulseToCenter(b2Vec2(speed , 0), true);
 		if (player.GetBody()->GetLinearVelocity().x > maxVel)
 		{
+
 			player.GetBody()->SetLinearVelocity(b2Vec2(maxVel, player.GetBody()->GetLinearVelocity().y));
 		}
 
@@ -388,7 +389,7 @@ void Scene::PlayerMovement()
 	}
 
 
-	if (canJump.m_canJump && !Input::GetKey(Key::D) && !Input::GetKey(Key::A)) {
+	if (!Input::GetKey(Key::D) && !Input::GetKey(Key::A)) {
 		player.GetBody()->SetLinearVelocity(speed * vel + b2Vec2(player.GetBody()->GetLinearVelocity().x * 0.9f,
 			player.GetBody()->GetLinearVelocity().y));
 	}
@@ -416,7 +417,7 @@ void Scene::PlayerMovement()
 			{
 				spaceReleased = false;
 				spacePressed = false;
-				player.GetBody()->ApplyLinearImpulseToCenter(b2Vec2(0.f, 180000.f), true);
+				player.GetBody()->ApplyLinearImpulseToCenter(b2Vec2(0.f, 380000.f), true);
 				airJumpCounter = airJumpDefault;
 				canJump.m_canJump = false;
 			}
@@ -457,7 +458,7 @@ void Scene::PlayerMovement()
 				if (Input::GetKeyUp(Key::Space) && spacePressed)
 				{
 
-					player.GetBody()->ApplyLinearImpulseToCenter(b2Vec2(0.f, jumpForce), true);
+					player.GetBody()->ApplyLinearImpulseToCenter(b2Vec2(0.f, jumpForce * 2), true); //Fix charge Jump vel
 					jumpForce = defaultForce;
 					canJump.m_canJump = false;
 					airJumpCounter--;

@@ -40,7 +40,7 @@ void CascadeVillage::InitScene(float windowWidth, float windowHeight)
 
 	m_physicsWorld = new b2World(m_gravity);
 	m_name = "Mt.Cascade";
-	m_gravity = b2Vec2(0.f, -45.f);
+	m_gravity = b2Vec2(0.f, -235.f);
 	m_physicsWorld->SetGravity(m_gravity);
 
 	m_physicsWorld->SetContactListener(&listener);
@@ -1524,33 +1524,12 @@ void CascadeVillage::readSaveFile()
 void CascadeVillage::cameraTrackPlayer()
 {
 
-	//RayCastCallback selectRay;
-	//m_physicsWorld->RayCast(&selectRay, wMousePos + b2Vec2(0, 20), wMousePos);
-	//if (selectRay.m_fixture == nullptr)
-	//{
-	//	m_physicsWorld->RayCast(&selectRay, wMousePos + b2Vec2(0, -20), wMousePos);
-	//	if (selectRay.m_fixture == nullptr)
-	//	{
-	//		m_physicsWorld->RayCast(&selectRay, wMousePos + b2Vec2(-20, 0), wMousePos);
-	//		if (selectRay.m_fixture == nullptr)
-	//		{
-	//			m_physicsWorld->RayCast(&selectRay, wMousePos + b2Vec2(20, 0), wMousePos);
-
-
-	//		}
-
-	//	}
-
-	//}
-
 	b2Vec2 newPos = ECS::GetComponent<PhysicsBody>(MainEntities::MainPlayer()).GetPosition() + b2Vec2(mousePosX / 30, (mousePosY / 15) - 10) - ECS::GetComponent<PhysicsBody>(playerFollow).GetPosition();
 	float length = sqrt(newPos.x * newPos.x + newPos.y * newPos.y);
 	newPos = b2Vec2(newPos.x, newPos.y);
 
-	b2Vec2 speed = b2Vec2(1000, 1000);
-
-	ECS::GetComponent<PhysicsBody>(playerFollow).GetBody()->SetLinearVelocity(b2Vec2(newPos.x * speed.x * Timer::deltaTime, newPos.y * speed.y * Timer::deltaTime));
-	ECS::GetComponent<PhysicsBody>(playerFollow).GetBody()->ApplyLinearImpulseToCenter(b2Vec2(0.f, 45.f * Timer::deltaTime), true);
+	b2Vec2 speed = b2Vec2(10, 10);
+	ECS::GetComponent<PhysicsBody>(playerFollow).GetBody()->SetLinearVelocity(b2Vec2(newPos.x * speed.x , newPos.y * speed.y ));
 
 }
 
