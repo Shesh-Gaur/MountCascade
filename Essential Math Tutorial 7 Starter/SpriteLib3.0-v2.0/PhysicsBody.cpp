@@ -276,18 +276,19 @@ void PhysicsBody::Update(Transform * trans)
 
 		std::string fileName;
 		b2Vec2 bossDistance = GetPosition() - ECS::GetComponent<PhysicsBody>(MainEntities::MainPlayer()).GetPosition();
+
 		if (!isAttacking && attackCooldown <= 0)
 		{
-			if (sqrt(bossDistance.x * bossDistance.x + bossDistance.y * bossDistance.y) < 100.f)
+			if (sqrt(bossDistance.x * bossDistance.x + bossDistance.y * bossDistance.y) < 140.f)
 			{
 				animationFrame = 0.f;
-
 				isAttacking = true;
 
 			}
 
 		}
-		if (!isAttacking) //Is Walking
+
+		if (!isAttacking && !isCharging) //Is Walking
 		{
 
 			if (recoverCooldown > 0)
@@ -297,10 +298,11 @@ void PhysicsBody::Update(Transform * trans)
 			else
 			{
 				isCharging = true;
+				recoverCooldown = 0;
 
 			}
 
-			
+			//std::cout << "\nRECOVER COOLDOWN " << recoverCooldown;
 
 			if (GetVelocity().x > 10) {
 				switch ((int)round(animationFrame)) {
@@ -380,11 +382,11 @@ void PhysicsBody::Update(Transform * trans)
 				direction2 /= abs(direction2);
 				SetNextMovement(b2Vec2(direction2 * GetSpeed(), GetBody()->GetLinearVelocity().y));
 			}
-			GetBody()->SetLinearVelocity(b2Vec2(GetNextMovement().x * getDeltaTime(), GetNextMovement().y * getDeltaTime()));
+			GetBody()->SetLinearVelocity(b2Vec2(GetNextMovement().x , GetNextMovement().y ));
 			//std::cout << "\nHi, I'm WALKING rn " << animationFrame;
 
 		}
-		else //Is Attacking
+		else if(isAttacking && !isCharging)//Is Attacking
 		{
 			if (bossLastVel < 0) {
 				switch ((int)round(animationFrame)) { //left
@@ -437,6 +439,57 @@ void PhysicsBody::Update(Transform * trans)
 			}
 
 			ECS::GetComponent<Sprite>((int)GetBody()->GetUserData()).LoadSprite(fileName, 256, 256);
+			attackCooldown = attackCooldownDefault;
+			//std::cout << "\nHi, I'm attacking rn " << animationFrame;
+
+		}
+
+		if (isCharging)//Is Charging
+		{
+			if (bossLastVel < 0) {
+				switch ((int)round(animationFrame)) { //left
+				case 0:
+					fileName = "golem/golemrecharge1.png";
+					break;
+				case 1:
+					fileName = "golem/golemrecharge2.png";
+					break;
+
+				default:
+					fileName = "golem/golemrecharge3.png";
+					animationFrame = 0;
+					chargeLoop--;
+					break;
+				}
+			}
+			else { //right
+				switch ((int)round(animationFrame)) {
+				case 0:
+					fileName = "golem/golemrecharge1r.png";
+					break;
+				case 1:
+					fileName = "golem/golemrecharge2r.png";
+					break;
+
+				default:
+					fileName = "golem/golemrecharge3r.png";
+					animationFrame = 0;
+					chargeLoop--;
+					break;
+
+				}
+
+
+			}
+			if (chargeLoop <= 0)
+			{
+
+				recoverCooldown = recoverCooldownDefault;
+				isCharging = false;
+				chargeLoop = chargeLoopDefault;
+
+			}
+			ECS::GetComponent<Sprite>((int)GetBody()->GetUserData()).LoadSprite(fileName, 192, 146);
 			attackCooldown = attackCooldownDefault;
 			//std::cout << "\nHi, I'm attacking rn " << animationFrame;
 

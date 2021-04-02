@@ -183,7 +183,7 @@ private:
 	b2Vec2 nextMovement;
 	//Do you draw the bodies?
 	static bool m_drawBodies;
-	float speed = 120;
+	float speed = 220;
 	float knockbackDefault = 1.f;
 	float knockbackTimer = knockbackDefault;
 	bool knockedBack = false;
@@ -197,5 +197,6 @@ private:
 	float recoverCooldown = recoverCooldownDefault;
 	bool isAttacking = false, isCharging = false;
 	float bossLastVel;
-
+	int chargeLoopDefault = 6.f;
+	int chargeLoop = chargeLoopDefault;
 };

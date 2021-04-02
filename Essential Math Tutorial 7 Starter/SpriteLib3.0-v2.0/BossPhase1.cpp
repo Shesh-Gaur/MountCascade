@@ -29,7 +29,7 @@ BossPhase1::BossPhase1(std::string name)
 	: Scene(name)
 {
 
-	m_gravity = b2Vec2(0.f, -45.f);
+	m_gravity = b2Vec2(0.f, -235.f);
 	m_physicsWorld->SetGravity(m_gravity);
 
 	m_physicsWorld->SetContactListener(&listener);
@@ -40,7 +40,7 @@ void BossPhase1::InitScene(float windowWidth, float windowHeight)
 
 	m_physicsWorld = new b2World(m_gravity);
 	m_name = "Mt.Cascade";
-	m_gravity = b2Vec2(0.f, -45.f);
+	m_gravity = b2Vec2(0.f, -235.f);
 	m_physicsWorld->SetGravity(m_gravity);
 
 	m_physicsWorld->SetContactListener(&listener);
@@ -519,7 +519,7 @@ void BossPhase1::InitScene(float windowWidth, float windowHeight)
 		auto& tempPhsBody = ECS::GetComponent<PhysicsBody>(entity);
 
 		float shrinkX = 88.f;
-		float shrinkY = 108.f;
+		float shrinkY = 145.f;
 		b2Body* tempBody;
 		b2BodyDef tempDef;
 		tempDef.type = b2_dynamicBody;
@@ -528,12 +528,12 @@ void BossPhase1::InitScene(float windowWidth, float windowHeight)
 		tempBody = m_physicsWorld->CreateBody(&tempDef);
 		
 		tempPhsBody = PhysicsBody(entity, tempBody, float(tempSpr.GetWidth() - shrinkX),
-			float(tempSpr.GetHeight() - shrinkY), vec2(0.f, -54.f), false, ENEMY, PLAYER | ENEMY , 1.f,8.f);
+			float(tempSpr.GetHeight() - shrinkY), vec2(0.f, -72.f), false, ENEMY, PLAYER | ENEMY , 1.f,8.f);
 		tempPhsBody.SetColor(vec4(0.f, 1.f, 0.f, 0.3f));
 		tempPhsBody.SetRotationAngleDeg(0);
 		tempPhsBody.SetName("Boss");
 		tempPhsBody.SetHealth(2);
-		tempPhsBody.SetSpeed(4000.f);
+		tempPhsBody.SetSpeed(70.f);
 
 	}
 
@@ -1089,44 +1089,26 @@ void BossPhase1::readSaveFile()
 		//playerSaveFile >> newXPos;
 		//playerSaveFile >> newYPos;
 
-		ECS::GetComponent<PhysicsBody>(MainEntities::MainPlayer()).SetPosition(b2Vec2(-724.f, 1268.f));
-		ECS::GetComponent<PhysicsBody>(playerFollow).SetPosition(b2Vec2(-724.f, 1268.f));
+		//ECS::GetComponent<PhysicsBody>(MainEntities::MainPlayer()).SetPosition(b2Vec2(-724.f, 1268.f));
+		//ECS::GetComponent<PhysicsBody>(playerFollow).SetPosition(b2Vec2(-724.f, 1268.f));
 		
 		//playerSaveFile.close();
 	}
-
+	ECS::GetComponent<PhysicsBody>(MainEntities::MainPlayer()).SetPosition(b2Vec2(-724.f, 1268.f));
+	ECS::GetComponent<PhysicsBody>(playerFollow).SetPosition(b2Vec2(-724.f, 1268.f));
 
 }
 
 
 void BossPhase1::cameraTrackPlayer()
 {
-	
-	//RayCastCallback selectRay;
-	//m_physicsWorld->RayCast(&selectRay, wMousePos + b2Vec2(0, 20), wMousePos);
-	//if (selectRay.m_fixture == nullptr)
-	//{
-	//	m_physicsWorld->RayCast(&selectRay, wMousePos + b2Vec2(0, -20), wMousePos);
-	//	if (selectRay.m_fixture == nullptr)
-	//	{
-	//		m_physicsWorld->RayCast(&selectRay, wMousePos + b2Vec2(-20, 0), wMousePos);
-	//		if (selectRay.m_fixture == nullptr)
-	//		{
-	//			m_physicsWorld->RayCast(&selectRay, wMousePos + b2Vec2(20, 0), wMousePos);
-
-
-	//		}
-
-	//	}
-
-	//}
 	if (bossStarted == true)
 	{
-		b2Vec2 newPos;
+
 		if (fov < 83)
 		{
 			fov += 2.5f * Timer::deltaTime;
-			
+
 		}
 		if (screenShakeTimer <= 0)
 		{
@@ -1135,35 +1117,13 @@ void BossPhase1::cameraTrackPlayer()
 		}
 		else
 		{
-			newPos = b2Vec2(-22.f + ECS::GetComponent<PhysicsBody>(MainEntities::MainPlayer()).GetBody()->GetLinearVelocity().x, 280.f + ECS::GetComponent<PhysicsBody>(MainEntities::MainPlayer()).GetBody()->GetLinearVelocity().y)  - ECS::GetComponent<PhysicsBody>(playerFollow).GetPosition();
+			newPos = b2Vec2(-22.f + ECS::GetComponent<PhysicsBody>(MainEntities::MainPlayer()).GetBody()->GetLinearVelocity().x, 280.f + ECS::GetComponent<PhysicsBody>(MainEntities::MainPlayer()).GetBody()->GetLinearVelocity().y) - ECS::GetComponent<PhysicsBody>(playerFollow).GetPosition();
 		}
-			ECS::GetComponent<Camera>(MainEntities::MainCamera()).Perspective(fov, aRatio, nPlane, 1000.f);
-			
-			ECS::GetComponent<Camera>(MainEntities::MainCamera()).SetPosition(ECS::GetComponent<Camera>(MainEntities::MainCamera()).GetPosition());
+		ECS::GetComponent<Camera>(MainEntities::MainCamera()).Perspective(fov, aRatio, nPlane, 1000.f);
 
-			
-			float length = sqrt(newPos.x * newPos.x + newPos.y * newPos.y);
-			newPos = b2Vec2(newPos.x, newPos.y);
-
-			b2Vec2 speed = b2Vec2(1000, 1000);
-
-			ECS::GetComponent<PhysicsBody>(playerFollow).GetBody()->SetLinearVelocity(b2Vec2(newPos.x * speed.x * Timer::deltaTime, newPos.y * speed.y * Timer::deltaTime));
-			ECS::GetComponent<PhysicsBody>(playerFollow).GetBody()->ApplyLinearImpulseToCenter(b2Vec2(0.f, 45.f * Timer::deltaTime), true);
+		ECS::GetComponent<Camera>(MainEntities::MainCamera()).SetPosition(ECS::GetComponent<Camera>(MainEntities::MainCamera()).GetPosition());
 
 
-		
-
-		if (Input::GetKeyDown(Key::Shift) && airDashCounter >= 0)
-		{
-			screenShakeTimer = screenShakeTimerDefault;
-		}
-
-		screenShakeTimer -= 1 * Timer::deltaTime;
-		
-	}
-	else
-	{
-		b2Vec2 newPos = ECS::GetComponent<PhysicsBody>(MainEntities::MainPlayer()).GetPosition() + b2Vec2(mousePosX / 30, (mousePosY / 15) - 10) - ECS::GetComponent<PhysicsBody>(playerFollow).GetPosition();
 		float length = sqrt(newPos.x * newPos.x + newPos.y * newPos.y);
 		newPos = b2Vec2(newPos.x, newPos.y);
 
@@ -1171,51 +1131,38 @@ void BossPhase1::cameraTrackPlayer()
 
 		ECS::GetComponent<PhysicsBody>(playerFollow).GetBody()->SetLinearVelocity(b2Vec2(newPos.x * speed.x * Timer::deltaTime, newPos.y * speed.y * Timer::deltaTime));
 		ECS::GetComponent<PhysicsBody>(playerFollow).GetBody()->ApplyLinearImpulseToCenter(b2Vec2(0.f, 45.f * Timer::deltaTime), true);
+
+
+
+
+		if (Input::GetKeyDown(Key::Shift) && Input::GetKey(Key::D) && airDashCounter >= 0.f)
+		{
+			screenShakeTimer = screenShakeTimerDefault;
+			
+		}
+		else if (Input::GetKeyDown(Key::Shift) && Input::GetKey(Key::A) && airDashCounter >= 0.f)
+		{
+			screenShakeTimer = screenShakeTimerDefault;
+
+		}
+		else
+		{
+			screenShakeTimer -= 1 * Timer::deltaTime;
+		}
+
+	}
+	else
+	{
+		b2Vec2 newPos = ECS::GetComponent<PhysicsBody>(MainEntities::MainPlayer()).GetPosition() + b2Vec2(mousePosX / 30, (mousePosY / 15) - 10) - ECS::GetComponent<PhysicsBody>(playerFollow).GetPosition();
+		float length = sqrt(newPos.x * newPos.x + newPos.y * newPos.y);
+		newPos = b2Vec2(newPos.x, newPos.y);
+
+		b2Vec2 speed = b2Vec2(10, 10);
+		ECS::GetComponent<PhysicsBody>(playerFollow).GetBody()->SetLinearVelocity(b2Vec2(newPos.x * speed.x, newPos.y * speed.y));
 	}
 }
 
-void BossPhase1::bossMoveBehaviour()
-{
 
-}
-
-void BossPhase1::ZoomCamera()
-{
-
-	//if (fov > 60)
-	//{
-	//	fov -= 0.5f * Timer::deltaTime;
-
-	//	ECS::GetComponent<Camera>(MainEntities::MainCamera()).Perspective(fov, aRatio, nPlane, 1000.f);
-	//	ECS::GetComponent<Camera>(MainEntities::MainCamera()).SetPosition(ECS::GetComponent<Camera>(MainEntities::MainCamera()).GetPosition());
-
-
-	//}
-
-//else
-//{
-//	if (fov < 70)
-//	{
-//		fov += 0.5f * Timer::deltaTime;
-
-//		ECS::GetComponent<Camera>(MainEntities::MainCamera()).Perspective(fov, aRatio, nPlane, 1000.f);
-//		ECS::GetComponent<Camera>(MainEntities::MainCamera()).SetPosition(ECS::GetComponent<Camera>(MainEntities::MainCamera()).GetPosition());
-
-
-//	}
-
-
-//}
-
-	//if (fov < 70)
-	//{
-	//	fov += 100.f * Timer::deltaTime;
-	//	ECS::GetComponent<Camera>(MainEntities::MainCamera()).Perspective(fov, aRatio, nPlane, 1000.f);
-
-
-	//}
-
-}
 
 void BossPhase1::updateUI()
 {
@@ -1491,8 +1438,6 @@ void BossPhase1::Update()
 	}
 
 	cameraTrackPlayer();
-	ZoomCamera();
-	bossMoveBehaviour();
 	updateUI();
 	//std::cout << "\n" << airDashCounter;
 
