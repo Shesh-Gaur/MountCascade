@@ -150,7 +150,7 @@ void PhysicsPlayground::InitScene(float windowWidth, float windowHeight)
 		ECS::AttachComponent<Transform>(entity);
 
 		//Set up the components
-		std::string fileName = "ui/Health3.png";
+		std::string fileName = "ui/Health6.png";
 		ECS::GetComponent<Sprite>(entity).LoadSprite(fileName, 22, 5);
 		ECS::GetComponent<Sprite>(entity).SetTransparency(0.8f);
 		ECS::GetComponent<Transform>(entity).SetPosition(vec3(0.f, 0.f, 2.f));
@@ -420,13 +420,13 @@ void PhysicsPlayground::InitScene(float windowWidth, float windowHeight)
 		ECS::GetComponent<Transform>(entity).SetPosition(vec3(700.f, 150.f, -48.f));
 	}
 
-	//Setup new Entity
+	//Background 1
 	{
 		/*Scene::CreateSprite(m_sceneReg, "HelloWorld.png", 100, 60, 0.5f, vec3(0.f, 0.f, 0.f));*/
 
 		//Creates entity
 		auto entity = ECS::CreateEntity();
-		mushbg = entity;
+		mushbg1 = entity;
 		//Add components
 		ECS::AttachComponent<Sprite>(entity);
 		ECS::AttachComponent<Transform>(entity);
@@ -435,6 +435,78 @@ void PhysicsPlayground::InitScene(float windowWidth, float windowHeight)
 		std::string fileName = "Cave_background1.png";
 		ECS::GetComponent<Sprite>(entity).LoadSprite(fileName, 1920, 1080);
 		ECS::GetComponent<Sprite>(entity).SetTransparency(1.f);
+		ECS::GetComponent<Transform>(entity).SetPosition(vec3(100.f, 300.f, -50.f));
+	}
+
+	//Background 2
+	{
+		/*Scene::CreateSprite(m_sceneReg, "HelloWorld.png", 100, 60, 0.5f, vec3(0.f, 0.f, 0.f));*/
+
+		//Creates entity
+		auto entity = ECS::CreateEntity();
+		mushbg2 = entity;
+		//Add components
+		ECS::AttachComponent<Sprite>(entity);
+		ECS::AttachComponent<Transform>(entity);
+
+		//Set up the components
+		std::string fileName = "Cave_background2.png";
+		ECS::GetComponent<Sprite>(entity).LoadSprite(fileName, 1920, 1080);
+		ECS::GetComponent<Sprite>(entity).SetTransparency(0.f);
+		ECS::GetComponent<Transform>(entity).SetPosition(vec3(100.f, 300.f, -50.f));
+	}
+
+	//Background 3
+	{
+		/*Scene::CreateSprite(m_sceneReg, "HelloWorld.png", 100, 60, 0.5f, vec3(0.f, 0.f, 0.f));*/
+
+		//Creates entity
+		auto entity = ECS::CreateEntity();
+		mushbg3 = entity;
+		//Add components
+		ECS::AttachComponent<Sprite>(entity);
+		ECS::AttachComponent<Transform>(entity);
+
+		//Set up the components
+		std::string fileName = "Cave_background3.png";
+		ECS::GetComponent<Sprite>(entity).LoadSprite(fileName, 1920, 1080);
+		ECS::GetComponent<Sprite>(entity).SetTransparency(0.f);
+		ECS::GetComponent<Transform>(entity).SetPosition(vec3(100.f, 300.f, -50.f));
+	}
+
+	//Background 4
+	{
+		/*Scene::CreateSprite(m_sceneReg, "HelloWorld.png", 100, 60, 0.5f, vec3(0.f, 0.f, 0.f));*/
+
+		//Creates entity
+		auto entity = ECS::CreateEntity();
+		mushbg4 = entity;
+		//Add components
+		ECS::AttachComponent<Sprite>(entity);
+		ECS::AttachComponent<Transform>(entity);
+
+		//Set up the components
+		std::string fileName = "Cave_background4.png";
+		ECS::GetComponent<Sprite>(entity).LoadSprite(fileName, 1920, 1080);
+		ECS::GetComponent<Sprite>(entity).SetTransparency(0.f);
+		ECS::GetComponent<Transform>(entity).SetPosition(vec3(100.f, 300.f, -50.f));
+	}
+
+	//Background 5
+	{
+		/*Scene::CreateSprite(m_sceneReg, "HelloWorld.png", 100, 60, 0.5f, vec3(0.f, 0.f, 0.f));*/
+
+		//Creates entity
+		auto entity = ECS::CreateEntity();
+		mushbg5 = entity;
+		//Add components
+		ECS::AttachComponent<Sprite>(entity);
+		ECS::AttachComponent<Transform>(entity);
+
+		//Set up the components
+		std::string fileName = "Cave_background5.png";
+		ECS::GetComponent<Sprite>(entity).LoadSprite(fileName, 1920, 1080);
+		ECS::GetComponent<Sprite>(entity).SetTransparency(0.f);
 		ECS::GetComponent<Transform>(entity).SetPosition(vec3(100.f, 300.f, -50.f));
 	}
 
@@ -1236,34 +1308,37 @@ void PhysicsPlayground::animateBackground()
 {
 	bgtimer += 1 * Timer::deltaTime;
 	std::string fileName;
-	if (bgtimer > bgtimerSpeed * 4)
-	{
-		fileName = "Cave_background5.png";
-		ECS::GetComponent<Sprite>(mushbg).LoadSprite(fileName, 1920, 1080);
+	if (bgtimer > 1.25) {
 		bgtimer = 0;
 	}
-	else if (bgtimer > bgtimerSpeed * 3)
+
+	if (bgtimer > 1)
 	{
-		fileName = "Cave_background4.png";
-		ECS::GetComponent<Sprite>(mushbg).LoadSprite(fileName, 1920, 1080);
+		ECS::GetComponent<Sprite>(mushbg5).SetTransparency(1.f);
+		ECS::GetComponent<Sprite>(mushbg4).SetTransparency(0.f);
+	}
+	else if (bgtimer > 0.75)
+	{
+		ECS::GetComponent<Sprite>(mushbg4).SetTransparency(1.f);
+		ECS::GetComponent<Sprite>(mushbg3).SetTransparency(0.f);
 
 	}
-	else if (bgtimer > bgtimerSpeed * 2)
+	else if (bgtimer > 0.5)
 	{
-		fileName = "Cave_background3.png";
-		ECS::GetComponent<Sprite>(mushbg).LoadSprite(fileName, 1920, 1080);
+		ECS::GetComponent<Sprite>(mushbg3).SetTransparency(1.f);
+		ECS::GetComponent<Sprite>(mushbg2).SetTransparency(0.f);
 
 	}
-	else if (bgtimer > bgtimerSpeed)
+	else if (bgtimer > 0.25)
 	{
-		fileName = "Cave_background2.png";
-		ECS::GetComponent<Sprite>(mushbg).LoadSprite(fileName, 1920, 1080);
+		ECS::GetComponent<Sprite>(mushbg2).SetTransparency(1.f);
+		ECS::GetComponent<Sprite>(mushbg1).SetTransparency(0.f);
 
 	}
-	else if (bgtimer < bgtimerSpeed )
+	else if (bgtimer < 0.25 )
 	{
-		fileName = "Cave_background1.png";
-		ECS::GetComponent<Sprite>(mushbg).LoadSprite(fileName, 1920, 1080);
+		ECS::GetComponent<Sprite>(mushbg1).SetTransparency(1.f);
+		ECS::GetComponent<Sprite>(mushbg5).SetTransparency(0.f);
 
 	}
 	//std::cout << "\n" << bgtimer;
@@ -1427,7 +1502,19 @@ void PhysicsPlayground::updateUI()
 	}
 
 	if (lastHealth != health) {
-		if (health >= 3) { //full health bar
+		if (health >= 6) { //full health bar
+			std::string fileName = "ui/Health6.png";
+			ECS::GetComponent<Sprite>(healthBar).LoadSprite(fileName, 22, 5);
+		}
+		else if (health >= 5) {
+			std::string fileName = "ui/Health5.png";
+			ECS::GetComponent<Sprite>(healthBar).LoadSprite(fileName, 22, 5);
+		}
+		else if (health >= 4) {
+			std::string fileName = "ui/Health4.png";
+			ECS::GetComponent<Sprite>(healthBar).LoadSprite(fileName, 22, 5);
+		}
+		else if (health >= 3) {
 			std::string fileName = "ui/Health3.png";
 			ECS::GetComponent<Sprite>(healthBar).LoadSprite(fileName, 22, 5);
 		}
@@ -1509,6 +1596,8 @@ b2Vec2 PhysicsPlayground::LoadPlayerLoc() {
 void PhysicsPlayground::Update()
 {
 
+	animateBackground();
+
 	auto& player = ECS::GetComponent<Player>(MainEntities::MainPlayer());
 	auto pl = ECS::GetComponent<PhysicsBody>(MainEntities::MainPlayer());
 	player.Update();
@@ -1544,7 +1633,7 @@ void PhysicsPlayground::Update()
 	if (ECS::GetComponent<PhysicsBody>(MainEntities::MainPlayer()).GetPosition().x > -750 && !activatePuni2) {
 		activatePuni2 = true;
 		puni2StartTime = clock();
-		health = 3;
+		health = 6;
 		SavePlayerLoc();
 	}
 
@@ -1640,7 +1729,7 @@ void PhysicsPlayground::Update()
 	//std::cout << diffTimeJumpBoost << "   " << jumpBoostFrame << std::endl;
 
 	if (health <= 0) {
-		health = 3;
+		health = 6;
 		ECS::GetComponent<PhysicsBody>(MainEntities::MainPlayer()).SetPosition(LoadPlayerLoc());
 	}
 
@@ -1721,7 +1810,6 @@ void PhysicsPlayground::Update()
 		}
 	}
 
-	//animateBackground();
 	cameraTrackPlayer();
 	ZoomCamera();
 	updateUI();

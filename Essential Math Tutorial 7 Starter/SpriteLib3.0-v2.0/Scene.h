@@ -98,10 +98,10 @@ protected:
 
 	bool loadStarted = false;
 
-	int playerHpDefault = 3;
+	int playerHpDefault = 6;
 	int playerHp = playerHpDefault;
 
-	int health = 3;
+	int health = 6;
 	bool isTouchingIceWall = false;
 private:
 	//Hello world entity number

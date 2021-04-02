@@ -276,7 +276,7 @@ void BossPhase1::InitScene(float windowWidth, float windowHeight)
 		ECS::AttachComponent<Transform>(entity);
 
 		//Set up the components
-		std::string fileName = "ui/Health3.png";
+		std::string fileName = "ui/Health6.png";
 		ECS::GetComponent<Sprite>(entity).LoadSprite(fileName, 65, 15);
 		ECS::GetComponent<Sprite>(entity).SetTransparency(0.8f);
 		ECS::GetComponent<Transform>(entity).SetPosition(vec3(0.f, 0.f, 2.f));
@@ -1195,7 +1195,19 @@ void BossPhase1::updateUI()
 	}
 
 	if (lastHealth != health) {
-		if (health >= 3) { //full health bar
+		if (health >= 6) { //full health bar
+			std::string fileName = "ui/Health6.png";
+			ECS::GetComponent<Sprite>(healthBar).LoadSprite(fileName, 22, 5);
+		}
+		else if (health >= 5) {
+			std::string fileName = "ui/Health5.png";
+			ECS::GetComponent<Sprite>(healthBar).LoadSprite(fileName, 22, 5);
+		}
+		else if (health >= 4) {
+			std::string fileName = "ui/Health4.png";
+			ECS::GetComponent<Sprite>(healthBar).LoadSprite(fileName, 22, 5);
+		}
+		else if (health >= 3) {
 			std::string fileName = "ui/Health3.png";
 			ECS::GetComponent<Sprite>(healthBar).LoadSprite(fileName, 22, 5);
 		}
@@ -1306,7 +1318,7 @@ void BossPhase1::Update()
 	if (ECS::GetComponent<PhysicsBody>(MainEntities::MainPlayer()).GetPosition().x > -600 && !activatePunisher) {
 		activatePunisher = true;
 		SavePlayerLoc();
-		health = 3;
+		health = 6;
 		punStartTime = clock();
 	}
 
@@ -1408,7 +1420,7 @@ void BossPhase1::Update()
 
 	if (health <= 0) {
 		std::cout << "Resetting player location at: " << LoadPlayerLoc().x << " " << LoadPlayerLoc().y << std::endl;
-		health = 3;
+		health = 6;
 		ECS::GetComponent<PhysicsBody>(MainEntities::MainPlayer()).SetPosition(LoadPlayerLoc());
 	}
 

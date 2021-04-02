@@ -133,7 +133,7 @@ void CascadeVillage::InitScene(float windowWidth, float windowHeight)
 		ECS::AttachComponent<Transform>(entity);
 
 		//Set up the components
-		std::string fileName = "ui/Health3.png";
+		std::string fileName = "ui/Health6.png";
 		ECS::GetComponent<Sprite>(entity).LoadSprite(fileName, 65, 15);
 		ECS::GetComponent<Sprite>(entity).SetTransparency(0.8f);
 		ECS::GetComponent<Transform>(entity).SetPosition(vec3(0.f, 0.f, 2.f));
@@ -461,6 +461,18 @@ void CascadeVillage::InitScene(float windowWidth, float windowHeight)
 		ECS::GetComponent<Transform>(entity).SetPosition(vec3(-125.f, 160.f, 0.01f));
 	}
 
+	{
+		auto entity = ECS::CreateEntity();
+		//Add components
+		ECS::AttachComponent<Sprite>(entity);
+		ECS::AttachComponent<Transform>(entity);
+
+		//Set up the components
+		std::string fileName = "overlay/Cascade_Village_Overlay.png";
+		ECS::GetComponent<Sprite>(entity).LoadSprite(fileName, 4096, 4096);
+		ECS::GetComponent<Sprite>(entity).SetTransparency(1.0f);
+		ECS::GetComponent<Transform>(entity).SetPosition(vec3(260.f, 225.f, 0.021f));
+	}
 
 	//Setup trigger
 	{
@@ -1604,7 +1616,19 @@ void CascadeVillage::updateUI()
 	}
 
 	if (lastHealth != health) {
-		if (health >= 3) { //full health bar
+		if (health >= 6) { //full health bar
+			std::string fileName = "ui/Health6.png";
+			ECS::GetComponent<Sprite>(healthBar).LoadSprite(fileName, 22, 5);
+		}
+		else if (health >= 5) {
+			std::string fileName = "ui/Health5.png";
+			ECS::GetComponent<Sprite>(healthBar).LoadSprite(fileName, 22, 5);
+		}
+		else if (health >= 4) {
+			std::string fileName = "ui/Health4.png";
+			ECS::GetComponent<Sprite>(healthBar).LoadSprite(fileName, 22, 5);
+		}
+		else if (health >= 3) {
 			std::string fileName = "ui/Health3.png";
 			ECS::GetComponent<Sprite>(healthBar).LoadSprite(fileName, 22, 5);
 		}
@@ -1711,14 +1735,14 @@ void CascadeVillage::Update()
 
 	if (health <= 0) {
 		std::cout << "Resetting player location" << std::endl;
-		health = 3;
+		health = 6;
 		ECS::GetComponent<PhysicsBody>(MainEntities::MainPlayer()).SetPosition(LoadPlayerLoc());
 	}
 
 	if (ECS::GetComponent<PhysicsBody>(MainEntities::MainPlayer()).GetPosition().x > -270 && !activatePuni) {
 		activatePuni = true;
 		puniStartTime = clock();
-		health = 3;
+		health = 6;
 		SavePlayerLoc();
 		ECS::GetComponent<Sprite>(puniText).SetTransparency(1.f);
 	}
