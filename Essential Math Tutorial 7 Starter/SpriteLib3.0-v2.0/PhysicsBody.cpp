@@ -273,7 +273,11 @@ void PhysicsBody::Update(Transform * trans)
 			attackCooldown -= 1.f * getDeltaTime();
 		}
 		//std::cout << "\nAttack Cooldown " << attackCooldown;
+		if (bossLastVel == NULL)
+		{
+			bossLastVel = 10.f;
 
+		}
 		std::string fileName;
 		b2Vec2 bossDistance = GetPosition() - ECS::GetComponent<PhysicsBody>(MainEntities::MainPlayer()).GetPosition();
 
