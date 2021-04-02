@@ -276,6 +276,7 @@ void PhysicsBody::Update(Transform * trans)
 
 		std::string fileName;
 		b2Vec2 bossDistance = GetPosition() - ECS::GetComponent<PhysicsBody>(MainEntities::MainPlayer()).GetPosition();
+
 		if (!isAttacking && attackCooldown <= 0)
 		{
 			if (sqrt(bossDistance.x * bossDistance.x + bossDistance.y * bossDistance.y) < 100.f)
@@ -287,6 +288,7 @@ void PhysicsBody::Update(Transform * trans)
 			}
 
 		}
+
 		if (!isAttacking) //Is Walking
 		{
 
@@ -384,7 +386,7 @@ void PhysicsBody::Update(Transform * trans)
 			//std::cout << "\nHi, I'm WALKING rn " << animationFrame;
 
 		}
-		else //Is Attacking
+		else if(isAttacking)//Is Attacking
 		{
 			if (bossLastVel < 0) {
 				switch ((int)round(animationFrame)) { //left
@@ -439,6 +441,45 @@ void PhysicsBody::Update(Transform * trans)
 			ECS::GetComponent<Sprite>((int)GetBody()->GetUserData()).LoadSprite(fileName, 256, 256);
 			attackCooldown = attackCooldownDefault;
 			//std::cout << "\nHi, I'm attacking rn " << animationFrame;
+
+		}
+		else if (isCharging)//Is Charging
+		{
+		if (bossLastVel < 0) {
+			switch ((int)round(animationFrame)) { //left
+			case 0:
+				fileName = "golem/golemrecharge1.png";
+				break;
+			case 1:
+				fileName = "golem/golemrecharge2.png";
+				break;
+			default:
+				fileName = "golem/golemrecharge3.png";
+				animationFrame = 0;
+				//isCharging = false;
+				break;
+			}
+		}
+		else { //right
+			switch ((int)round(animationFrame)) {
+			case 0:
+				fileName = "golem/golemrecharge1r.png";
+				break;
+			case 1:
+				fileName = "golem/golemrecharge2r.png";
+				break;
+			default:
+				fileName = "golem/golemrecharge3r.png";
+				animationFrame = 0;
+				//isCharging = false;
+				break;
+
+			}
+		}
+
+		ECS::GetComponent<Sprite>((int)GetBody()->GetUserData()).LoadSprite(fileName, 256, 256);
+		attackCooldown = attackCooldownDefault;
+		//std::cout << "\nHi, I'm attacking rn " << animationFrame;
 
 		}
 		SetRotationAngleDeg(0);

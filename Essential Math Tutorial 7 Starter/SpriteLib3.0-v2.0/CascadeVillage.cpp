@@ -389,7 +389,7 @@ void CascadeVillage::InitScene(float windowWidth, float windowHeight)
 		ECS::GetComponent<Sprite>(entity).SetTransparency(1.f);
 		ECS::GetComponent<Transform>(entity).SetPosition(vec3(-800.f, 420.f, -40.f));
 	}
-	//Creates entity
+	//Punisher Idle Anim
 	{
 		auto entity = ECS::CreateEntity();
 		puni = entity;
@@ -398,10 +398,52 @@ void CascadeVillage::InitScene(float windowWidth, float windowHeight)
 		ECS::AttachComponent<Transform>(entity);
 
 		//Set up the components
-		std::string fileName = "punisher/Punisher-Cooking1.png";
-		ECS::GetComponent<Sprite>(entity).LoadSprite(fileName, 128, 128);
+		std::string fileName = "punisher/Punisher1.png";
+		ECS::GetComponent<Sprite>(entity).LoadSprite(fileName, 77, 100);
 		ECS::GetComponent<Sprite>(entity).SetTransparency(1.0f);
-		ECS::GetComponent<Transform>(entity).SetPosition(vec3(-450.f, 160.f, 0.01f));
+		ECS::GetComponent<Transform>(entity).SetPosition(vec3(-220.f, 145.f, 0.01f));
+	}
+
+	//Punisher Tutorial Jump
+	{
+		auto entity = ECS::CreateEntity();
+		//Add components
+		ECS::AttachComponent<Sprite>(entity);
+		ECS::AttachComponent<Transform>(entity);
+
+		//Set up the components
+		std::string fileName = "punisher/Punisher1.png";
+		ECS::GetComponent<Sprite>(entity).LoadSprite(fileName, 77, 100);
+		ECS::GetComponent<Sprite>(entity).SetTransparency(1.0f);
+		ECS::GetComponent<Transform>(entity).SetPosition(vec3(320.f, 140.f, 0.01f));
+	}
+
+	//Punisher Tutorial Dash
+	{
+		auto entity = ECS::CreateEntity();
+		//Add components
+		ECS::AttachComponent<Sprite>(entity);
+		ECS::AttachComponent<Transform>(entity);
+
+		//Set up the components
+		std::string fileName = "punisher/Punisher1.png";
+		ECS::GetComponent<Sprite>(entity).LoadSprite(fileName, 77, 100);
+		ECS::GetComponent<Sprite>(entity).SetTransparency(1.0f);
+		ECS::GetComponent<Transform>(entity).SetPosition(vec3(1255.f, 145.f, 0.01f));
+	}
+
+	//Punisher Tutorial Attack
+	{
+		auto entity = ECS::CreateEntity();
+		//Add components
+		ECS::AttachComponent<Sprite>(entity);
+		ECS::AttachComponent<Transform>(entity);
+
+		//Set up the components
+		std::string fileName = "punisher/Punisher1.png";
+		ECS::GetComponent<Sprite>(entity).LoadSprite(fileName, 77, 100);
+		ECS::GetComponent<Sprite>(entity).SetTransparency(1.0f);
+		ECS::GetComponent<Transform>(entity).SetPosition(vec3(1575.f, 310.f, 0.01f));
 	}
 
 	{ //Punisher Text Entity
@@ -416,7 +458,7 @@ void CascadeVillage::InitScene(float windowWidth, float windowHeight)
 		std::string fileName = "punisher/mushroomintroduction.png";
 		ECS::GetComponent<Sprite>(entity).LoadSprite(fileName, 128, 128);
 		ECS::GetComponent<Sprite>(entity).SetTransparency(0.0f);
-		ECS::GetComponent<Transform>(entity).SetPosition(vec3(-325.f, 160.f, 0.01f));
+		ECS::GetComponent<Transform>(entity).SetPosition(vec3(-125.f, 160.f, 0.01f));
 	}
 
 
@@ -1694,7 +1736,7 @@ void CascadeVillage::Update()
 		ECS::GetComponent<PhysicsBody>(MainEntities::MainPlayer()).SetPosition(LoadPlayerLoc());
 	}
 
-	if (ECS::GetComponent<PhysicsBody>(MainEntities::MainPlayer()).GetPosition().x > -450 && !activatePuni) {
+	if (ECS::GetComponent<PhysicsBody>(MainEntities::MainPlayer()).GetPosition().x > -270 && !activatePuni) {
 		activatePuni = true;
 		puniStartTime = clock();
 		health = 3;
@@ -1702,7 +1744,7 @@ void CascadeVillage::Update()
 		ECS::GetComponent<Sprite>(puniText).SetTransparency(1.f);
 	}
 
-	if (activatePuni && puniDiffTime > 0.12) {
+	/*if (activatePuni && puniDiffTime > 0.12) {
 		std::string fileName = "punisher/Punisher-Cooking1.png";
 		puniStartTime = clock();
 		puniCurFrame += 1;
@@ -1789,6 +1831,44 @@ void CascadeVillage::Update()
 		}
 
 		ECS::GetComponent<Sprite>(puni).LoadSprite(fileName, 128, 128);
+	}*/
+
+	if (activatePuni && puniDiffTime > 0.12) {
+		std::string fileName = "punisher/Punisher1.png";
+		puniStartTime = clock();
+		puniCurFrame += 1;
+
+		switch (puniCurFrame) {
+		case 1:
+			fileName = "punisher/Punisher1.png";
+			break;
+		case 2:
+			fileName = "punisher/Punisher2.png";
+			break;
+		case 3:
+			fileName = "punisher/Punisher3.png";
+			break;
+		case 4:
+			fileName = "punisher/Punisher4.png";
+			break;
+		case 5:
+			fileName = "punisher/Punisher5.png";
+			break;
+		case 6:
+			fileName = "punisher/Punisher6.png";
+			break;
+		case 7:
+			fileName = "punisher/Punisher7.png";
+			break;
+		case 8:
+			fileName = "punisher/Punisher8.png";
+			break;
+		default:
+			fileName = "punisher/Punisher9.png";
+			break;
+		}
+
+		ECS::GetComponent<Sprite>(puni).LoadSprite(fileName, 77, 100);
 	}
 
 	if (houseDiffTime > 0.1) {
