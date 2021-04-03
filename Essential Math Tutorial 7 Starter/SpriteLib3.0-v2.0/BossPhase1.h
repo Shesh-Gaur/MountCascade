@@ -114,5 +114,8 @@ protected:
 
 	int punisher;
 	int puni3Text;
+	int bossHpBar;
+	int bossInBar;
+
 
 };

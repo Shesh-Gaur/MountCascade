@@ -2635,7 +2635,7 @@ void CascadeVillage::KeyboardDown()
 	auto& canJump = ECS::GetComponent<CanJump>(MainEntities::MainPlayer());
 
 	if (Input::GetKeyDown(Key::OEMMinus) && health > 0) health--;
-	if (Input::GetKeyDown(Key::OEMPlus) && health < 3) health++;
+	if (Input::GetKeyDown(Key::OEMPlus) && health < 6) health++;
 
 
 	if (loadStarted == false) {

@@ -266,246 +266,94 @@ void PhysicsBody::Update(Transform * trans)
 	}
 	else if (name == "Boss")
 	{
+	 //HealthBar Code
+		std::string fileName2 = "Masks/SquareMask.png";
+		float adj = GetHealth() / GetMaxHealth();
+		ECS::GetComponent<Sprite>(healthBar).LoadSprite(fileName2, 510 * adj, 12);
+		
 
-		animationFrame += 5.f * getDeltaTime();
-		if (attackCooldown > 0)
-		{
-			attackCooldown -= 1.f * getDeltaTime();
-		}
-		//std::cout << "\nAttack Cooldown " << attackCooldown;
-		if (bossLastVel == NULL)
-		{
-			bossLastVel = 10.f;
-
-		}
 		std::string fileName;
-		b2Vec2 bossDistance = GetPosition() - ECS::GetComponent<PhysicsBody>(MainEntities::MainPlayer()).GetPosition();
+		ECS::GetComponent<Sprite>((int)GetBody()->GetUserData()).LoadSprite(fileName, 256, 256);
 
-		if (!isAttacking && attackCooldown <= 0)
+
+		if (playerSpotted == false && getCurrentClock() % 10 == 0)
 		{
-			if (sqrt(bossDistance.x * bossDistance.x + bossDistance.y * bossDistance.y) < 140.f)
+			fileName = "golem/idleframe1.png";
+			RayCastCallback viewRay;
+			m_body->GetWorld()->RayCast(&viewRay, GetPosition(), ECS::GetComponent<PhysicsBody>(MainEntities::MainPlayer()).GetPosition());
+
+			if (viewRay.m_fixture != NULL)
 			{
-				animationFrame = 0.f;
-				isAttacking = true;
-
+				if (viewRay.m_fixture->GetBody() == ECS::GetComponent<PhysicsBody>(MainEntities::MainPlayer()).GetBody())
+				{
+					playerSpotted = true;
+				}
 			}
-
 		}
 
-		if (!isAttacking && !isCharging) //Is Walking
+
+		if (playerSpotted == true)
 		{
-
-			if (recoverCooldown > 0)
+			animationFrame += 5.f * getDeltaTime();
+			if (attackCooldown > 0)
 			{
-				recoverCooldown -= 1.f * getDeltaTime();
+				attackCooldown -= 1.f * getDeltaTime();
 			}
-			else
+			//std::cout << "\nAttack Cooldown " << attackCooldown;
+			if (bossLastVel == NULL)
 			{
-				isCharging = true;
-				recoverCooldown = 0;
+				bossLastVel = 10.f;
 
 			}
-
-			//std::cout << "\nRECOVER COOLDOWN " << recoverCooldown;
-
-			if (GetVelocity().x > 10) {
-				switch ((int)round(animationFrame)) {
-				case 0:
-					fileName = "golem/256 Canvas/golemoppositerunframe1.png";
-					break;
-				case 1:
-					fileName = "golem/256 Canvas/golemoppositerunframe2.png";
-					break;
-				case 2:
-					fileName = "golem/256 Canvas/golemoppositerunframe3.png";
-					break;
-				case 3:
-					fileName = "golem/256 Canvas/golemoppositerunframe4.png";
-					break;
-				case 4:
-					fileName = "golem/256 Canvas/golemoppositerunframe5.png";
-					break;
-				default:
-					fileName = "golem/256 Canvas/golemoppositerunframe6.png";
-					animationFrame = 0;
-					break;
-				}
-				ECS::GetComponent<Sprite>((int)GetBody()->GetUserData()).LoadSprite(fileName, 256, 256);
-
-
-			}
-			else if (GetVelocity().x < -10) {
-				switch ((int)round(animationFrame)) {
-				case 0:
-					fileName = "golem/256 Canvas/runframe1.png";
-					break;
-				case 1:
-					fileName = "golem/256 Canvas/runframe2.png";
-					break;
-				case 2:
-					fileName = "golem/256 Canvas/runframe3.png";
-					break;
-				case 3:
-					fileName = "golem/256 Canvas/runframe4.png";
-					break;
-				case 4:
-					fileName = "golem/256 Canvas/runframe5.png";
-					break;
-				default:
-					fileName = "golem/256 Canvas/runframe6.png";
-					animationFrame = 0;
-					break;
-				}
-				ECS::GetComponent<Sprite>((int)GetBody()->GetUserData()).LoadSprite(fileName, 256, 256);
-
-			}
-			else {
-				switch ((int)round(animationFrame)) {
-				case 0:
-					fileName = "golem/256 Canvas/idleframe1.png";
-					break;
-				case 1:
-					fileName = "golem/256 Canvas/idleframe2.png";
-					break;
-				default:
-					fileName = "golem/256 Canvas/idleframe3.png";
-					animationFrame = 0;
-					break;
-				}
-			}
-			ECS::GetComponent<Sprite>((int)GetBody()->GetUserData()).LoadSprite(fileName, 256, 256);
-
-			bossLastVel = GetVelocity().x;
-
-
-
 			
-			if (getCurrentClock() % 10 == 0)
+			b2Vec2 bossDistance = GetPosition() - ECS::GetComponent<PhysicsBody>(MainEntities::MainPlayer()).GetPosition();
+
+			if (!isAttacking && attackCooldown <= 0)
 			{
-				float direction2 = ECS::GetComponent<PhysicsBody>(MainEntities::MainPlayer()).GetPosition().x - GetPosition().x;
-				direction2 /= abs(direction2);
-				SetNextMovement(b2Vec2(direction2 * GetSpeed(), GetBody()->GetLinearVelocity().y));
-			}
-			GetBody()->SetLinearVelocity(b2Vec2(GetNextMovement().x , GetNextMovement().y ));
-			//std::cout << "\nHi, I'm WALKING rn " << animationFrame;
-
-		}
-		else if(isAttacking && !isCharging)//Is Attacking
-		{
-			if (bossLastVel < 0) {
-				switch ((int)round(animationFrame)) { //left
-				case 0:
-					fileName = "golem/256 Canvas/attackanim1.png";
-					break;
-				case 1:
-					fileName = "golem/256 Canvas/attackanim2.png";
-					break;
-				case 2:
-					fileName = "golem/256 Canvas/attackanim3.png";
-					break;
-				case 3:
-					fileName = "golem/256 Canvas/attackanim4.png";
-					break;
-				case 4:
-					fileName = "golem/256 Canvas/attackanim5.png";
-					break;
-				default:
-					fileName = "golem/256 Canvas/attackanim6.png";
-					animationFrame = 0;
-					isAttacking = false;
-					break;
-				}
-			}
-			else { //right
-				switch ((int)round(animationFrame)) {
-				case 0:
-					fileName = "golem/256 Canvas/attackanim1r.png";
-					break;
-				case 1:
-					fileName = "golem/256 Canvas/attackanim2r.png";
-					break;
-				case 2:
-					fileName = "golem/256 Canvas/attackanim3r.png";
-					break;
-				case 3:
-					fileName = "golem/256 Canvas/attackanim4r.png";
-					break;
-				case 4:
-					fileName = "golem/256 Canvas/attackanim5r.png";
-					break;
-				default:
-					fileName = "golem/256 Canvas/attackanim6r.png";
-					animationFrame = 0;
-					isAttacking = false;
-					break;
-				
-				}
-			}
-
-			ECS::GetComponent<Sprite>((int)GetBody()->GetUserData()).LoadSprite(fileName, 256, 256);
-			attackCooldown = attackCooldownDefault;
-			//std::cout << "\nHi, I'm attacking rn " << animationFrame;
-
-		}
-
-		if (isCharging)//Is Charging
-		{
-			if (bossLastVel < 0) {
-				switch ((int)round(animationFrame)) { //left
-				case 0:
-					fileName = "golem/golemrecharge1.png";
-					break;
-				case 1:
-					fileName = "golem/golemrecharge2.png";
-					break;
-
-				default:
-					fileName = "golem/golemrecharge3.png";
-					animationFrame = 0;
-					chargeLoop--;
-					break;
-				}
-			}
-			else { //right
-				switch ((int)round(animationFrame)) {
-				case 0:
-					fileName = "golem/golemrecharge1r.png";
-					break;
-				case 1:
-					fileName = "golem/golemrecharge2r.png";
-					break;
-
-				default:
-					fileName = "golem/golemrecharge3r.png";
-					animationFrame = 0;
-					chargeLoop--;
-					break;
+				if (sqrt(bossDistance.x * bossDistance.x + bossDistance.y * bossDistance.y) < 140.f)
+				{
+					animationFrame = 0.f;
+					isAttacking = true;
 
 				}
 
-
 			}
-			if (chargeLoop <= 0)
+
+			if (!isAttacking && !isCharging) //Is Walking
 			{
-				if (bossLastVel > 10) {
+
+				if (recoverCooldown > 0)
+				{
+					recoverCooldown -= 1.f * getDeltaTime();
+				}
+				else
+				{
+					isCharging = true;
+					recoverCooldown = 0;
+
+				}
+
+				//std::cout << "\nRECOVER COOLDOWN " << recoverCooldown;
+
+				if (GetVelocity().x > 10) {
 					switch ((int)round(animationFrame)) {
 					case 0:
-						fileName = "golem/256 Canvas/golemoppositerunframe1.png";
+						fileName = "golem/golemoppositerunframe1.png";
 						break;
 					case 1:
-						fileName = "golem/256 Canvas/golemoppositerunframe2.png";
+						fileName = "golem/golemoppositerunframe2.png";
 						break;
 					case 2:
-						fileName = "golem/256 Canvas/golemoppositerunframe3.png";
+						fileName = "golem/golemoppositerunframe3.png";
 						break;
 					case 3:
-						fileName = "golem/256 Canvas/golemoppositerunframe4.png";
+						fileName = "golem/golemoppositerunframe4.png";
 						break;
 					case 4:
-						fileName = "golem/256 Canvas/golemoppositerunframe5.png";
+						fileName = "golem/golemoppositerunframe5.png";
 						break;
 					default:
-						fileName = "golem/256 Canvas/golemoppositerunframe6.png";
+						fileName = "golem/golemoppositerunframe6.png";
 						animationFrame = 0;
 						break;
 					}
@@ -513,58 +361,255 @@ void PhysicsBody::Update(Transform * trans)
 
 
 				}
-				else if (bossLastVel < -10) {
+				else if (GetVelocity().x < -10) {
 					switch ((int)round(animationFrame)) {
 					case 0:
-						fileName = "golem/256 Canvas/runframe1.png";
+						fileName = "golem/runframe1.png";
 						break;
 					case 1:
-						fileName = "golem/256 Canvas/runframe2.png";
+						fileName = "golem/runframe2.png";
 						break;
 					case 2:
-						fileName = "golem/256 Canvas/runframe3.png";
+						fileName = "golem/runframe3.png";
 						break;
 					case 3:
-						fileName = "golem/256 Canvas/runframe4.png";
+						fileName = "golem/runframe4.png";
 						break;
 					case 4:
-						fileName = "golem/256 Canvas/runframe5.png";
+						fileName = "golem/runframe5.png";
 						break;
 					default:
-						fileName = "golem/256 Canvas/runframe6.png";
+						fileName = "golem/runframe6.png";
 						animationFrame = 0;
 						break;
 					}
+					ECS::GetComponent<Sprite>((int)GetBody()->GetUserData()).LoadSprite(fileName, 256, 256);
 
 				}
+				else {
+					switch ((int)round(animationFrame)) {
+					case 0:
+						fileName = "golem/idleframe1.png";
+						break;
+					case 1:
+						fileName = "golem/idleframe2.png";
+						break;
+					default:
+						fileName = "golem/idleframe3.png";
+						animationFrame = 0;
+						break;
+					}
+				}
+				ECS::GetComponent<Sprite>((int)GetBody()->GetUserData()).LoadSprite(fileName, 256, 256);
 
-				RayCastCallback wallRay;
-				GetBody()->GetWorld()->RayCast(&wallRay,GetPosition(), GetPosition() + b2Vec2(bossLastVel*1.5, 0));
-				if (wallRay.m_fixture != NULL)
+				
+
+
+
+
+				if (getCurrentClock() % 10 == 0)
 				{
-					std::cout << "\n" << ECS::GetComponent<PhysicsBody>((int)wallRay.m_fixture->GetBody()->GetUserData()).GetName();
-					if (ECS::GetComponent<PhysicsBody>((int)wallRay.m_fixture->GetBody()->GetUserData()).GetName() != "Player" && ECS::GetComponent<PhysicsBody>((int)wallRay.m_fixture->GetBody()->GetUserData()).GetName() != "Trigger")
+					float direction2 = ECS::GetComponent<PhysicsBody>(MainEntities::MainPlayer()).GetPosition().x - GetPosition().x;
+					direction2 /= abs(direction2);
+					SetNextMovement(b2Vec2(direction2 * GetSpeed(), GetBody()->GetLinearVelocity().y));
+				}
+				GetBody()->SetLinearVelocity(b2Vec2(GetNextMovement().x, GetNextMovement().y));
+				bossLastVel = GetVelocity().x;
+				//std::cout << "\nHi, I'm WALKING rn " << animationFrame;
+
+			}
+			else if (isAttacking && !isCharging)//Is Attacking
+			{
+				if (bossLastVel < 0) {
+					switch ((int)round(animationFrame)) { //left
+					case 0:
+						fileName = "golem/attackanim1.png";
+						break;
+					case 1:
+						fileName = "golem/attackanim2.png";
+						break;
+					case 2:
+						fileName = "golem/attackanim3.png";
+						break;
+					case 3:
+						fileName = "golem/attackanim4.png";
+						break;
+					case 4:
+						fileName = "golem/attackanim5.png";
+						break;
+					default:
+						fileName = "golem/attackanim6.png";
+						animationFrame = 0;
+						isAttacking = false;
+						break;
+					}
+				}
+				else { //right
+					switch ((int)round(animationFrame)) {
+					case 0:
+						fileName = "golem/attackanim1r.png";
+						break;
+					case 1:
+						fileName = "golem/attackanim2r.png";
+						break;
+					case 2:
+						fileName = "golem/attackanim3r.png";
+						break;
+					case 3:
+						fileName = "golem/attackanim4r.png";
+						break;
+					case 4:
+						fileName = "golem/attackanim5r.png";
+						break;
+					default:
+						fileName = "golem/attackanim6r.png";
+						animationFrame = 0;
+						isAttacking = false;
+						break;
+
+					}
+				}
+
+				ECS::GetComponent<Sprite>((int)GetBody()->GetUserData()).LoadSprite(fileName, 256, 256);
+				attackCooldown = attackCooldownDefault;
+				//std::cout << "\nHi, I'm attacking rn " << animationFrame;
+
+			}
+
+			if (isCharging)//Is Charging
+			{
+				if (bossLastVel < 0) {
+					switch ((int)round(animationFrame)) { //left
+					case 0:
+						fileName = "golem/golemrecharge1.png";
+						break;
+					case 1:
+						fileName = "golem/golemrecharge2.png";
+						break;
+
+					default:
+						fileName = "golem/golemrecharge3.png";
+						chargeLoop--;
+						animationFrame = 0;
+						break;
+					}
+				}
+				else { //right
+					switch ((int)round(animationFrame)) {
+					case 0:
+						fileName = "golem/golemrecharge1r.png";
+						break;
+					case 1:
+						fileName = "golem/golemrecharge2r.png";
+						break;
+
+					default:
+						fileName = "golem/golemrecharge3r.png";
+						chargeLoop--;
+						animationFrame = 0;
+						break;
+
+					}
+
+
+				}
+				if (chargeLoop <= 0)
+				{
+					//std::cout << "\nLAST VEL " << bossLastVel;
+
+					if (bossLastVel > 0) {
+						switch ((int)round(animationFrame)) {
+						case 0:
+							fileName = "golem/golemoppositerunframe1.png";
+							break;
+						case 1:
+							fileName = "golem/golemoppositerunframe2.png";
+							break;
+						case 2:
+							fileName = "golem/golemoppositerunframe3.png";
+							break;
+						case 3:
+							fileName = "golem/golemoppositerunframe4.png";
+							break;
+						case 4:
+							fileName = "golem/golemoppositerunframe5.png";
+							break;
+						default:
+							fileName = "golem/golemoppositerunframe6.png";
+							animationFrame = 0;
+							break;
+						}
+						ECS::GetComponent<Sprite>((int)GetBody()->GetUserData()).LoadSprite(fileName, 256, 256);
+
+
+					}
+					else if (bossLastVel < -0) {
+						switch ((int)round(animationFrame)) {
+						case 0:
+							fileName = "golem/runframe1.png";
+							break;
+						case 1:
+							fileName = "golem/runframe2.png";
+							break;
+						case 2:
+							fileName = "golem/runframe3.png";
+							break;
+						case 3:
+							fileName = "golem/runframe4.png";
+							break;
+						case 4:
+							fileName = "golem/runframe5.png";
+							break;
+						default:
+							fileName = "golem/runframe6.png";
+							animationFrame = 0;
+							break;
+						}
+
+					}
+
+					RayCastCallback wallRay;
+
+					if (bossLastVel != 0)
+					{
+						GetBody()->GetWorld()->RayCast(&wallRay, GetPosition(), GetPosition() + b2Vec2(bossLastVel * 1.5, 0));
+
+
+
+						if (wallRay.m_fixture != NULL)
+						{
+							std::cout << "\n" << ECS::GetComponent<PhysicsBody>((int)wallRay.m_fixture->GetBody()->GetUserData()).GetName();
+							if (ECS::GetComponent<PhysicsBody>((int)wallRay.m_fixture->GetBody()->GetUserData()).GetName() != "Player" && ECS::GetComponent<PhysicsBody>((int)wallRay.m_fixture->GetBody()->GetUserData()).GetName() != "Trigger")
+							{
+								recoverCooldown = recoverCooldownDefault;
+								isCharging = false;
+								chargeLoop = chargeLoopDefault;
+							}
+
+						}
+						else
+						{
+							GetBody()->SetLinearVelocity(b2Vec2(bossLastVel * 4, GetBody()->GetLinearVelocity().y));
+
+						}
+					}
+					else
 					{
 						recoverCooldown = recoverCooldownDefault;
 						isCharging = false;
 						chargeLoop = chargeLoopDefault;
+
 					}
+					//if ray doesn't return Null, and its not the player
+
+
 
 				}
-				else
-				{
-					GetBody()->SetLinearVelocity(b2Vec2(bossLastVel * 4, GetBody()->GetLinearVelocity().y));
-
-				}
-				//if ray doesn't return Null, and its not the player
-
-
+				ECS::GetComponent<Sprite>((int)GetBody()->GetUserData()).LoadSprite(fileName, 256, 256);
+				attackCooldown = attackCooldownDefault;
+				//std::cout << "\nHi, I'm attacking rn " << animationFrame;
 
 			}
-			ECS::GetComponent<Sprite>((int)GetBody()->GetUserData()).LoadSprite(fileName, 256, 256);
-			attackCooldown = attackCooldownDefault;
-			//std::cout << "\nHi, I'm attacking rn " << animationFrame;
-
 		}
 		SetRotationAngleDeg(0);
 
@@ -693,6 +738,12 @@ bool PhysicsBody::GetDraw()
 float PhysicsBody::GetHealth()
 {
 	return health;
+}
+
+
+float PhysicsBody::GetMaxHealth()
+{
+	return maxHealth;
 }
 
 bool PhysicsBody::GetExists()
@@ -1088,4 +1139,19 @@ void PhysicsBody::SetSpeed(float sp)
 void PhysicsBody::isKnocked()
 {
 	knockedBack = true;
+}
+
+void PhysicsBody::SetMaxHealth(float hp)
+{
+
+		maxHealth = hp;
+	
+}
+
+
+void PhysicsBody::SetHealthBar(int obj)
+{
+
+	healthBar = obj;
+
 }

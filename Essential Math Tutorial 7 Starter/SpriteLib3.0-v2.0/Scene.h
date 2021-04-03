@@ -102,6 +102,8 @@ protected:
 	int playerHp = playerHpDefault;
 
 	int health = 6;
+	float invincibilityTimeDefault = 3.0f;
+	float invincibilityTime = 0;
 	bool isTouchingIceWall = false;
 private:
 	//Hello world entity number

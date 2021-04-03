@@ -192,7 +192,7 @@ void BossPhase1::InitScene(float windowWidth, float windowHeight)
 		std::string fileName = "Cave_back-background2.png";
 		ECS::GetComponent<Sprite>(entity).LoadSprite(fileName, 3200, 1800);
 		ECS::GetComponent<Sprite>(entity).SetTransparency(1.f);
-		ECS::GetComponent<Transform>(entity).SetPosition(vec3(-700.f, -200.f, -40.f));
+		ECS::GetComponent<Transform>(entity).SetPosition(vec3(-700.f, 200.f, -40.f));
 	}
 
 	//Setup new Entity
@@ -210,8 +210,10 @@ void BossPhase1::InitScene(float windowWidth, float windowHeight)
 		std::string fileName = "Cave_back-background2.png";
 		ECS::GetComponent<Sprite>(entity).LoadSprite(fileName, 3200, 1800);
 		ECS::GetComponent<Sprite>(entity).SetTransparency(1.f);
-		ECS::GetComponent<Transform>(entity).SetPosition(vec3(0.f, -200.f, -40.f));
+		ECS::GetComponent<Transform>(entity).SetPosition(vec3(0.f, 200.f, -40.f));
 	}
+
+
 	//Setup new Entity
 	{
 		/*Scene::CreateSprite(m_sceneReg, "HelloWorld.png", 100, 60, 0.5f, vec3(0.f, 0.f, 0.f));*/
@@ -518,6 +520,44 @@ void BossPhase1::InitScene(float windowWidth, float windowHeight)
 		tempPhsBody.SetName("Trigger");
 	}
 
+	//BOSS HEALTH BAR
+	{
+		/*Scene::CreateSprite(m_sceneReg, "HelloWorld.png", 100, 60, 0.5f, vec3(0.f, 0.f, 0.f));*/
+
+		//Creates entity
+		auto entity = ECS::CreateEntity();
+		bossHpBar = entity;
+		//Add components
+		ECS::AttachComponent<Sprite>(entity);
+		ECS::AttachComponent<Transform>(entity);
+
+		//Set up the components
+		std::string fileName = "Boss_Bar_Outline.png";
+		ECS::GetComponent<Sprite>(entity).LoadSprite(fileName, 512, 512);
+		ECS::GetComponent<Sprite>(entity).SetTransparency(1.f);
+		ECS::GetComponent<Transform>(entity).SetPosition(vec3(-22.f, 800.f, 0.03f));
+
+	}
+
+	//BOSS HEALTH BAR
+	{
+		/*Scene::CreateSprite(m_sceneReg, "HelloWorld.png", 100, 60, 0.5f, vec3(0.f, 0.f, 0.f));*/
+
+		//Creates entity
+		auto entity = ECS::CreateEntity();
+		bossInBar = entity;
+
+		//Add components
+		ECS::AttachComponent<Sprite>(entity);
+		ECS::AttachComponent<Transform>(entity);
+
+		//Set up the components
+		std::string fileName = "Masks/SquareMask.png";
+		ECS::GetComponent<Sprite>(entity).LoadSprite(fileName, 510, 12);
+		ECS::GetComponent<Sprite>(entity).SetTransparency(1.f);
+		ECS::GetComponent<Transform>(entity).SetPosition(vec3(-22.f, 552.f, 0.03f));
+	}
+
 	//Create BOSS
 	{
 		auto entity = ECS::CreateEntity();
@@ -548,11 +588,19 @@ void BossPhase1::InitScene(float windowWidth, float windowHeight)
 			float(tempSpr.GetHeight() - shrinkY), vec2(0.f, -72.f), false, ENEMY, PLAYER | ENEMY , 1.f,8.f);
 		tempPhsBody.SetColor(vec4(0.f, 1.f, 0.f, 0.3f));
 		tempPhsBody.SetRotationAngleDeg(0);
-		tempPhsBody.SetName("Boss");
 		tempPhsBody.SetHealth(15);
+		tempPhsBody.SetMaxHealth(15);
 		tempPhsBody.SetSpeed(70.f);
+		tempPhsBody.SetHealthBar(bossInBar);
+		tempPhsBody.SetName("Boss");
+
+
 
 	}
+
+
+
+
 
 	readSaveFile();
 	resetGrid();
@@ -598,6 +646,8 @@ void BossPhase1::InitScene(float windowWidth, float windowHeight)
 		}
 	}
 	updateNbors(m_physicsWorld);
+
+
 	//std::cout << "\nNum:" << mushroomBoss;
 	//std::cout << "\nNum2:" << mushroomBoss2;
 	auto& player = ECS::GetComponent<Player>(MainEntities::MainPlayer());
@@ -1183,6 +1233,7 @@ void BossPhase1::cameraTrackPlayer()
 
 void BossPhase1::updateUI()
 {
+
 	auto& player = ECS::GetComponent<Player>(MainEntities::MainPlayer());
 
 	if (round(lastDash) != round(airDashCounter)) {
@@ -1241,6 +1292,7 @@ void BossPhase1::updateUI()
 			player.m_dead = true;
 			ECS::GetComponent<Sprite>(healthBar).LoadSprite(fileName, 22, 5);
 		}
+		invincibilityTime = invincibilityTimeDefault;
 		lastHealth = health;
 		hpTrans = 2.f;
 	}
@@ -1254,6 +1306,75 @@ void BossPhase1::updateUI()
 	if (dashTrans > 0.f)
 	{
 		dashTrans -= 1.f * Timer::deltaTime;
+	}
+
+	if (invincibilityTime > 0)
+	{
+		ECS::GetComponent<Sprite>(MainEntities::MainPlayer()).SetTransparency(0.5f);
+		//ECS::GetComponent<PhysicsBody>(MainEntities::MainPlayer()).SetCollisionBit(TRIGGER);
+		invincibilityTime -= 1.f * Timer::deltaTime;
+	}
+	else
+	{
+		//ECS::GetComponent<PhysicsBody>(MainEntities::MainPlayer()).SetCollisionBit(PLAYER);
+
+		ECS::GetComponent<Sprite>(MainEntities::MainPlayer()).SetTransparency(1.f);
+		invincibilityTime = 0;
+
+		if (ECS::GetComponent<PhysicsBody>(MainEntities::MainPlayer()).GetBody()->GetContactList() != NULL)
+		{
+			int currentEnemy = (int)ECS::GetComponent<PhysicsBody>(MainEntities::MainPlayer()).GetBody()->GetContactList()->contact->GetFixtureB()->GetBody()->GetUserData();
+
+			if (ECS::GetComponent<PhysicsBody>(currentEnemy).GetName() == "Bat" && startAttackCooldown == false)
+			{
+				health--;
+				b2Vec2 towardPlayer = ECS::GetComponent<PhysicsBody>(currentEnemy).CalculateMovement(ECS::GetComponent<PhysicsBody>(MainEntities::MainPlayer()).GetPosition());
+				ECS::GetComponent<PhysicsBody>(MainEntities::MainPlayer()).GetBody()->ApplyLinearImpulseToCenter(b2Vec2(towardPlayer.x * 200000, towardPlayer.y * 200000), true); //Knocks back the player, but gets immediately canceled by player movement
+				startAttackCooldown = true;
+			}
+
+			if (ECS::GetComponent<PhysicsBody>(currentEnemy).GetName() == "Boss" && startAttackCooldown == false)
+			{
+
+				b2Vec2 towardPlayer;
+				towardPlayer = ECS::GetComponent<PhysicsBody>(currentEnemy).CalculateMovement(ECS::GetComponent<PhysicsBody>(MainEntities::MainPlayer()).GetPosition());
+
+				if (ECS::GetComponent<PhysicsBody>(currentEnemy).isCharging == true)
+				{
+					ECS::GetComponent<PhysicsBody>(MainEntities::MainPlayer()).GetBody()->ApplyLinearImpulseToCenter(b2Vec2(towardPlayer.x * 1000000, 20000000.f), true);
+					health -= 3;
+				}
+				else if (ECS::GetComponent<PhysicsBody>(currentEnemy).isAttacking == true)
+				{
+					ECS::GetComponent<PhysicsBody>(MainEntities::MainPlayer()).GetBody()->ApplyLinearImpulseToCenter(b2Vec2(towardPlayer.x * 1000000, towardPlayer.y * 1000000), true);
+					health -= 2;
+
+
+				}
+				else
+				{
+					ECS::GetComponent<PhysicsBody>(MainEntities::MainPlayer()).GetBody()->ApplyLinearImpulseToCenter(b2Vec2(towardPlayer.x * 1000000, towardPlayer.y * 1000000), true);
+					health--;
+
+				}
+				ECS::GetComponent<PhysicsBody>(MainEntities::MainPlayer()).GetBody()->ApplyLinearImpulseToCenter(b2Vec2(towardPlayer.x * 1000000, towardPlayer.y * 1000000), true); //Knocks back the player, but gets immediately canceled by player movement
+				startAttackCooldown = true;
+			}
+
+
+		}
+
+		if (startAttackCooldown == true)
+		{
+			attackCooldownTimer -= 1 * Timer::deltaTime;
+			if (attackCooldownTimer <= 0)
+			{
+				attackCooldownTimer = attackCooldownTimerDefault;
+				startAttackCooldown = false;
+
+			}
+		}
+
 	}
 
 	ECS::GetComponent<Sprite>(healthBar).SetTransparency(hpTrans);
@@ -1442,59 +1563,7 @@ void BossPhase1::Update()
 		ECS::GetComponent<PhysicsBody>(MainEntities::MainPlayer()).SetPosition(LoadPlayerLoc());
 	}
 
-	if (ECS::GetComponent<PhysicsBody>(MainEntities::MainPlayer()).GetBody()->GetContactList() != NULL)
-	{
-		int currentEnemy = (int)ECS::GetComponent<PhysicsBody>(MainEntities::MainPlayer()).GetBody()->GetContactList()->contact->GetFixtureB()->GetBody()->GetUserData();
 
-		if (ECS::GetComponent<PhysicsBody>(currentEnemy).GetName() == "Bat" && startAttackCooldown == false)
-		{
-			health--;
-			b2Vec2 towardPlayer = ECS::GetComponent<PhysicsBody>(currentEnemy).CalculateMovement(ECS::GetComponent<PhysicsBody>(MainEntities::MainPlayer()).GetPosition());
-			ECS::GetComponent<PhysicsBody>(MainEntities::MainPlayer()).GetBody()->ApplyLinearImpulseToCenter(b2Vec2(towardPlayer.x * 200000, towardPlayer.y * 200000), true); //Knocks back the player, but gets immediately canceled by player movement
-			startAttackCooldown = true;
-		}
-
-		if (ECS::GetComponent<PhysicsBody>(currentEnemy).GetName() == "Boss" && startAttackCooldown == false)
-		{
-			
-			b2Vec2 towardPlayer;
-			towardPlayer = ECS::GetComponent<PhysicsBody>(currentEnemy).CalculateMovement(ECS::GetComponent<PhysicsBody>(MainEntities::MainPlayer()).GetPosition());
-
-			if (ECS::GetComponent<PhysicsBody>(currentEnemy).isCharging == true)
-			{
-				ECS::GetComponent<PhysicsBody>(MainEntities::MainPlayer()).GetBody()->ApplyLinearImpulseToCenter(b2Vec2(towardPlayer.x * 1000000, 20000000.f), true);
-				health -=3;
-			}
-			else if (ECS::GetComponent<PhysicsBody>(currentEnemy).isAttacking == true)
-			{
-				ECS::GetComponent<PhysicsBody>(MainEntities::MainPlayer()).GetBody()->ApplyLinearImpulseToCenter(b2Vec2(towardPlayer.x * 1000000, towardPlayer.y * 1000000), true);
-				health -=2;
-
-
-			}
-			else
-			{
-				ECS::GetComponent<PhysicsBody>(MainEntities::MainPlayer()).GetBody()->ApplyLinearImpulseToCenter(b2Vec2(towardPlayer.x * 1000000, towardPlayer.y * 1000000), true);
-				health--;
-
-			}
-			ECS::GetComponent<PhysicsBody>(MainEntities::MainPlayer()).GetBody()->ApplyLinearImpulseToCenter(b2Vec2(towardPlayer.x * 1000000, towardPlayer.y * 1000000), true); //Knocks back the player, but gets immediately canceled by player movement
-			startAttackCooldown = true;
-		}
-
-
-	}
-
-	if (startAttackCooldown == true)
-	{
-		attackCooldownTimer -= 1 * Timer::deltaTime;
-		if (attackCooldownTimer <= 0)
-		{
-			attackCooldownTimer = attackCooldownTimerDefault;
-			startAttackCooldown = false;
-
-		}
-	}
 
 	cameraTrackPlayer();
 	updateUI();
@@ -2099,7 +2168,7 @@ void BossPhase1::KeyboardDown()
 	auto& canJump = ECS::GetComponent<CanJump>(MainEntities::MainPlayer());
 
 	if (Input::GetKeyDown(Key::OEMMinus) && health > 0) health--;
-	if (Input::GetKeyDown(Key::OEMPlus) && health < 3) health++;
+	if (Input::GetKeyDown(Key::OEMPlus) && health < 6) health++;
 
 
 	if (loadStarted == false) {

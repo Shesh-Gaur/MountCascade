@@ -1523,7 +1523,6 @@ void PhysicsPlayground::ZoomCamera()
 
 void PhysicsPlayground::updateUI()
 {
-
 	auto& player = ECS::GetComponent<Player>(MainEntities::MainPlayer());
 
 	if (round(lastDash) != round(airDashCounter)) {
@@ -1549,7 +1548,6 @@ void PhysicsPlayground::updateUI()
 		}
 		lastDash = airDashCounter;
 		dashTrans = 2.f;
-
 		//std::cout << std::endl << airDashCounter << std::endl;
 	}
 
@@ -1583,10 +1581,9 @@ void PhysicsPlayground::updateUI()
 			player.m_dead = true;
 			ECS::GetComponent<Sprite>(healthBar).LoadSprite(fileName, 22, 5);
 		}
-
+		invincibilityTime = invincibilityTimeDefault;
 		lastHealth = health;
 		hpTrans = 2.f;
-
 	}
 
 	if (hpTrans > 0.f)
@@ -1600,9 +1597,74 @@ void PhysicsPlayground::updateUI()
 		dashTrans -= 1.f * Timer::deltaTime;
 	}
 
+	if (invincibilityTime > 0)
+	{
+		ECS::GetComponent<Sprite>(MainEntities::MainPlayer()).SetTransparency(0.5f);
+		invincibilityTime -= 1.f * Timer::deltaTime;
+	}
+	else
+	{
+		ECS::GetComponent<Sprite>(MainEntities::MainPlayer()).SetTransparency(1.f);
+		invincibilityTime = 0;
+
+		if (ECS::GetComponent<PhysicsBody>(MainEntities::MainPlayer()).GetBody()->GetContactList() != NULL)
+		{
+			int currentEnemy = (int)ECS::GetComponent<PhysicsBody>(MainEntities::MainPlayer()).GetBody()->GetContactList()->contact->GetFixtureB()->GetBody()->GetUserData();
+
+			if (ECS::GetComponent<PhysicsBody>(currentEnemy).GetName() == "Bat" && startAttackCooldown == false)
+			{
+				health--;
+				b2Vec2 towardPlayer = ECS::GetComponent<PhysicsBody>(currentEnemy).CalculateMovement(ECS::GetComponent<PhysicsBody>(MainEntities::MainPlayer()).GetPosition());
+				ECS::GetComponent<PhysicsBody>(MainEntities::MainPlayer()).GetBody()->ApplyLinearImpulseToCenter(b2Vec2(towardPlayer.x * 200000, towardPlayer.y * 200000), true); //Knocks back the player, but gets immediately canceled by player movement
+				startAttackCooldown = true;
+			}
+
+			if (ECS::GetComponent<PhysicsBody>(currentEnemy).GetName() == "Boss" && startAttackCooldown == false)
+			{
+
+				b2Vec2 towardPlayer;
+				towardPlayer = ECS::GetComponent<PhysicsBody>(currentEnemy).CalculateMovement(ECS::GetComponent<PhysicsBody>(MainEntities::MainPlayer()).GetPosition());
+
+				if (ECS::GetComponent<PhysicsBody>(currentEnemy).isCharging == true)
+				{
+					ECS::GetComponent<PhysicsBody>(MainEntities::MainPlayer()).GetBody()->ApplyLinearImpulseToCenter(b2Vec2(towardPlayer.x * 1000000, 20000000.f), true);
+					health -= 3;
+				}
+				else if (ECS::GetComponent<PhysicsBody>(currentEnemy).isAttacking == true)
+				{
+					ECS::GetComponent<PhysicsBody>(MainEntities::MainPlayer()).GetBody()->ApplyLinearImpulseToCenter(b2Vec2(towardPlayer.x * 1000000, towardPlayer.y * 1000000), true);
+					health -= 2;
+
+
+				}
+				else
+				{
+					ECS::GetComponent<PhysicsBody>(MainEntities::MainPlayer()).GetBody()->ApplyLinearImpulseToCenter(b2Vec2(towardPlayer.x * 1000000, towardPlayer.y * 1000000), true);
+					health--;
+
+				}
+				ECS::GetComponent<PhysicsBody>(MainEntities::MainPlayer()).GetBody()->ApplyLinearImpulseToCenter(b2Vec2(towardPlayer.x * 1000000, towardPlayer.y * 1000000), true); //Knocks back the player, but gets immediately canceled by player movement
+				startAttackCooldown = true;
+			}
+
+
+		}
+
+		if (startAttackCooldown == true)
+		{
+			attackCooldownTimer -= 1 * Timer::deltaTime;
+			if (attackCooldownTimer <= 0)
+			{
+				attackCooldownTimer = attackCooldownTimerDefault;
+				startAttackCooldown = false;
+
+			}
+		}
+
+	}
+
 	ECS::GetComponent<Sprite>(healthBar).SetTransparency(hpTrans);
 	ECS::GetComponent<Sprite>(dashBar).SetTransparency(dashTrans);
-
 
 	auto& playerBody = ECS::GetComponent<PhysicsBody>(MainEntities::MainPlayer());
 
@@ -1834,34 +1896,6 @@ void PhysicsPlayground::Update()
 		
 	}
 
-	if (ECS::GetComponent<PhysicsBody>(MainEntities::MainPlayer()).GetBody()->GetContactList() != NULL)
-	{
-		int currentEnemy = (int)ECS::GetComponent<PhysicsBody>(MainEntities::MainPlayer()).GetBody()->GetContactList()->contact->GetFixtureB()->GetBody()->GetUserData();
-
-		if (ECS::GetComponent<PhysicsBody>(currentEnemy).GetName() == "Bat" )
-		{
-			if (startAttackCooldown == false)
-			{
-				health--;
-				startAttackCooldown = true;
-			}
-			b2Vec2 towardPlayer = ECS::GetComponent<PhysicsBody>(currentEnemy).CalculateMovement(ECS::GetComponent<PhysicsBody>(MainEntities::MainPlayer()).GetPosition());
-			ECS::GetComponent<PhysicsBody>(MainEntities::MainPlayer()).GetBody()->ApplyLinearImpulseToCenter(b2Vec2(towardPlayer.x * 200000, towardPlayer.y * 200000), true); //Knocks back the player, but gets immediately canceled by player movement
-			
-		}
-
-	}
-
-	if (startAttackCooldown == true)
-	{
-		attackCooldownTimer -= 1 * Timer::deltaTime;
-		if (attackCooldownTimer <= 0)
-		{
-			attackCooldownTimer = attackCooldownTimerDefault;
-			startAttackCooldown = false;
-
-		}
-	}
 
 	cameraTrackPlayer();
 	ZoomCamera();
@@ -2272,12 +2306,13 @@ void PhysicsPlayground::RunLevelEditor()
 	if (Input::GetKeyDown(Key::One))
 	{
 		entitiesCreated = true;
-		makeBox(wMousePos.x, wMousePos.y, 0.02f, 0, 50, 50);
+		makeBox2(wMousePos.x, wMousePos.y, 0.03f, 0, 128, 128);
+
 	}
 	else if (Input::GetKeyDown(Key::Two))
 	{
 		entitiesCreated = true;
-		makeBox2(wMousePos.x, wMousePos.y, 0.03f, 0, 50, 50);
+		makeBox2(wMousePos.x, wMousePos.y, 0.03f, 0, 64, 64);
 
 	}
 	else if (Input::GetKeyDown(Key::Three))
@@ -2491,7 +2526,7 @@ void PhysicsPlayground::KeyboardDown()
 	auto& canJump = ECS::GetComponent<CanJump>(MainEntities::MainPlayer());
 
 	if (Input::GetKeyDown(Key::OEMMinus) && health > 0) health--;
-	if (Input::GetKeyDown(Key::OEMPlus) && health < 3) health++;
+	if (Input::GetKeyDown(Key::OEMPlus) && health < 6) health++;
 
 
 	if (loadStarted == false) {
