@@ -113,5 +113,6 @@ protected:
 	int boss;
 
 	int punisher;
+	int puni3Text;
 
 };

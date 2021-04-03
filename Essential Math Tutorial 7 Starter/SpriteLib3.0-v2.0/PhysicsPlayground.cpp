@@ -61,6 +61,20 @@ void PhysicsPlayground::InitScene(float windowWidth, float windowHeight)
 	EffectManager::CreateEffect(EffectType::Sepia, windowWidth, windowHeight);
 	EffectManager::RemoveEffect(EffectManager::GetSepiaHandle()); //added this to get rid of sephia
 
+	{ //Punisher Text Entity
+
+		auto entity = ECS::CreateEntity();
+		puni2Text = entity;
+		//Add components
+		ECS::AttachComponent<Sprite>(entity);
+		ECS::AttachComponent<Transform>(entity);
+
+		//Set up the components
+		std::string fileName = "tutorial/Chatbox-Punisher Healing Station.png";
+		ECS::GetComponent<Sprite>(entity).LoadSprite(fileName, 96, 48);
+		ECS::GetComponent<Sprite>(entity).SetTransparency(0.0f);
+		ECS::GetComponent<Transform>(entity).SetPosition(vec3(-620.f, 50.f, 0.01f));
+	}
 
 	//Setup MainCamera Entity
 	{
@@ -207,6 +221,44 @@ void PhysicsPlayground::InitScene(float windowWidth, float windowHeight)
 		tempPhsBody = PhysicsBody(entity, tempBody, float(tempSpr.GetWidth() - shrinkX), vec2(0.f, 0.f), false, OBJECTS,PICKUP,0.f,0.f);
 		tempPhsBody.SetColor(vec4(0.f, 1.f, 0.f, 0.3f));
 		tempPhsBody.SetRotationAngleDeg(0);
+
+	}
+
+	{ //Dash Text Box
+		/*Scene::CreateSprite(m_sceneReg, "HelloWorld.png", 100, 60, 0.5f, vec3(0.f, 0.f, 0.f));*/
+
+		//Creates entity
+		auto entity = ECS::CreateEntity();
+
+		//dashTextEntity = entity;
+		//Add components
+		ECS::AttachComponent<Sprite>(entity);
+		ECS::AttachComponent<Transform>(entity);
+
+		//Set up the components
+		std::string fileName = "tutorial/Chatbox-Charged Jump.png";
+		ECS::GetComponent<Sprite>(entity).LoadSprite(fileName, 96, 48);
+		ECS::GetComponent<Sprite>(entity).SetTransparency(1.f);
+		ECS::GetComponent<Transform>(entity).SetPosition(vec3(480.f, 155.f, 2.f));
+
+	}
+
+	{ //Dash Punisher
+	/*Scene::CreateSprite(m_sceneReg, "HelloWorld.png", 100, 60, 0.5f, vec3(0.f, 0.f, 0.f));*/
+
+	//Creates entity
+		auto entity = ECS::CreateEntity();
+
+		//dashTextEntity = entity;
+		//Add components
+		ECS::AttachComponent<Sprite>(entity);
+		ECS::AttachComponent<Transform>(entity);
+
+		//Set up the components
+		std::string fileName = "punisher/Punisher1.png";
+		ECS::GetComponent<Sprite>(entity).LoadSprite(fileName, 77, 100);
+		ECS::GetComponent<Sprite>(entity).SetTransparency(1.f);
+		ECS::GetComponent<Transform>(entity).SetPosition(vec3(570.f, 160.f, 2.f));
 
 	}
 
@@ -1634,6 +1686,7 @@ void PhysicsPlayground::Update()
 		activatePuni2 = true;
 		puni2StartTime = clock();
 		health = 6;
+		ECS::GetComponent<Sprite>(puni2Text).SetTransparency(1.f);
 		SavePlayerLoc();
 	}
 

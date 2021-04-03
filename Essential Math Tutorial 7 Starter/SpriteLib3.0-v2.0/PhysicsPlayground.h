@@ -119,4 +119,6 @@ protected:
 	int mushbg5;
 
 	int puni2;
+
+	int puni2Text;
 };

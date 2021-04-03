@@ -282,6 +282,21 @@ void BossPhase1::InitScene(float windowWidth, float windowHeight)
 		ECS::GetComponent<Transform>(entity).SetPosition(vec3(0.f, 0.f, 2.f));
 	}
 
+	{ //Punisher Text Entity
+
+		auto entity = ECS::CreateEntity();
+		puni3Text = entity;
+		//Add components
+		ECS::AttachComponent<Sprite>(entity);
+		ECS::AttachComponent<Transform>(entity);
+
+		//Set up the components
+		std::string fileName = "tutorial/Chatbox-Punisher Healing Station.png";
+		ECS::GetComponent<Sprite>(entity).LoadSprite(fileName, 96, 48);
+		ECS::GetComponent<Sprite>(entity).SetTransparency(0.0f);
+		ECS::GetComponent<Transform>(entity).SetPosition(vec3(-420.f, 1300.f, 0.01f));
+	}
+
 	{ //Punisher Entity
 
 	//Creates entity
@@ -1322,6 +1337,7 @@ void BossPhase1::Update()
 		SavePlayerLoc();
 		health = 6;
 		punStartTime = clock();
+		ECS::GetComponent<Sprite>(puni3Text).SetTransparency(1.f);
 	}
 
 	if (activatePunisher && punDiffTime > 0.12) {

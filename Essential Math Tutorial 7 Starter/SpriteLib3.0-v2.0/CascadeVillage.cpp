@@ -455,10 +455,10 @@ void CascadeVillage::InitScene(float windowWidth, float windowHeight)
 		ECS::AttachComponent<Transform>(entity);
 
 		//Set up the components
-		std::string fileName = "punisher/mushroomintroduction.png";
-		ECS::GetComponent<Sprite>(entity).LoadSprite(fileName, 128, 128);
+		std::string fileName = "tutorial/Chatbox-Punisher Healing Station.png";
+		ECS::GetComponent<Sprite>(entity).LoadSprite(fileName, 96, 48);
 		ECS::GetComponent<Sprite>(entity).SetTransparency(0.0f);
-		ECS::GetComponent<Transform>(entity).SetPosition(vec3(-125.f, 160.f, 0.01f));
+		ECS::GetComponent<Transform>(entity).SetPosition(vec3(-105.f, 160.f, 0.01f));
 	}
 
 	{
