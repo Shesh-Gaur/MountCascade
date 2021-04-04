@@ -391,13 +391,14 @@ void Scene::PlayerMovement()
 
 	if (!Input::GetKey(Key::D) && !Input::GetKey(Key::A)) {
 		player.GetBody()->SetLinearVelocity(speed * vel + b2Vec2(player.GetBody()->GetLinearVelocity().x * 0.9f,
-			player.GetBody()->GetLinearVelocity().y));
+		player.GetBody()->GetLinearVelocity().y));
 	}
+
 	if (canJump.m_canJump)
 	{
 		spacePressed = false;
-
 	}
+
 	if (isTouchingIceWall == false)
 	{
 

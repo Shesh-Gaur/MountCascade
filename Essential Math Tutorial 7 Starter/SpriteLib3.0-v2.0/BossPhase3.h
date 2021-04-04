@@ -1,15 +1,13 @@
 #pragma once
-#pragma once
-
 #include "Scene.h"
 #include "PhysicsPlaygroundListener.h"
 #include <string>
 #include <fstream>
 #include <iostream>
-class BossPhase1 : public Scene
+class BossPhase3 : public Scene
 {
 public:
-	BossPhase1(std::string name);
+	BossPhase3(std::string name);
 
 	void InitScene(float windowWidth, float windowHeight) override;
 
@@ -117,14 +115,8 @@ protected:
 	int bossHpBar;
 	int bossInBar;
 
-	int bg1;
-	int bg2;
-	int bg3;
-	int bg4;
-	int bg5;
 	std::vector<int> batVec2;
 
-	float backgtimer = 0.f;
 	int startTime2 = clock();
 	double diffTime2;
 	int batFrameNum2 = 0;
@@ -141,6 +133,5 @@ protected:
 	bool isBossAttacking = false;
 	int bossLastVel = 0;
 	int bossAttackAnimNum = 0;
-
 
 };

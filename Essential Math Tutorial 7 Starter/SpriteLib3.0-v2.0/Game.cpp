@@ -39,10 +39,12 @@ void Game::InitGame()
 	m_scenes.push_back(new AnimationSpritePlayground("Animation TIEM!!!!"));
 	m_scenes.push_back(new CascadeVillage("Cascade Village Time"));
 	m_scenes.push_back(new BossPhase1("Boss Phase One Time"));
+	m_scenes.push_back(new BossPhase3("Boss Phase Three Time"));
+
 
 
 	//Sets active scene reference to our scene
-	m_activeScene = m_scenes[4];
+	m_activeScene = m_scenes[5];
 
 	m_activeScene->InitScene(float(BackEnd::GetWindowWidth()), float(BackEnd::GetWindowHeight()));
 
@@ -251,6 +253,11 @@ void Game::KeyboardDown()
 	else if (Input::GetKeyDown(Key::C))
 	{
 		SwapScene(4);
+
+	}
+	else if (Input::GetKeyDown(Key::V))
+	{
+		SwapScene(5);
 
 	}
 }

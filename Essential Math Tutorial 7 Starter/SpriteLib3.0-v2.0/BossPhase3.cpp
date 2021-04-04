@@ -1,4 +1,4 @@
-#include "BossPhase1.h"
+#include "BossPhase3.h"
 #include "Utilities.h"
 #include "RayCastCallback.h"
 #include <random>
@@ -6,7 +6,8 @@
 #include <iostream>
 #include "Astar.h"
 
-BossPhase1::BossPhase1(std::string name)
+
+BossPhase3::BossPhase3(std::string name)
 	: Scene(name)
 {
 
@@ -16,7 +17,7 @@ BossPhase1::BossPhase1(std::string name)
 	m_physicsWorld->SetContactListener(&listener);
 }
 
-void BossPhase1::InitScene(float windowWidth, float windowHeight)
+void BossPhase3::InitScene(float windowWidth, float windowHeight)
 {
 
 	m_physicsWorld = new b2World(m_gravity);
@@ -31,7 +32,7 @@ void BossPhase1::InitScene(float windowWidth, float windowHeight)
 
 	//Attach the register
 	ECS::AttachRegister(m_sceneReg);
-	
+
 
 	//Sets up aspect ratio for the camera
 	float aspectRatio = windowWidth / windowHeight;
@@ -201,7 +202,7 @@ void BossPhase1::InitScene(float windowWidth, float windowHeight)
 
 		//Creates entity
 		auto entity = ECS::CreateEntity();
-		bg1 = entity;
+
 		//Add components
 		ECS::AttachComponent<Sprite>(entity);
 		ECS::AttachComponent<Transform>(entity);
@@ -210,78 +211,6 @@ void BossPhase1::InitScene(float windowWidth, float windowHeight)
 		std::string fileName = "Cave_background1.png";
 		ECS::GetComponent<Sprite>(entity).LoadSprite(fileName, 1920, 1080);
 		ECS::GetComponent<Sprite>(entity).SetTransparency(1.f);
-		ECS::GetComponent<Transform>(entity).SetPosition(vec3(100.f, 400.f, -50.f));
-	}
-
-	//Setup new Entity
-	{
-		/*Scene::CreateSprite(m_sceneReg, "HelloWorld.png", 100, 60, 0.5f, vec3(0.f, 0.f, 0.f));*/
-
-		//Creates entity
-		auto entity = ECS::CreateEntity();
-		bg2 = entity;
-		//Add components
-		ECS::AttachComponent<Sprite>(entity);
-		ECS::AttachComponent<Transform>(entity);
-
-		//Set up the components
-		std::string fileName = "Cave_background2.png";
-		ECS::GetComponent<Sprite>(entity).LoadSprite(fileName, 1920, 1080);
-		ECS::GetComponent<Sprite>(entity).SetTransparency(0.f);
-		ECS::GetComponent<Transform>(entity).SetPosition(vec3(100.f, 400.f, -50.f));
-	}
-
-	//Setup new Entity
-	{
-		/*Scene::CreateSprite(m_sceneReg, "HelloWorld.png", 100, 60, 0.5f, vec3(0.f, 0.f, 0.f));*/
-
-		//Creates entity
-		auto entity = ECS::CreateEntity();
-		bg3 = entity;
-		//Add components
-		ECS::AttachComponent<Sprite>(entity);
-		ECS::AttachComponent<Transform>(entity);
-
-		//Set up the components
-		std::string fileName = "Cave_background3.png";
-		ECS::GetComponent<Sprite>(entity).LoadSprite(fileName, 1920, 1080);
-		ECS::GetComponent<Sprite>(entity).SetTransparency(0.f);
-		ECS::GetComponent<Transform>(entity).SetPosition(vec3(100.f, 400.f, -50.f));
-	}
-
-	//Setup new Entity
-	{
-		/*Scene::CreateSprite(m_sceneReg, "HelloWorld.png", 100, 60, 0.5f, vec3(0.f, 0.f, 0.f));*/
-
-		//Creates entity
-		auto entity = ECS::CreateEntity();
-		bg4 = entity;
-		//Add components
-		ECS::AttachComponent<Sprite>(entity);
-		ECS::AttachComponent<Transform>(entity);
-
-		//Set up the components
-		std::string fileName = "Cave_background4.png";
-		ECS::GetComponent<Sprite>(entity).LoadSprite(fileName, 1920, 1080);
-		ECS::GetComponent<Sprite>(entity).SetTransparency(0.f);
-		ECS::GetComponent<Transform>(entity).SetPosition(vec3(100.f, 400.f, -50.f));
-	}
-
-	//Setup new Entity
-	{
-		/*Scene::CreateSprite(m_sceneReg, "HelloWorld.png", 100, 60, 0.5f, vec3(0.f, 0.f, 0.f));*/
-
-		//Creates entity
-		auto entity = ECS::CreateEntity();
-		bg5 = entity;
-		//Add components
-		ECS::AttachComponent<Sprite>(entity);
-		ECS::AttachComponent<Transform>(entity);
-
-		//Set up the components
-		std::string fileName = "Cave_background5.png";
-		ECS::GetComponent<Sprite>(entity).LoadSprite(fileName, 1920, 1080);
-		ECS::GetComponent<Sprite>(entity).SetTransparency(0.f);
 		ECS::GetComponent<Transform>(entity).SetPosition(vec3(100.f, 400.f, -50.f));
 	}
 
@@ -489,7 +418,7 @@ void BossPhase1::InitScene(float windowWidth, float windowHeight)
 		b2Body* tempBody;
 		b2BodyDef tempDef;
 		tempDef.type = b2_dynamicBody;
-		tempDef.position.Set(float32(-724.f), float32 (1268.f));
+		tempDef.position.Set(float32(0.f), float32(0.f));
 
 		tempBody = m_physicsWorld->CreateBody(&tempDef);
 
@@ -573,87 +502,6 @@ void BossPhase1::InitScene(float windowWidth, float windowHeight)
 		tempPhsBody.SetName("Trigger");
 	}
 
-	//BOSS HEALTH BAR
-	{
-		/*Scene::CreateSprite(m_sceneReg, "HelloWorld.png", 100, 60, 0.5f, vec3(0.f, 0.f, 0.f));*/
-
-		//Creates entity
-		auto entity = ECS::CreateEntity();
-		bossHpBar = entity;
-		//Add components
-		ECS::AttachComponent<Sprite>(entity);
-		ECS::AttachComponent<Transform>(entity);
-
-		//Set up the components
-		std::string fileName = "Boss_Bar_Outline.png";
-		ECS::GetComponent<Sprite>(entity).LoadSprite(fileName, 512, 512);
-		ECS::GetComponent<Sprite>(entity).SetTransparency(1.f);
-		ECS::GetComponent<Transform>(entity).SetPosition(vec3(-22.f, 800.f, 0.03f));
-
-	}
-
-	//BOSS HEALTH BAR
-	{
-		/*Scene::CreateSprite(m_sceneReg, "HelloWorld.png", 100, 60, 0.5f, vec3(0.f, 0.f, 0.f));*/
-
-		//Creates entity
-		auto entity = ECS::CreateEntity();
-		bossInBar = entity;
-
-		//Add components
-		ECS::AttachComponent<Sprite>(entity);
-		ECS::AttachComponent<Transform>(entity);
-
-		//Set up the components
-		std::string fileName = "Masks/SquareMask.png";
-		ECS::GetComponent<Sprite>(entity).LoadSprite(fileName, 510, 12);
-		ECS::GetComponent<Sprite>(entity).SetTransparency(1.f);
-		ECS::GetComponent<Transform>(entity).SetPosition(vec3(-22.f, 552.f, 0.03f));
-	}
-
-	//Create BOSS
-	{
-		auto entity = ECS::CreateEntity();
-		boss = entity;
-		//Add components
-		ECS::AttachComponent<Sprite>(entity);
-		ECS::AttachComponent<Transform>(entity);
-		ECS::AttachComponent<PhysicsBody>(entity);
-
-		//Set up the components
-		std::string fileName = "idleframe1.png";
-		ECS::GetComponent<Sprite>(entity).LoadSprite(fileName, 256, 256);
-		ECS::GetComponent<Sprite>(entity).SetTransparency(1.f);
-		ECS::GetComponent<Transform>(entity).SetPosition(vec3(0.f, 0.f, 0.02f));
-		auto& tempSpr = ECS::GetComponent<Sprite>(entity);
-		auto& tempPhsBody = ECS::GetComponent<PhysicsBody>(entity);
-
-		float shrinkX = 88.f;
-		float shrinkY = 145.f;
-		b2Body* tempBody;
-		b2BodyDef tempDef;
-		tempDef.type = b2_dynamicBody;
-		tempDef.position.Set(float32(100), float32(350));
-
-		tempBody = m_physicsWorld->CreateBody(&tempDef);
-		
-		tempPhsBody = PhysicsBody(entity, tempBody, float(tempSpr.GetWidth() - shrinkX),
-			float(tempSpr.GetHeight() - shrinkY), vec2(0.f, -72.f), false, ENEMY, PLAYER | ENEMY , 1.f,8.f);
-		tempPhsBody.SetColor(vec4(0.f, 1.f, 0.f, 0.3f));
-		tempPhsBody.SetRotationAngleDeg(0);
-		tempPhsBody.SetHealth(15);
-		tempPhsBody.SetMaxHealth(15);
-		tempPhsBody.SetSpeed(70.f);
-		tempPhsBody.SetHealthBar(bossInBar);
-		tempPhsBody.SetName("Boss");
-
-
-
-	}
-
-
-
-
 
 	readSaveFile();
 	resetGrid();
@@ -710,12 +558,17 @@ void BossPhase1::InitScene(float windowWidth, float windowHeight)
 
 	startup = true;
 
-	ECS::GetComponent<HorizontalScroll>(MainEntities::MainCamera()).SetFocus(&ECS::GetComponent<Transform>(MainEntities::MainPlayer()));
-	ECS::GetComponent<VerticalScroll>(MainEntities::MainCamera()).SetFocus(&ECS::GetComponent<Transform>(MainEntities::MainPlayer()));
+
+
+	ECS::GetComponent<PhysicsBody>(playerFollow).SetPosition(ECS::GetComponent<PhysicsBody>(MainEntities::MainPlayer()).GetPosition());
+	ECS::GetComponent<Camera>(MainEntities::MainCamera()).SetPosition(ECS::GetComponent<PhysicsBody>(MainEntities::MainPlayer()).GetPosition().x, ECS::GetComponent<PhysicsBody>(MainEntities::MainPlayer()).GetPosition().y, 0.02f);
+
+	ECS::GetComponent<HorizontalScroll>(MainEntities::MainCamera()).SetFocus(&ECS::GetComponent<Transform>(playerFollow));
+	ECS::GetComponent<VerticalScroll>(MainEntities::MainCamera()).SetFocus(&ECS::GetComponent<Transform>(playerFollow));
 
 }
 
-void BossPhase1::makeBox(float xPos, float yPos, float zPos, float rotation, float width, float height) //add z var
+void BossPhase3::makeBox(float xPos, float yPos, float zPos, float rotation, float width, float height) //add z var
 {
 	//Creates entity
 	auto entity = ECS::CreateEntity();
@@ -749,7 +602,7 @@ void BossPhase1::makeBox(float xPos, float yPos, float zPos, float rotation, flo
 
 }
 
-void BossPhase1::makeBox2(float xPos, float yPos, float zPos, float rotation, float width, float height)
+void BossPhase3::makeBox2(float xPos, float yPos, float zPos, float rotation, float width, float height)
 {
 	//Creates entity
 	auto entity = ECS::CreateEntity();
@@ -784,7 +637,7 @@ void BossPhase1::makeBox2(float xPos, float yPos, float zPos, float rotation, fl
 
 }
 
-void BossPhase1::makeDummy(float xPos, float yPos, float zPos, float rotation, float width, float height)
+void BossPhase3::makeDummy(float xPos, float yPos, float zPos, float rotation, float width, float height)
 {
 	/*Scene::CreateSprite(m_sceneReg, "HelloWorld.png", 100, 60, 0.5f, vec3(0.f, 0.f, 0.f));*/
 
@@ -820,7 +673,7 @@ void BossPhase1::makeDummy(float xPos, float yPos, float zPos, float rotation, f
 
 }
 
-void BossPhase1::makeMushroom(float xPos, float yPos, float zPos, float rotation, float width, float height)
+void BossPhase3::makeMushroom(float xPos, float yPos, float zPos, float rotation, float width, float height)
 {
 	/*Scene::CreateSprite(m_sceneReg, "HelloWorld.png", 100, 60, 0.5f, vec3(0.f, 0.f, 0.f));*/
 
@@ -854,7 +707,7 @@ void BossPhase1::makeMushroom(float xPos, float yPos, float zPos, float rotation
 
 }
 
-void BossPhase1::makeStalagmite1(float xPos, float yPos, float zPos, float rotation, float width, float height)
+void BossPhase3::makeStalagmite1(float xPos, float yPos, float zPos, float rotation, float width, float height)
 {
 	/*Scene::CreateSprite(m_sceneReg, "HelloWorld.png", 100, 60, 0.5f, vec3(0.f, 0.f, 0.f));*/
 
@@ -888,7 +741,7 @@ void BossPhase1::makeStalagmite1(float xPos, float yPos, float zPos, float rotat
 
 }
 
-void BossPhase1::makeStalagmite2(float xPos, float yPos, float zPos, float rotation, float width, float height)
+void BossPhase3::makeStalagmite2(float xPos, float yPos, float zPos, float rotation, float width, float height)
 {
 	/*Scene::CreateSprite(m_sceneReg, "HelloWorld.png", 100, 60, 0.5f, vec3(0.f, 0.f, 0.f));*/
 
@@ -922,7 +775,7 @@ void BossPhase1::makeStalagmite2(float xPos, float yPos, float zPos, float rotat
 
 }
 
-void BossPhase1::makeNode(float xPos, float yPos, float transparency)
+void BossPhase3::makeNode(float xPos, float yPos, float transparency)
 {
 	//Creates entity
 	auto entity = ECS::CreateEntity();
@@ -938,7 +791,7 @@ void BossPhase1::makeNode(float xPos, float yPos, float transparency)
 	ECS::GetComponent<Sprite>(entity).SetTransparency(transparency);
 }
 
-void BossPhase1::makeBat(float xPos, float yPos, float zPos, float rotation, float width, float height)
+void BossPhase3::makeBat(float xPos, float yPos, float zPos, float rotation, float width, float height)
 {
 	//Creates entity
 	auto entity = ECS::CreateEntity();
@@ -975,7 +828,7 @@ void BossPhase1::makeBat(float xPos, float yPos, float zPos, float rotation, flo
 }
 
 
-void BossPhase1::makeIceWall(float xPos, float yPos, float zPos, float rotation, float width, float height)
+void BossPhase3::makeIceWall(float xPos, float yPos, float zPos, float rotation, float width, float height)
 {
 	//Creates entity
 	auto entity = ECS::CreateEntity();
@@ -1011,7 +864,7 @@ void BossPhase1::makeIceWall(float xPos, float yPos, float zPos, float rotation,
 
 }
 
-void BossPhase1::makeSmallMush(float xPos, float yPos, float zPos, float rotation, float width, float height)
+void BossPhase3::makeSmallMush(float xPos, float yPos, float zPos, float rotation, float width, float height)
 {
 	//Creates entity
 	auto entity = ECS::CreateEntity();
@@ -1044,7 +897,7 @@ void BossPhase1::makeSmallMush(float xPos, float yPos, float zPos, float rotatio
 
 }
 
-void BossPhase1::writeAutoSaveFile(int file)
+void BossPhase3::writeAutoSaveFile(int file)
 {
 	char x;
 	unsigned int entityNum = 0;
@@ -1053,23 +906,23 @@ void BossPhase1::writeAutoSaveFile(int file)
 
 	if (file == 1)
 	{
-		editorSaveFile.open("assets/EditorSaves/BossPhase1/backupSaves/BackupSaveFile1.txt");
+		editorSaveFile.open("assets/EditorSaves/BossPhase3/backupSaves/BackupSaveFile1.txt");
 	}
 	else if (file == 2)
 	{
-		editorSaveFile.open("assets/EditorSaves/BossPhase1/backupSaves/BackupSaveFile2.txt");
+		editorSaveFile.open("assets/EditorSaves/BossPhase3/backupSaves/BackupSaveFile2.txt");
 	}
 	else if (file == 3)
 	{
-		editorSaveFile.open("assets/EditorSaves/BossPhase1/backupSaves/BackupSaveFile3.txt");
+		editorSaveFile.open("assets/EditorSaves/BossPhase3/backupSaves/BackupSaveFile3.txt");
 	}
 	else if (file == 4)
 	{
-		editorSaveFile.open("assets/EditorSaves/BossPhase1/backupSaves/BackupSaveFile4.txt");
+		editorSaveFile.open("assets/EditorSaves/BossPhase3/backupSaves/BackupSaveFile4.txt");
 	}
 	else if (file == 5)
 	{
-		editorSaveFile.open("assets/EditorSaves/BossPhase1/backupSaves/BackupSaveFile5.txt");
+		editorSaveFile.open("assets/EditorSaves/BossPhase3/backupSaves/BackupSaveFile5.txt");
 	}
 
 	b2Body* body = m_physicsWorld->GetBodyList();
@@ -1106,12 +959,12 @@ void BossPhase1::writeAutoSaveFile(int file)
 	editorSaveFile.close();
 }
 
-void BossPhase1::writeSaveFile()
+void BossPhase3::writeSaveFile()
 {
 	char x;
 	unsigned int entityNum = 0;
 	std::ofstream editorSaveFile;
-	editorSaveFile.open("assets/EditorSaves/BossPhase1/LevelEditorSave.txt");
+	editorSaveFile.open("assets/EditorSaves/BossPhase3/LevelEditorSave.txt");
 	b2Body* body = m_physicsWorld->GetBodyList();
 	bool firstLineDone = false;
 
@@ -1145,14 +998,14 @@ void BossPhase1::writeSaveFile()
 	editorSaveFile.close();
 }
 
-void BossPhase1::readSaveFile()
+void BossPhase3::readSaveFile()
 {
 	float xPos, yPos, zPos, angle, width, height;
 	std::string name;
 	unsigned int entityNum = 0;
 	std::fstream editorSaveFile;
 
-	editorSaveFile.open("assets/EditorSaves/BossPhase1/LevelEditorSave.txt");
+	editorSaveFile.open("assets/EditorSaves/BossPhase3/LevelEditorSave.txt");
 	while (editorSaveFile.good())
 	{
 
@@ -1211,16 +1064,15 @@ void BossPhase1::readSaveFile()
 
 		//ECS::GetComponent<PhysicsBody>(MainEntities::MainPlayer()).SetPosition(b2Vec2(-724.f, 1268.f));
 		//ECS::GetComponent<PhysicsBody>(playerFollow).SetPosition(b2Vec2(-724.f, 1268.f));
-		
+
 		//playerSaveFile.close();
 	}
-	ECS::GetComponent<PhysicsBody>(MainEntities::MainPlayer()).SetPosition(b2Vec2(-724.f, 1268.f));
-	ECS::GetComponent<PhysicsBody>(playerFollow).SetPosition(b2Vec2(-724.f, 1268.f));
+
 
 }
 
 
-void BossPhase1::cameraTrackPlayer()
+void BossPhase3::cameraTrackPlayer()
 {
 	if (bossStarted == true)
 	{
@@ -1258,7 +1110,7 @@ void BossPhase1::cameraTrackPlayer()
 		if (Input::GetKeyDown(Key::Shift) && Input::GetKey(Key::D) && airDashCounter >= 0.f)
 		{
 			screenShakeTimer = screenShakeTimerDefault;
-			
+
 		}
 		else if (Input::GetKeyDown(Key::Shift) && Input::GetKey(Key::A) && airDashCounter >= 0.f)
 		{
@@ -1284,7 +1136,7 @@ void BossPhase1::cameraTrackPlayer()
 
 
 
-void BossPhase1::updateUI()
+void BossPhase3::updateUI()
 {
 
 	auto& player = ECS::GetComponent<Player>(MainEntities::MainPlayer());
@@ -1441,7 +1293,7 @@ void BossPhase1::updateUI()
 
 }
 
-void BossPhase1::SavePlayerLoc() {
+void BossPhase3::SavePlayerLoc() {
 	std::ofstream fstre;
 	std::string fileLoc = "assets/PlayerSaves/File2.txt";
 
@@ -1457,7 +1309,7 @@ void BossPhase1::SavePlayerLoc() {
 	}
 }
 
-b2Vec2 BossPhase1::LoadPlayerLoc() {
+b2Vec2 BossPhase3::LoadPlayerLoc() {
 	std::fstream fstre;
 	std::string fileLoc = "assets/PlayerSaves/File2.txt";
 	int tempx = 0;
@@ -1471,10 +1323,10 @@ b2Vec2 BossPhase1::LoadPlayerLoc() {
 		fstre >> tempx >> tempy;
 	}
 
-	return b2Vec2(tempx,tempy);
+	return b2Vec2(tempx, tempy);
 }
 
-void BossPhase1::Update()
+void BossPhase3::Update()
 {
 
 	auto& player = ECS::GetComponent<Player>(MainEntities::MainPlayer());
@@ -1505,41 +1357,6 @@ void BossPhase1::Update()
 	punDiffTime = (clock() - punStartTime) / (double)(CLOCKS_PER_SEC);
 
 	//std::cout << "Vel: " << ECS::GetComponent<PhysicsBody>(boss).GetVelocity().x << " Frame: " << bossFrameNum << " Dif Time: " << bossDiffTime << std::endl;
-
-	backgtimer += 1 * Timer::deltaTime;
-	if (backgtimer > 1.25) {
-		backgtimer = 0;
-	}
-
-	if (backgtimer > 1)
-	{
-		ECS::GetComponent<Sprite>(bg5).SetTransparency(1.f);
-		ECS::GetComponent<Sprite>(bg4).SetTransparency(0.f);
-	}
-	else if (backgtimer > 0.75)
-	{
-		ECS::GetComponent<Sprite>(bg4).SetTransparency(1.f);
-		ECS::GetComponent<Sprite>(bg3).SetTransparency(0.f);
-
-	}
-	else if (backgtimer > 0.5)
-	{
-		ECS::GetComponent<Sprite>(bg3).SetTransparency(1.f);
-		ECS::GetComponent<Sprite>(bg2).SetTransparency(0.f);
-
-	}
-	else if (backgtimer > 0.25)
-	{
-		ECS::GetComponent<Sprite>(bg2).SetTransparency(1.f);
-		ECS::GetComponent<Sprite>(bg1).SetTransparency(0.f);
-
-	}
-	else if (backgtimer < 0.25)
-	{
-		ECS::GetComponent<Sprite>(bg1).SetTransparency(1.f);
-		ECS::GetComponent<Sprite>(bg5).SetTransparency(0.f);
-
-	}
 
 	if (ECS::GetComponent<PhysicsBody>(MainEntities::MainPlayer()).GetPosition().x > -600 && !activatePunisher) {
 		activatePunisher = true;
@@ -1638,9 +1455,11 @@ void BossPhase1::Update()
 		ECS::GetComponent<Sprite>(punisher).LoadSprite(fileName, 128, 128);
 	}
 
-	
+
 	if (startup == false)
 	{
+		
+
 		startup = true;
 
 	}
@@ -1651,15 +1470,13 @@ void BossPhase1::Update()
 		ECS::GetComponent<PhysicsBody>(MainEntities::MainPlayer()).SetPosition(LoadPlayerLoc());
 	}
 
-
-
 	cameraTrackPlayer();
 	updateUI();
 	//std::cout << "\n" << airDashCounter;
 
 }
 
-void BossPhase1::GUI()
+void BossPhase3::GUI()
 {
 	GUIWindowUI();
 
@@ -1674,7 +1491,7 @@ void BossPhase1::GUI()
 	}
 }
 
-void BossPhase1::GUIWindowUI()
+void BossPhase3::GUIWindowUI()
 {
 	ImGui::Begin("Test");
 
@@ -1688,7 +1505,7 @@ void BossPhase1::GUIWindowUI()
 	ImGui::End();
 }
 
-void BossPhase1::GUIWindowOne()
+void BossPhase3::GUIWindowOne()
 {
 	//Window begin
 	ImGui::Begin("Side Docked Window");
@@ -1819,7 +1636,7 @@ void BossPhase1::GUIWindowOne()
 	ImGui::End();
 }
 
-void BossPhase1::GUIWindowTwo()
+void BossPhase3::GUIWindowTwo()
 {
 	//Second docked window
 	ImGui::Begin("Second Window");
@@ -1864,7 +1681,7 @@ void BossPhase1::GUIWindowTwo()
 	ImGui::End();
 }
 
-void BossPhase1::RunLevelEditor()
+void BossPhase3::RunLevelEditor()
 {
 	float scaleSpeed = 10;
 	b2Vec2 wMousePos;
@@ -2199,7 +2016,7 @@ void BossPhase1::RunLevelEditor()
 }
 
 
-void BossPhase1::KeyboardHold()
+void BossPhase3::KeyboardHold()
 {
 
 	auto& player = ECS::GetComponent<PhysicsBody>(MainEntities::MainPlayer());
@@ -2250,7 +2067,7 @@ void BossPhase1::KeyboardHold()
 
 }
 
-void BossPhase1::KeyboardDown()
+void BossPhase3::KeyboardDown()
 {
 	auto& player = ECS::GetComponent<PhysicsBody>(MainEntities::MainPlayer());
 	auto& canJump = ECS::GetComponent<CanJump>(MainEntities::MainPlayer());
@@ -2285,13 +2102,13 @@ void BossPhase1::KeyboardDown()
 
 }
 
-void BossPhase1::KeyboardUp()
+void BossPhase3::KeyboardUp()
 {
 
 
 }
 
-void BossPhase1::MouseMotion(SDL_MouseMotionEvent evnt)
+void BossPhase3::MouseMotion(SDL_MouseMotionEvent evnt)
 {
 
 	mousePosX = evnt.x - (ECS::GetComponent<Camera>(MainEntities::MainCamera()).GetWindowSize().x / 2);
@@ -2299,7 +2116,7 @@ void BossPhase1::MouseMotion(SDL_MouseMotionEvent evnt)
 
 }
 
-void BossPhase1::MouseClick(SDL_MouseButtonEvent evnt)
+void BossPhase3::MouseClick(SDL_MouseButtonEvent evnt)
 {
 	mouseEvnt = evnt;
 }
