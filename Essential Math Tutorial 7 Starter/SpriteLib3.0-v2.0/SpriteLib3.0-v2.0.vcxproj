@@ -145,6 +145,7 @@
     <ClInclude Include="BackEnd.h" />
     <ClInclude Include="BloomEffect.h" />
     <ClInclude Include="BossPhase1.h" />
+    <ClInclude Include="BossPhase3.h" />
     <ClInclude Include="Camera.h" />
     <ClInclude Include="CameraSystem.h" />
     <ClInclude Include="CanJump.h" />
@@ -218,6 +219,7 @@
     <ClCompile Include="BackEnd.cpp" />
     <ClCompile Include="BloomEffect.cpp" />
     <ClCompile Include="BossPhase1.cpp" />
+    <ClCompile Include="BossPhase3.cpp" />
     <ClCompile Include="Camera.cpp" />
     <ClCompile Include="CameraSystem.cpp" />
     <ClCompile Include="CanJump.cpp" />

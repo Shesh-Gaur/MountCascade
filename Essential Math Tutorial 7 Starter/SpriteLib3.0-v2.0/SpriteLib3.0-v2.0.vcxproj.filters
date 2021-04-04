@@ -231,6 +231,9 @@
     <ClInclude Include="JumpPowerupTrigger.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="BossPhase3.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="AnimationController.cpp">
@@ -435,6 +438,9 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="JumpPowerupTrigger.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="BossPhase3.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

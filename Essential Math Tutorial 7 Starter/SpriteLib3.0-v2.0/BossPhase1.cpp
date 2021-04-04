@@ -6,25 +6,6 @@
 #include <iostream>
 #include "Astar.h"
 
-std::vector<int> batVec2;
-
-int startTime2 = clock();
-double diffTime2;
-int batFrameNum2 = 0;
-
-int bossStartTime = clock();
-double bossDiffTime;
-int bossFrameNum = 0;
-
-bool activatePunisher = false;
-int punStartTime = 0;
-double punDiffTime = 0;
-int punCurFrame = 0;
-
-bool isBossAttacking = false;
-int bossLastVel = 0;
-int bossAttackAnimNum = 0;
-
 BossPhase1::BossPhase1(std::string name)
 	: Scene(name)
 {

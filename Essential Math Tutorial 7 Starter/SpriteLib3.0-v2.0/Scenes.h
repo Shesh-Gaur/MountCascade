@@ -7,6 +7,8 @@
 #include "AnimationSpritePlayground.h"
 #include "CascadeVillage.h"
 #include "BossPhase1.h"
+#include "BossPhase3.h"
+
 
 
 #endif // !__SCENES_H__
