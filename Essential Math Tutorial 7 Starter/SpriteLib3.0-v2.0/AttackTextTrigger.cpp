@@ -28,10 +28,10 @@ void AttackTextTrigger::OnEnter()
 		ECS::AttachComponent<Transform>(entity);
 
 		//Set up the components
-		std::string fileName = "ui/placeholder.png";
-		ECS::GetComponent<Sprite>(entity).LoadSprite(fileName, 100, 100);
-		ECS::GetComponent<Sprite>(entity).SetTransparency(0.f);
-		ECS::GetComponent<Transform>(entity).SetPosition(vec3(1630.f, 300.f, 2.f));
+		std::string fileName = "tutorial/Chatbox-Attack.png";
+		ECS::GetComponent<Sprite>(entity).LoadSprite(fileName, 92, 48);
+		ECS::GetComponent<Sprite>(entity).SetTransparency(1.f);
+		ECS::GetComponent<Transform>(entity).SetPosition(vec3(1680.f, 350.f, 2.f));
 		isATTRan = true;
 	}
 

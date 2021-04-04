@@ -61,6 +61,20 @@ void PhysicsPlayground::InitScene(float windowWidth, float windowHeight)
 	EffectManager::CreateEffect(EffectType::Sepia, windowWidth, windowHeight);
 	EffectManager::RemoveEffect(EffectManager::GetSepiaHandle()); //added this to get rid of sephia
 
+	{ //Punisher Text Entity
+
+		auto entity = ECS::CreateEntity();
+		puni2Text = entity;
+		//Add components
+		ECS::AttachComponent<Sprite>(entity);
+		ECS::AttachComponent<Transform>(entity);
+
+		//Set up the components
+		std::string fileName = "tutorial/Chatbox-Punisher Healing Station.png";
+		ECS::GetComponent<Sprite>(entity).LoadSprite(fileName, 96, 48);
+		ECS::GetComponent<Sprite>(entity).SetTransparency(0.0f);
+		ECS::GetComponent<Transform>(entity).SetPosition(vec3(-620.f, 50.f, 0.01f));
+	}
 
 	//Setup MainCamera Entity
 	{
@@ -150,7 +164,7 @@ void PhysicsPlayground::InitScene(float windowWidth, float windowHeight)
 		ECS::AttachComponent<Transform>(entity);
 
 		//Set up the components
-		std::string fileName = "ui/Health3.png";
+		std::string fileName = "ui/Health6.png";
 		ECS::GetComponent<Sprite>(entity).LoadSprite(fileName, 22, 5);
 		ECS::GetComponent<Sprite>(entity).SetTransparency(0.8f);
 		ECS::GetComponent<Transform>(entity).SetPosition(vec3(0.f, 0.f, 2.f));
@@ -207,6 +221,44 @@ void PhysicsPlayground::InitScene(float windowWidth, float windowHeight)
 		tempPhsBody = PhysicsBody(entity, tempBody, float(tempSpr.GetWidth() - shrinkX), vec2(0.f, 0.f), false, OBJECTS,PICKUP,0.f,0.f);
 		tempPhsBody.SetColor(vec4(0.f, 1.f, 0.f, 0.3f));
 		tempPhsBody.SetRotationAngleDeg(0);
+
+	}
+
+	{ //Dash Text Box
+		/*Scene::CreateSprite(m_sceneReg, "HelloWorld.png", 100, 60, 0.5f, vec3(0.f, 0.f, 0.f));*/
+
+		//Creates entity
+		auto entity = ECS::CreateEntity();
+
+		//dashTextEntity = entity;
+		//Add components
+		ECS::AttachComponent<Sprite>(entity);
+		ECS::AttachComponent<Transform>(entity);
+
+		//Set up the components
+		std::string fileName = "tutorial/Chatbox-Charged Jump.png";
+		ECS::GetComponent<Sprite>(entity).LoadSprite(fileName, 96, 48);
+		ECS::GetComponent<Sprite>(entity).SetTransparency(1.f);
+		ECS::GetComponent<Transform>(entity).SetPosition(vec3(480.f, 155.f, 2.f));
+
+	}
+
+	{ //Dash Punisher
+	/*Scene::CreateSprite(m_sceneReg, "HelloWorld.png", 100, 60, 0.5f, vec3(0.f, 0.f, 0.f));*/
+
+	//Creates entity
+		auto entity = ECS::CreateEntity();
+
+		//dashTextEntity = entity;
+		//Add components
+		ECS::AttachComponent<Sprite>(entity);
+		ECS::AttachComponent<Transform>(entity);
+
+		//Set up the components
+		std::string fileName = "punisher/Punisher1.png";
+		ECS::GetComponent<Sprite>(entity).LoadSprite(fileName, 77, 100);
+		ECS::GetComponent<Sprite>(entity).SetTransparency(1.f);
+		ECS::GetComponent<Transform>(entity).SetPosition(vec3(570.f, 160.f, 2.f));
 
 	}
 
@@ -420,13 +472,13 @@ void PhysicsPlayground::InitScene(float windowWidth, float windowHeight)
 		ECS::GetComponent<Transform>(entity).SetPosition(vec3(700.f, 150.f, -48.f));
 	}
 
-	//Setup new Entity
+	//Background 1
 	{
 		/*Scene::CreateSprite(m_sceneReg, "HelloWorld.png", 100, 60, 0.5f, vec3(0.f, 0.f, 0.f));*/
 
 		//Creates entity
 		auto entity = ECS::CreateEntity();
-		mushbg = entity;
+		mushbg1 = entity;
 		//Add components
 		ECS::AttachComponent<Sprite>(entity);
 		ECS::AttachComponent<Transform>(entity);
@@ -435,6 +487,78 @@ void PhysicsPlayground::InitScene(float windowWidth, float windowHeight)
 		std::string fileName = "Cave_background1.png";
 		ECS::GetComponent<Sprite>(entity).LoadSprite(fileName, 1920, 1080);
 		ECS::GetComponent<Sprite>(entity).SetTransparency(1.f);
+		ECS::GetComponent<Transform>(entity).SetPosition(vec3(100.f, 300.f, -50.f));
+	}
+
+	//Background 2
+	{
+		/*Scene::CreateSprite(m_sceneReg, "HelloWorld.png", 100, 60, 0.5f, vec3(0.f, 0.f, 0.f));*/
+
+		//Creates entity
+		auto entity = ECS::CreateEntity();
+		mushbg2 = entity;
+		//Add components
+		ECS::AttachComponent<Sprite>(entity);
+		ECS::AttachComponent<Transform>(entity);
+
+		//Set up the components
+		std::string fileName = "Cave_background2.png";
+		ECS::GetComponent<Sprite>(entity).LoadSprite(fileName, 1920, 1080);
+		ECS::GetComponent<Sprite>(entity).SetTransparency(0.f);
+		ECS::GetComponent<Transform>(entity).SetPosition(vec3(100.f, 300.f, -50.f));
+	}
+
+	//Background 3
+	{
+		/*Scene::CreateSprite(m_sceneReg, "HelloWorld.png", 100, 60, 0.5f, vec3(0.f, 0.f, 0.f));*/
+
+		//Creates entity
+		auto entity = ECS::CreateEntity();
+		mushbg3 = entity;
+		//Add components
+		ECS::AttachComponent<Sprite>(entity);
+		ECS::AttachComponent<Transform>(entity);
+
+		//Set up the components
+		std::string fileName = "Cave_background3.png";
+		ECS::GetComponent<Sprite>(entity).LoadSprite(fileName, 1920, 1080);
+		ECS::GetComponent<Sprite>(entity).SetTransparency(0.f);
+		ECS::GetComponent<Transform>(entity).SetPosition(vec3(100.f, 300.f, -50.f));
+	}
+
+	//Background 4
+	{
+		/*Scene::CreateSprite(m_sceneReg, "HelloWorld.png", 100, 60, 0.5f, vec3(0.f, 0.f, 0.f));*/
+
+		//Creates entity
+		auto entity = ECS::CreateEntity();
+		mushbg4 = entity;
+		//Add components
+		ECS::AttachComponent<Sprite>(entity);
+		ECS::AttachComponent<Transform>(entity);
+
+		//Set up the components
+		std::string fileName = "Cave_background4.png";
+		ECS::GetComponent<Sprite>(entity).LoadSprite(fileName, 1920, 1080);
+		ECS::GetComponent<Sprite>(entity).SetTransparency(0.f);
+		ECS::GetComponent<Transform>(entity).SetPosition(vec3(100.f, 300.f, -50.f));
+	}
+
+	//Background 5
+	{
+		/*Scene::CreateSprite(m_sceneReg, "HelloWorld.png", 100, 60, 0.5f, vec3(0.f, 0.f, 0.f));*/
+
+		//Creates entity
+		auto entity = ECS::CreateEntity();
+		mushbg5 = entity;
+		//Add components
+		ECS::AttachComponent<Sprite>(entity);
+		ECS::AttachComponent<Transform>(entity);
+
+		//Set up the components
+		std::string fileName = "Cave_background5.png";
+		ECS::GetComponent<Sprite>(entity).LoadSprite(fileName, 1920, 1080);
+		ECS::GetComponent<Sprite>(entity).SetTransparency(0.f);
 		ECS::GetComponent<Transform>(entity).SetPosition(vec3(100.f, 300.f, -50.f));
 	}
 
@@ -1236,34 +1360,37 @@ void PhysicsPlayground::animateBackground()
 {
 	bgtimer += 1 * Timer::deltaTime;
 	std::string fileName;
-	if (bgtimer > bgtimerSpeed * 4)
-	{
-		fileName = "Cave_background5.png";
-		ECS::GetComponent<Sprite>(mushbg).LoadSprite(fileName, 1920, 1080);
+	if (bgtimer > 1.25) {
 		bgtimer = 0;
 	}
-	else if (bgtimer > bgtimerSpeed * 3)
+
+	if (bgtimer > 1)
 	{
-		fileName = "Cave_background4.png";
-		ECS::GetComponent<Sprite>(mushbg).LoadSprite(fileName, 1920, 1080);
+		ECS::GetComponent<Sprite>(mushbg5).SetTransparency(1.f);
+		ECS::GetComponent<Sprite>(mushbg4).SetTransparency(0.f);
+	}
+	else if (bgtimer > 0.75)
+	{
+		ECS::GetComponent<Sprite>(mushbg4).SetTransparency(1.f);
+		ECS::GetComponent<Sprite>(mushbg3).SetTransparency(0.f);
 
 	}
-	else if (bgtimer > bgtimerSpeed * 2)
+	else if (bgtimer > 0.5)
 	{
-		fileName = "Cave_background3.png";
-		ECS::GetComponent<Sprite>(mushbg).LoadSprite(fileName, 1920, 1080);
+		ECS::GetComponent<Sprite>(mushbg3).SetTransparency(1.f);
+		ECS::GetComponent<Sprite>(mushbg2).SetTransparency(0.f);
 
 	}
-	else if (bgtimer > bgtimerSpeed)
+	else if (bgtimer > 0.25)
 	{
-		fileName = "Cave_background2.png";
-		ECS::GetComponent<Sprite>(mushbg).LoadSprite(fileName, 1920, 1080);
+		ECS::GetComponent<Sprite>(mushbg2).SetTransparency(1.f);
+		ECS::GetComponent<Sprite>(mushbg1).SetTransparency(0.f);
 
 	}
-	else if (bgtimer < bgtimerSpeed )
+	else if (bgtimer < 0.25 )
 	{
-		fileName = "Cave_background1.png";
-		ECS::GetComponent<Sprite>(mushbg).LoadSprite(fileName, 1920, 1080);
+		ECS::GetComponent<Sprite>(mushbg1).SetTransparency(1.f);
+		ECS::GetComponent<Sprite>(mushbg5).SetTransparency(0.f);
 
 	}
 	//std::cout << "\n" << bgtimer;
@@ -1396,7 +1523,6 @@ void PhysicsPlayground::ZoomCamera()
 
 void PhysicsPlayground::updateUI()
 {
-
 	auto& player = ECS::GetComponent<Player>(MainEntities::MainPlayer());
 
 	if (round(lastDash) != round(airDashCounter)) {
@@ -1422,12 +1548,23 @@ void PhysicsPlayground::updateUI()
 		}
 		lastDash = airDashCounter;
 		dashTrans = 2.f;
-
 		//std::cout << std::endl << airDashCounter << std::endl;
 	}
 
 	if (lastHealth != health) {
-		if (health >= 3) { //full health bar
+		if (health >= 6) { //full health bar
+			std::string fileName = "ui/Health6.png";
+			ECS::GetComponent<Sprite>(healthBar).LoadSprite(fileName, 22, 5);
+		}
+		else if (health >= 5) {
+			std::string fileName = "ui/Health5.png";
+			ECS::GetComponent<Sprite>(healthBar).LoadSprite(fileName, 22, 5);
+		}
+		else if (health >= 4) {
+			std::string fileName = "ui/Health4.png";
+			ECS::GetComponent<Sprite>(healthBar).LoadSprite(fileName, 22, 5);
+		}
+		else if (health >= 3) {
 			std::string fileName = "ui/Health3.png";
 			ECS::GetComponent<Sprite>(healthBar).LoadSprite(fileName, 22, 5);
 		}
@@ -1444,10 +1581,9 @@ void PhysicsPlayground::updateUI()
 			player.m_dead = true;
 			ECS::GetComponent<Sprite>(healthBar).LoadSprite(fileName, 22, 5);
 		}
-
+		invincibilityTime = invincibilityTimeDefault;
 		lastHealth = health;
 		hpTrans = 2.f;
-
 	}
 
 	if (hpTrans > 0.f)
@@ -1461,9 +1597,74 @@ void PhysicsPlayground::updateUI()
 		dashTrans -= 1.f * Timer::deltaTime;
 	}
 
+	if (invincibilityTime > 0)
+	{
+		ECS::GetComponent<Sprite>(MainEntities::MainPlayer()).SetTransparency(0.5f);
+		invincibilityTime -= 1.f * Timer::deltaTime;
+	}
+	else
+	{
+		ECS::GetComponent<Sprite>(MainEntities::MainPlayer()).SetTransparency(1.f);
+		invincibilityTime = 0;
+
+		if (ECS::GetComponent<PhysicsBody>(MainEntities::MainPlayer()).GetBody()->GetContactList() != NULL)
+		{
+			int currentEnemy = (int)ECS::GetComponent<PhysicsBody>(MainEntities::MainPlayer()).GetBody()->GetContactList()->contact->GetFixtureB()->GetBody()->GetUserData();
+
+			if (ECS::GetComponent<PhysicsBody>(currentEnemy).GetName() == "Bat" && startAttackCooldown == false)
+			{
+				health--;
+				b2Vec2 towardPlayer = ECS::GetComponent<PhysicsBody>(currentEnemy).CalculateMovement(ECS::GetComponent<PhysicsBody>(MainEntities::MainPlayer()).GetPosition());
+				ECS::GetComponent<PhysicsBody>(MainEntities::MainPlayer()).GetBody()->ApplyLinearImpulseToCenter(b2Vec2(towardPlayer.x * 200000, towardPlayer.y * 200000), true); //Knocks back the player, but gets immediately canceled by player movement
+				startAttackCooldown = true;
+			}
+
+			if (ECS::GetComponent<PhysicsBody>(currentEnemy).GetName() == "Boss" && startAttackCooldown == false)
+			{
+
+				b2Vec2 towardPlayer;
+				towardPlayer = ECS::GetComponent<PhysicsBody>(currentEnemy).CalculateMovement(ECS::GetComponent<PhysicsBody>(MainEntities::MainPlayer()).GetPosition());
+
+				if (ECS::GetComponent<PhysicsBody>(currentEnemy).isCharging == true)
+				{
+					ECS::GetComponent<PhysicsBody>(MainEntities::MainPlayer()).GetBody()->ApplyLinearImpulseToCenter(b2Vec2(towardPlayer.x * 1000000, 20000000.f), true);
+					health -= 3;
+				}
+				else if (ECS::GetComponent<PhysicsBody>(currentEnemy).isAttacking == true)
+				{
+					ECS::GetComponent<PhysicsBody>(MainEntities::MainPlayer()).GetBody()->ApplyLinearImpulseToCenter(b2Vec2(towardPlayer.x * 1000000, towardPlayer.y * 1000000), true);
+					health -= 2;
+
+
+				}
+				else
+				{
+					ECS::GetComponent<PhysicsBody>(MainEntities::MainPlayer()).GetBody()->ApplyLinearImpulseToCenter(b2Vec2(towardPlayer.x * 1000000, towardPlayer.y * 1000000), true);
+					health--;
+
+				}
+				ECS::GetComponent<PhysicsBody>(MainEntities::MainPlayer()).GetBody()->ApplyLinearImpulseToCenter(b2Vec2(towardPlayer.x * 1000000, towardPlayer.y * 1000000), true); //Knocks back the player, but gets immediately canceled by player movement
+				startAttackCooldown = true;
+			}
+
+
+		}
+
+		if (startAttackCooldown == true)
+		{
+			attackCooldownTimer -= 1 * Timer::deltaTime;
+			if (attackCooldownTimer <= 0)
+			{
+				attackCooldownTimer = attackCooldownTimerDefault;
+				startAttackCooldown = false;
+
+			}
+		}
+
+	}
+
 	ECS::GetComponent<Sprite>(healthBar).SetTransparency(hpTrans);
 	ECS::GetComponent<Sprite>(dashBar).SetTransparency(dashTrans);
-
 
 	auto& playerBody = ECS::GetComponent<PhysicsBody>(MainEntities::MainPlayer());
 
@@ -1509,6 +1710,8 @@ b2Vec2 PhysicsPlayground::LoadPlayerLoc() {
 void PhysicsPlayground::Update()
 {
 
+	animateBackground();
+
 	auto& player = ECS::GetComponent<Player>(MainEntities::MainPlayer());
 	auto pl = ECS::GetComponent<PhysicsBody>(MainEntities::MainPlayer());
 	player.Update();
@@ -1544,7 +1747,8 @@ void PhysicsPlayground::Update()
 	if (ECS::GetComponent<PhysicsBody>(MainEntities::MainPlayer()).GetPosition().x > -750 && !activatePuni2) {
 		activatePuni2 = true;
 		puni2StartTime = clock();
-		health = 3;
+		health = 6;
+		ECS::GetComponent<Sprite>(puni2Text).SetTransparency(1.f);
 		SavePlayerLoc();
 	}
 
@@ -1640,7 +1844,7 @@ void PhysicsPlayground::Update()
 	//std::cout << diffTimeJumpBoost << "   " << jumpBoostFrame << std::endl;
 
 	if (health <= 0) {
-		health = 3;
+		health = 6;
 		ECS::GetComponent<PhysicsBody>(MainEntities::MainPlayer()).SetPosition(LoadPlayerLoc());
 	}
 
@@ -1692,36 +1896,7 @@ void PhysicsPlayground::Update()
 		
 	}
 
-	if (ECS::GetComponent<PhysicsBody>(MainEntities::MainPlayer()).GetBody()->GetContactList() != NULL)
-	{
-		int currentEnemy = (int)ECS::GetComponent<PhysicsBody>(MainEntities::MainPlayer()).GetBody()->GetContactList()->contact->GetFixtureB()->GetBody()->GetUserData();
 
-		if (ECS::GetComponent<PhysicsBody>(currentEnemy).GetName() == "Bat" )
-		{
-			if (startAttackCooldown == false)
-			{
-				health--;
-				startAttackCooldown = true;
-			}
-			b2Vec2 towardPlayer = ECS::GetComponent<PhysicsBody>(currentEnemy).CalculateMovement(ECS::GetComponent<PhysicsBody>(MainEntities::MainPlayer()).GetPosition());
-			ECS::GetComponent<PhysicsBody>(MainEntities::MainPlayer()).GetBody()->ApplyLinearImpulseToCenter(b2Vec2(towardPlayer.x * 200000, towardPlayer.y * 200000), true); //Knocks back the player, but gets immediately canceled by player movement
-			
-		}
-
-	}
-
-	if (startAttackCooldown == true)
-	{
-		attackCooldownTimer -= 1 * Timer::deltaTime;
-		if (attackCooldownTimer <= 0)
-		{
-			attackCooldownTimer = attackCooldownTimerDefault;
-			startAttackCooldown = false;
-
-		}
-	}
-
-	//animateBackground();
 	cameraTrackPlayer();
 	ZoomCamera();
 	updateUI();
@@ -2131,12 +2306,13 @@ void PhysicsPlayground::RunLevelEditor()
 	if (Input::GetKeyDown(Key::One))
 	{
 		entitiesCreated = true;
-		makeBox(wMousePos.x, wMousePos.y, 0.02f, 0, 50, 50);
+		makeBox2(wMousePos.x, wMousePos.y, 0.03f, 0, 128, 128);
+
 	}
 	else if (Input::GetKeyDown(Key::Two))
 	{
 		entitiesCreated = true;
-		makeBox2(wMousePos.x, wMousePos.y, 0.03f, 0, 50, 50);
+		makeBox2(wMousePos.x, wMousePos.y, 0.03f, 0, 64, 64);
 
 	}
 	else if (Input::GetKeyDown(Key::Three))
@@ -2350,7 +2526,7 @@ void PhysicsPlayground::KeyboardDown()
 	auto& canJump = ECS::GetComponent<CanJump>(MainEntities::MainPlayer());
 
 	if (Input::GetKeyDown(Key::OEMMinus) && health > 0) health--;
-	if (Input::GetKeyDown(Key::OEMPlus) && health < 3) health++;
+	if (Input::GetKeyDown(Key::OEMPlus) && health < 6) health++;
 
 
 	if (loadStarted == false) {

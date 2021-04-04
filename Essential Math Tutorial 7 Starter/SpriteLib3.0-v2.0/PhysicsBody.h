@@ -92,6 +92,8 @@ public:
 	static bool GetDraw();
 
 	float GetHealth();
+	float GetMaxHealth();
+
 	std::string GetName();
 	b2Vec2 GetNextMovement();
 	float GetSpeed();
@@ -138,6 +140,10 @@ public:
 	//Set whether the bodies are being drawn
 	static void SetDraw(bool drawBodies);
 	void SetHealth(float hp);
+	void SetMaxHealth(float hp);
+	void SetHealthBar(int obj);
+
+
 	void TakeDamage(float dmg,int ent);
 	void SetName(std::string n);
 	void dispatchAI();
@@ -150,7 +156,7 @@ public:
 	static std::vector<int> m_bodiesToDelete;
 	bool isCharging = false;
 	bool isAttacking = false;
-
+	int healthBar = 69;
 private:
 	//The actual box2D body
 	b2Body* m_body = nullptr;
@@ -180,8 +186,9 @@ private:
 	//Width and height of the body
 	float m_width = 0.f;
 	float m_height = 0.f;
-	
-	float health = 5.f;
+
+	float maxHealth = 5.f;
+	float health = maxHealth;
 	std::string name = "Object";
 	b2Vec2 nextMovement;
 	//Do you draw the bodies?
@@ -201,4 +208,5 @@ private:
 	float bossLastVel;
 	int chargeLoopDefault = 6.f;
 	int chargeLoop = chargeLoopDefault;
+	
 };

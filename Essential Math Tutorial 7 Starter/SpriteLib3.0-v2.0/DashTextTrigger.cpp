@@ -31,9 +31,9 @@ void DashTextTrigger::OnEnter()
 		ECS::AttachComponent<Transform>(entity);
 
 		//Set up the components
-		std::string fileName = "ui/placeholder.png";
-		ECS::GetComponent<Sprite>(entity).LoadSprite(fileName, 100, 100);
-		ECS::GetComponent<Sprite>(entity).SetTransparency(0.f);
+		std::string fileName = "tutorial/Chatbox-Dash.png";
+		ECS::GetComponent<Sprite>(entity).LoadSprite(fileName, 96, 48);
+		ECS::GetComponent<Sprite>(entity).SetTransparency(1.f);
 		ECS::GetComponent<Transform>(entity).SetPosition(vec3(380.f, 155.f, 2.f));
 
 		isDTTRan = true;

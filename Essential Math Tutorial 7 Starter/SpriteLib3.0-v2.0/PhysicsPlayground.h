@@ -111,7 +111,14 @@ protected:
 	int healthBar;
 	int dashBar;
 	int dummy;
-	int mushbg;
+
+	int mushbg1;
+	int mushbg2;
+	int mushbg3;
+	int mushbg4;
+	int mushbg5;
 
 	int puni2;
+
+	int puni2Text;
 };
