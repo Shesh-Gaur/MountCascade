@@ -117,5 +117,11 @@ protected:
 	int bossHpBar;
 	int bossInBar;
 
+	int bg1;
+	int bg2;
+	int bg3;
+	int bg4;
+	int bg5;
 
+	float backgtimer = 0.f;
 };

@@ -455,7 +455,7 @@ void CascadeVillage::InitScene(float windowWidth, float windowHeight)
 		ECS::AttachComponent<Transform>(entity);
 
 		//Set up the components
-		std::string fileName = "tutorial/Chatbox-Punisher Healing Station.png";
+		std::string fileName = "tutorial/Chatbox-Move and Jump.png";
 		ECS::GetComponent<Sprite>(entity).LoadSprite(fileName, 96, 48);
 		ECS::GetComponent<Sprite>(entity).SetTransparency(0.0f);
 		ECS::GetComponent<Transform>(entity).SetPosition(vec3(-105.f, 160.f, 0.01f));
@@ -469,9 +469,9 @@ void CascadeVillage::InitScene(float windowWidth, float windowHeight)
 
 		//Set up the components
 		std::string fileName = "overlay/Cascade_Village_Overlay.png";
-		ECS::GetComponent<Sprite>(entity).LoadSprite(fileName, 4096, 4096);
+		ECS::GetComponent<Sprite>(entity).LoadSprite(fileName, 3776, 1088);
 		ECS::GetComponent<Sprite>(entity).SetTransparency(1.0f);
-		ECS::GetComponent<Transform>(entity).SetPosition(vec3(260.f, 225.f, 0.021f));
+		ECS::GetComponent<Transform>(entity).SetPosition(vec3(240.f, 255.f, 0.021f));
 	}
 
 	//Setup trigger
