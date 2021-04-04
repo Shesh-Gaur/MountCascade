@@ -10,8 +10,6 @@
 #include "TransitionTrigger.h"
 
 
-
-
 int startTime3 = clock();
 int startTimeJumpBoost = clock();
 int jumpBoostFrame = 0;
@@ -1735,7 +1733,7 @@ void PhysicsPlayground::Update()
 
 
 	if (pl.GetPosition().x > 130 && pl.GetPosition().x  < 190 && pl.GetPosition().y < 100) {
-		hasJumpBoostUnlocked = true;
+		hasChargeJump = true;
 		ECS::GetComponent<Sprite>(jumpBoostEntity).SetTransparency(0.f);
 	}
 
