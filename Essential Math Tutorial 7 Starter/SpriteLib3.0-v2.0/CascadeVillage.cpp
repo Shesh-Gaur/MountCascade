@@ -401,10 +401,10 @@ void CascadeVillage::InitScene(float windowWidth, float windowHeight)
 		std::string fileName = "punisher/Punisher1.png";
 		ECS::GetComponent<Sprite>(entity).LoadSprite(fileName, 77, 100);
 		ECS::GetComponent<Sprite>(entity).SetTransparency(1.0f);
-		ECS::GetComponent<Transform>(entity).SetPosition(vec3(-220.f, 145.f, 0.01f));
+		ECS::GetComponent<Transform>(entity).SetPosition(vec3(-220.f, 175.f, 0.01f));
 	}
 
-	//Punisher Tutorial Jump
+	//Punisher Tutorial dash
 	{
 		auto entity = ECS::CreateEntity();
 		//Add components
@@ -415,10 +415,10 @@ void CascadeVillage::InitScene(float windowWidth, float windowHeight)
 		std::string fileName = "punisher/Punisher1.png";
 		ECS::GetComponent<Sprite>(entity).LoadSprite(fileName, 77, 100);
 		ECS::GetComponent<Sprite>(entity).SetTransparency(1.0f);
-		ECS::GetComponent<Transform>(entity).SetPosition(vec3(320.f, 140.f, 0.01f));
+		ECS::GetComponent<Transform>(entity).SetPosition(vec3(320.f, 145.f, 0.01f));
 	}
 
-	//Punisher Tutorial Dash
+	//Punisher wall jump
 	{
 		auto entity = ECS::CreateEntity();
 		//Add components
@@ -429,7 +429,7 @@ void CascadeVillage::InitScene(float windowWidth, float windowHeight)
 		std::string fileName = "punisher/Punisher1.png";
 		ECS::GetComponent<Sprite>(entity).LoadSprite(fileName, 77, 100);
 		ECS::GetComponent<Sprite>(entity).SetTransparency(1.0f);
-		ECS::GetComponent<Transform>(entity).SetPosition(vec3(1255.f, 145.f, 0.01f));
+		ECS::GetComponent<Transform>(entity).SetPosition(vec3(1255.f, 140.f, 0.01f));
 	}
 
 	//Punisher Tutorial Attack
@@ -443,7 +443,7 @@ void CascadeVillage::InitScene(float windowWidth, float windowHeight)
 		std::string fileName = "punisher/Punisher1.png";
 		ECS::GetComponent<Sprite>(entity).LoadSprite(fileName, 77, 100);
 		ECS::GetComponent<Sprite>(entity).SetTransparency(1.0f);
-		ECS::GetComponent<Transform>(entity).SetPosition(vec3(1575.f, 310.f, 0.01f));
+		ECS::GetComponent<Transform>(entity).SetPosition(vec3(1775.f, 335.f, 0.01f));
 	}
 
 	{ //Punisher Text Entity
@@ -458,7 +458,7 @@ void CascadeVillage::InitScene(float windowWidth, float windowHeight)
 		std::string fileName = "tutorial/Chatbox-Move and Jump.png";
 		ECS::GetComponent<Sprite>(entity).LoadSprite(fileName, 96, 48);
 		ECS::GetComponent<Sprite>(entity).SetTransparency(0.0f);
-		ECS::GetComponent<Transform>(entity).SetPosition(vec3(-105.f, 160.f, 0.01f));
+		ECS::GetComponent<Transform>(entity).SetPosition(vec3(-105.f, 180.f, 0.01f));
 	}
 
 	{
@@ -754,7 +754,7 @@ void CascadeVillage::InitScene(float windowWidth, float windowHeight)
 		std::string fileName = "jumpBoost/Boost1.png";
 		ECS::GetComponent<Sprite>(entity).LoadSprite(fileName, 512, 512);
 		ECS::GetComponent<Sprite>(entity).SetTransparency(1.f);
-		ECS::GetComponent<Transform>(entity).SetPosition(vec3(-1321.f, 575.f, 0.021f));
+		ECS::GetComponent<Transform>(entity).SetPosition(vec3(-1321.f, 600.f, 0.021f));
 	}
 	{ //background mountain 1
 

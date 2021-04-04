@@ -32,7 +32,7 @@ void WallJumpTextTrigger::OnEnter()
 		std::string fileName = "tutorial/Chatbox-Wall Jump.png";
 		ECS::GetComponent<Sprite>(entity).LoadSprite(fileName, 96, 48);
 		ECS::GetComponent<Sprite>(entity).SetTransparency(1.f);
-		ECS::GetComponent<Transform>(entity).SetPosition(vec3(1400.f, 150.f, 2.f));
+		ECS::GetComponent<Transform>(entity).SetPosition(vec3(1380.f, 150.f, 2.f));
 		isWTTRan = true;
 	}
 
