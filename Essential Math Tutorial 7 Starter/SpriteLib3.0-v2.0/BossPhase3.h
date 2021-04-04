@@ -41,6 +41,7 @@ public:
 	void makeBat(float xPos, float yPos, float zPos, float rotation, float width, float height);
 	void makeIceWall(float xPos, float yPos, float zPos, float rotation, float width, float height);
 	void makeSmallMush(float xPos, float yPos, float zPos, float rotation, float width, float height);
+	void makeLavaBoss(float xPos, float yPos, float zPos, float rotation, float width, float height);
 	void RunLevelEditor();
 	void cameraTrackPlayer();
 	void ZoomCamera();
