@@ -897,6 +897,41 @@ void BossPhase3::makeSmallMush(float xPos, float yPos, float zPos, float rotatio
 
 }
 
+void BossPhase3::makeLavaBoss(float xPos, float yPos, float zPos, float rotation, float width, float height)
+{
+	//Creates entity
+	auto entity = ECS::CreateEntity();
+	//Add components
+	ECS::AttachComponent<Sprite>(entity);
+	ECS::AttachComponent<Transform>(entity);
+	ECS::AttachComponent<PhysicsBody>(entity);
+
+	//Set up the components
+	std::string fileName = "golem/redrunframe5.png";
+	ECS::GetComponent<Sprite>(entity).LoadSprite(fileName, width, height);
+	ECS::GetComponent<Sprite>(entity).SetTransparency(1.f);
+	ECS::GetComponent<Transform>(entity).SetPosition(vec3(0.f, 0.f, zPos));
+	auto& tempSpr = ECS::GetComponent<Sprite>(entity);
+	auto& tempPhsBody = ECS::GetComponent<PhysicsBody>(entity);
+
+	float shrinkX = 50.f;
+	float shrinkY = 50.f;
+	b2Body* tempBody;
+	b2BodyDef tempDef;
+	tempDef.type = b2_staticBody;
+	tempDef.position.Set(float32(xPos), float32(yPos));
+
+	tempBody = m_physicsWorld->CreateBody(&tempDef);
+
+	tempPhsBody = PhysicsBody(entity, tempBody, float(tempSpr.GetWidth() - shrinkX), vec2(0.f, 0.f), false, OBJECTS, 0.f, 0.f);
+	tempPhsBody.SetColor(vec4(0.f, 1.f, 0.f, 0.3f));
+	tempPhsBody.SetRotationAngleDeg(rotation);
+
+
+}
+
+
+
 void BossPhase3::writeAutoSaveFile(int file)
 {
 	char x;
@@ -1048,6 +1083,10 @@ void BossPhase3::readSaveFile()
 		else if (name == "smallMush.png")
 		{
 			makeSmallMush(xPos, yPos, zPos, angle, width, height);
+		}
+		else if (name == "redrunframe5.png")
+		{
+			makeLavaBoss(xPos, yPos, zPos, angle, width, height);
 		}
 
 	}
@@ -1851,7 +1890,7 @@ void BossPhase3::RunLevelEditor()
 	else if (Input::GetKeyDown(Key::Two))
 	{
 		entitiesCreated = true;
-		makeBox2(wMousePos.x, wMousePos.y, 0.03f, 0, 50, 50);
+		makeLavaBoss(wMousePos.x, wMousePos.y, 0.021f, 0, 392, 295);
 
 	}
 	else if (Input::GetKeyDown(Key::Three))
