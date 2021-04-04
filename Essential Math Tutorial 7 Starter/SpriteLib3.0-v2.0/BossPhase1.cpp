@@ -709,7 +709,7 @@ void BossPhase1::InitScene(float windowWidth, float windowHeight)
 
 
 	startup = true;
-
+	hasChargeJump = true;
 	ECS::GetComponent<HorizontalScroll>(MainEntities::MainCamera()).SetFocus(&ECS::GetComponent<Transform>(MainEntities::MainPlayer()));
 	ECS::GetComponent<VerticalScroll>(MainEntities::MainCamera()).SetFocus(&ECS::GetComponent<Transform>(MainEntities::MainPlayer()));
 
