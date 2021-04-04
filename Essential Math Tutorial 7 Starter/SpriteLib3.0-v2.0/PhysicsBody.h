@@ -201,7 +201,7 @@ private:
 	bool playerSpotted = false;
 	bool batExists = true;
 	float animationFrame = 0.f;
-	float attackCooldownDefault = 5.f;
+	float attackCooldownDefault = 4.f;
 	float attackCooldown = attackCooldownDefault;
 	float recoverCooldownDefault = 10.f;
 	float recoverCooldown = recoverCooldownDefault;
