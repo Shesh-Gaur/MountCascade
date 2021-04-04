@@ -436,7 +436,7 @@ void Scene::PlayerMovement()
 				}
 
 			}
-			if (airJumpCounter > 0 && spaceReleased == true && health > 0)
+			if (airJumpCounter > 0 && spaceReleased == true && health > 0 && hasChargeJump == true)
 			{
 				if (Input::GetKey(Key::Space))
 				{
