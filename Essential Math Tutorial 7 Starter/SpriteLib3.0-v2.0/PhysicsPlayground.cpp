@@ -59,6 +59,19 @@ void PhysicsPlayground::InitScene(float windowWidth, float windowHeight)
 	//EffectManager::CreateEffect(EffectType::Sepia, windowWidth, windowHeight);
 	//EffectManager::RemoveEffect(EffectManager::GetSepiaHandle()); //added this to get rid of sephia
 
+	{
+		auto entity = ECS::CreateEntity();
+		//Add components
+		ECS::AttachComponent<Sprite>(entity);
+		ECS::AttachComponent<Transform>(entity);
+
+		//Set up the components
+		std::string fileName = "overlay/The_Mushroom_Cave_Overlay.png";
+		ECS::GetComponent<Sprite>(entity).LoadSprite(fileName, 4096, 4096);
+		ECS::GetComponent<Sprite>(entity).SetTransparency(0.5f);
+		ECS::GetComponent<Transform>(entity).SetPosition(vec3(525.f, 250.f, 0.021f));
+	}
+
 	{ //Punisher Text Entity
 
 		auto entity = ECS::CreateEntity();
@@ -71,7 +84,7 @@ void PhysicsPlayground::InitScene(float windowWidth, float windowHeight)
 		std::string fileName = "tutorial/Chatbox-Punisher Healing Station.png";
 		ECS::GetComponent<Sprite>(entity).LoadSprite(fileName, 96, 48);
 		ECS::GetComponent<Sprite>(entity).SetTransparency(0.0f);
-		ECS::GetComponent<Transform>(entity).SetPosition(vec3(-620.f, 50.f, 0.01f));
+		ECS::GetComponent<Transform>(entity).SetPosition(vec3(-600.f, 50.f, 0.01f));
 	}
 
 	//Setup MainCamera Entity
@@ -182,7 +195,7 @@ void PhysicsPlayground::InitScene(float windowWidth, float windowHeight)
 		std::string fileName = "jumpBoost/Boost1.png";
 		ECS::GetComponent<Sprite>(entity).LoadSprite(fileName, 32, 32);
 		ECS::GetComponent<Sprite>(entity).SetTransparency(0.8f);
-		ECS::GetComponent<Transform>(entity).SetPosition(vec3(160.f, 80.f, 2.f));
+		ECS::GetComponent<Transform>(entity).SetPosition(vec3(200.f, 80.f, 2.f));
 	}
 
 
@@ -238,7 +251,7 @@ void PhysicsPlayground::InitScene(float windowWidth, float windowHeight)
 		std::string fileName = "tutorial/Chatbox-Charged Jump.png";
 		ECS::GetComponent<Sprite>(entity).LoadSprite(fileName, 96, 48);
 		ECS::GetComponent<Sprite>(entity).SetTransparency(1.f);
-		ECS::GetComponent<Transform>(entity).SetPosition(vec3(480.f, 155.f, 2.f));
+		ECS::GetComponent<Transform>(entity).SetPosition(vec3(510.f, 155.f, 2.f));
 
 	}
 
@@ -257,7 +270,7 @@ void PhysicsPlayground::InitScene(float windowWidth, float windowHeight)
 		std::string fileName = "punisher/Punisher1.png";
 		ECS::GetComponent<Sprite>(entity).LoadSprite(fileName, 77, 100);
 		ECS::GetComponent<Sprite>(entity).SetTransparency(1.f);
-		ECS::GetComponent<Transform>(entity).SetPosition(vec3(570.f, 160.f, 2.f));
+		ECS::GetComponent<Transform>(entity).SetPosition(vec3(580.f, 160.f, 2.f));
 
 	}
 
