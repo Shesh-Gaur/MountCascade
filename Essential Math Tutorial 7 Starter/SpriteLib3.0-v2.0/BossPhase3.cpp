@@ -1738,8 +1738,13 @@ void BossPhase3::RunLevelEditor()
 
 
 	b2Vec2 wMousePos;
+<<<<<<< Updated upstream
 	wMousePos = (b2Vec2((mousePosX * (fov/70)) / 4, (mousePosY *(fov/70)) / 4));
 	wMousePos += b2Vec2(ECS::GetComponent<Camera>(MainEntities::MainCamera()).GetPosition().x + mouseAdjustment, ECS::GetComponent<Camera>(MainEntities::MainCamera()).GetPosition().y);
+=======
+	wMousePos = (b2Vec2((mousePosX * (fov/50)) / 4, (mousePosY *(fov/50)) / 4));
+	wMousePos += b2Vec2(ECS::GetComponent<Camera>(MainEntities::MainCamera()).GetPosition().x, ECS::GetComponent<Camera>(MainEntities::MainCamera()).GetPosition().y);
+>>>>>>> Stashed changes
 	ECS::GetComponent<Sprite>(rayMarker).SetTransparency(0.9f);
 	ECS::GetComponent<Transform>(rayMarker).SetPosition(wMousePos.x, wMousePos.y, 2);
 

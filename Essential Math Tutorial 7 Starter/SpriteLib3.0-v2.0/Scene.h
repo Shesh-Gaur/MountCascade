@@ -105,7 +105,7 @@ protected:
 	float invincibilityTimeDefault = 3.0f;
 	float invincibilityTime = 0;
 	bool isTouchingIceWall = false;
-	bool hasChargeJump = false;
+	bool hasChargeJump = true;
 private:
 	//Hello world entity number
 	int m_helloWorldSign = 0;
