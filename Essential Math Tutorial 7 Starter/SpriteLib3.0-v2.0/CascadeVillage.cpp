@@ -470,7 +470,7 @@ void CascadeVillage::InitScene(float windowWidth, float windowHeight)
 
 		//Set up the components
 		std::string fileName = "overlay/Cascade_Village_Overlay.png";
-		ECS::GetComponent<Sprite>(entity).LoadSprite(fileName, 3776, 1088);
+		ECS::GetComponent<Sprite>(entity).LoadSprite(fileName, 4096, 4096);
 		ECS::GetComponent<Sprite>(entity).SetTransparency(1.0f);
 		ECS::GetComponent<Transform>(entity).SetPosition(vec3(240.f, 255.f, 0.021f));
 	}

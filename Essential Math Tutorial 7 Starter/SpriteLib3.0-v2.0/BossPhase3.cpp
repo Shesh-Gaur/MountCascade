@@ -1727,11 +1727,11 @@ void BossPhase3::RunLevelEditor()
 {
 	float scaleSpeed = 10;
 	
-	if (Input::GetKey(Key::NumPad9))
+	if (Input::GetKey(Key::P))
 	{
 		mouseAdjustment += 100.f * Timer::deltaTime;
 	}
-	else if (Input::GetKey(Key::NumPad7))
+	else if (Input::GetKey(Key::O))
 	{
 		mouseAdjustment -= 100.f * Timer::deltaTime;
 	}
