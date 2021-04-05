@@ -2083,13 +2083,14 @@ void BossPhase1::RunLevelEditor()
 	else if (Input::GetKeyDown(Key::Two))
 	{
 		entitiesCreated = true;
-		makeBox2(wMousePos.x, wMousePos.y, 0.03f, 0, 50, 50);
+		makeBox2(wMousePos.x, wMousePos.y, 0.02f, 0, 64, 64);
 
 	}
 	else if (Input::GetKeyDown(Key::Three))
 	{
 		entitiesCreated = true;
-		makeDummy(wMousePos.x, wMousePos.y, 0.02f, 0, 50, 50);
+		makeBox2(wMousePos.x, wMousePos.y, 0.02f, 0, 128, 128);
+
 
 	}
 	else if (Input::GetKeyDown(Key::Four))

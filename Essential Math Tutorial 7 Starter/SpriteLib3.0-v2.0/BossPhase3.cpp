@@ -1726,9 +1726,20 @@ void BossPhase3::GUIWindowTwo()
 void BossPhase3::RunLevelEditor()
 {
 	float scaleSpeed = 10;
+	
+	if (Input::GetKey(Key::NumPad9))
+	{
+		mouseAdjustment += 100.f * Timer::deltaTime;
+	}
+	else if (Input::GetKey(Key::NumPad7))
+	{
+		mouseAdjustment -= 100.f * Timer::deltaTime;
+	}
+
+
 	b2Vec2 wMousePos;
 	wMousePos = (b2Vec2((mousePosX * (fov/70)) / 4, (mousePosY *(fov/70)) / 4));
-	wMousePos += b2Vec2(ECS::GetComponent<Camera>(MainEntities::MainCamera()).GetPosition().x, ECS::GetComponent<Camera>(MainEntities::MainCamera()).GetPosition().y);
+	wMousePos += b2Vec2(ECS::GetComponent<Camera>(MainEntities::MainCamera()).GetPosition().x + mouseAdjustment, ECS::GetComponent<Camera>(MainEntities::MainCamera()).GetPosition().y);
 	ECS::GetComponent<Sprite>(rayMarker).SetTransparency(0.9f);
 	ECS::GetComponent<Transform>(rayMarker).SetPosition(wMousePos.x, wMousePos.y, 2);
 

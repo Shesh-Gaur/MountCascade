@@ -29,7 +29,7 @@ void TransitionTrigger::OnEnter()
 {
 
 	Trigger::OnEnter();
-	ECS::GetComponent<Transform>(MainEntities::MainLoading()).SetPosition(vec3(ECS::GetComponent<PhysicsBody>(MainEntities::MainPlayer()).GetPosition().x, ECS::GetComponent<PhysicsBody>(MainEntities::MainPlayer()).GetPosition().y,4));
+	ECS::GetComponent<Transform>(MainEntities::MainLoading()).SetPosition(vec3(ECS::GetComponent<Camera>(MainEntities::MainCamera()).GetPosition().x, ECS::GetComponent<Camera>(MainEntities::MainCamera()).GetPosition().y,0.04));
 	if (ECS::GetComponent<Sprite>(MainEntities::MainLoading()).GetTransparency() == 0.f)
 	{
 		ECS::GetComponent<Sprite>(MainEntities::MainLoading()).SetTransparency(0.1f);
