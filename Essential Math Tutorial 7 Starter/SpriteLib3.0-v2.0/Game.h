@@ -66,6 +66,8 @@ public:
 	void SwapScene(int newScene);
 	bool switchSceneCascadeVillage = false;
 	bool switchSceneMushroomCave = false;
+	bool switchSceneBossRoom1 = false;
+
 
 private:
 	//The window

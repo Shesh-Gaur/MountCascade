@@ -55,9 +55,9 @@ void PhysicsPlayground::InitScene(float windowWidth, float windowHeight)
 	//Sets up aspect ratio for the camera
 	float aspectRatio = windowWidth / windowHeight;
 	aRatio = aspectRatio;
-	EffectManager::CreateEffect(EffectType::Vignette, windowWidth, windowHeight);
-	EffectManager::CreateEffect(EffectType::Sepia, windowWidth, windowHeight);
-	EffectManager::RemoveEffect(EffectManager::GetSepiaHandle()); //added this to get rid of sephia
+	//EffectManager::CreateEffect(EffectType::Vignette, windowWidth, windowHeight);
+	//EffectManager::CreateEffect(EffectType::Sepia, windowWidth, windowHeight);
+	//EffectManager::RemoveEffect(EffectManager::GetSepiaHandle()); //added this to get rid of sephia
 
 	{ //Punisher Text Entity
 
@@ -362,6 +362,8 @@ void PhysicsPlayground::InitScene(float windowWidth, float windowHeight)
 		tempPhsBody.SetFixedRotation(true);
 		tempPhsBody.SetColor(vec4(1.f, 0.f, 1.f, 0.3f));
 		tempPhsBody.SetGravityScale(1.f);
+		tempPhsBody.SetName("Player");
+
 	}
 	//Setup new Entity
 	{
@@ -744,7 +746,7 @@ void PhysicsPlayground::InitScene(float windowWidth, float windowHeight)
 		tempPhsBody.SetName("Trigger");
 	}
 
-	//Setup trigger
+	//Setup trigger back to the Village
 	{
 		//Creates entity
 		auto entity = ECS::CreateEntity();
@@ -782,6 +784,47 @@ void PhysicsPlayground::InitScene(float windowWidth, float windowHeight)
 		tempPhsBody.SetColor(vec4(1.f, 0.f, 0.f, 0.3f));
 		tempPhsBody.SetName("Trigger");
 	}
+
+	//Setup trigger to boss room
+	{
+		//Creates entity
+		auto entity = ECS::CreateEntity();
+
+		//Add components
+		ECS::AttachComponent<Transform>(entity);
+		ECS::AttachComponent<PhysicsBody>(entity);
+		ECS::AttachComponent<Trigger*>(entity);
+		ECS::AttachComponent<Sprite>(entity);
+
+		//Sets up components
+		std::string fileName = "boxSprite.jpg";
+		ECS::GetComponent<Sprite>(entity).LoadSprite(fileName, 50, 50);
+		ECS::GetComponent<Sprite>(entity).SetTransparency(0.5f);
+		ECS::GetComponent<Transform>(entity).SetPosition(vec3(0.f,0.f, 0.002f));
+		ECS::GetComponent<Trigger*>(entity) = new TransitionTrigger();
+		ECS::GetComponent<Trigger*>(entity)->SetTriggerEntity(entity);
+
+		TransitionTrigger* temp = (TransitionTrigger*)ECS::GetComponent<Trigger*>(entity);
+		temp->nextScene = 2;
+
+		auto& tempPhsBody = ECS::GetComponent<PhysicsBody>(entity);
+		auto& tempSpr = ECS::GetComponent<Sprite>(entity);
+		float shrinkX = 0.f;
+		float shrinkY = 0.f;
+		b2Body* tempBody;
+		b2BodyDef tempDef;
+		tempDef.type = b2_staticBody;
+		tempDef.position.Set(float32(1965.f), float32(500.f));
+
+		tempBody = m_physicsWorld->CreateBody(&tempDef);
+
+		tempPhsBody = PhysicsBody(entity, tempBody, float(tempSpr.GetWidth() - shrinkX),
+			float(tempSpr.GetHeight() - shrinkY), vec2(0.f, 0.f), true, TRIGGER, PLAYER);
+		tempPhsBody.SetColor(vec4(1.f, 0.f, 0.f, 0.3f));
+		tempPhsBody.SetName("Trigger");
+	}
+
+
 
 	/*//Jump Boost Collect Trigger
 	{
@@ -824,9 +867,9 @@ void PhysicsPlayground::InitScene(float windowWidth, float windowHeight)
 	readSaveFile();
 	makeLoadingScreen();
 
-	for (int y = 0; y < (gWidth * 50); y += 50)
+	for (int y = 0 + 25; y < (gWidth * 50) + 25; y += 50)
 	{
-		for (int x = 0 - 800; x < (gLength * 50) - 800; x += 50)
+		for (int x = 0 - 920; x < (gLength * 50) - 920; x += 50)
 		{
 			RayCastCallback nodeRay;
 			m_physicsWorld->RayCast(&nodeRay, b2Vec2(x, y) + b2Vec2(0, 50), b2Vec2(x, y));
@@ -851,9 +894,9 @@ void PhysicsPlayground::InitScene(float windowWidth, float windowHeight)
 			//if (nodeRay.m_fixture == nullptr || nodeRay.m_fixture->GetBody()->GetType() == b2_dynamicBody)
 			//{
 
-			if (nodeRay.m_fixture == nullptr || ECS::GetComponent<PhysicsBody>((int)nodeRay.m_fixture->GetBody()->GetUserData()).GetName() == "Decor")
+			if (nodeRay.m_fixture == nullptr || ECS::GetComponent<PhysicsBody>((int)nodeRay.m_fixture->GetBody()->GetUserData()).GetName() == "Decor" || ECS::GetComponent<PhysicsBody>((int)nodeRay.m_fixture->GetBody()->GetUserData()).GetName() == "Bat" || ECS::GetComponent<PhysicsBody>((int)nodeRay.m_fixture->GetBody()->GetUserData()).GetName() == "Player" || ECS::GetComponent<PhysicsBody>((int)nodeRay.m_fixture->GetBody()->GetUserData()).GetName() == "Boss")
 			{
-					//makeNode(x, y ,1);
+					//makeNode(x, y ,0.3);
 					//Adds a blank node to the list
 					makeGrid(b2Vec2(x, y));
 				
@@ -879,7 +922,7 @@ void PhysicsPlayground::InitScene(float windowWidth, float windowHeight)
 
 
 	startup = true;
-
+	transitionStarted = false;
 	ECS::GetComponent<HorizontalScroll>(MainEntities::MainCamera()).SetFocus(&ECS::GetComponent<Transform>(MainEntities::MainPlayer()));
 	ECS::GetComponent<VerticalScroll>(MainEntities::MainCamera()).SetFocus(&ECS::GetComponent<Transform>(MainEntities::MainPlayer()));
 	

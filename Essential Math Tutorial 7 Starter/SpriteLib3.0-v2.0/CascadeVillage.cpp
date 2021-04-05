@@ -54,9 +54,9 @@ void CascadeVillage::InitScene(float windowWidth, float windowHeight)
 	//Sets up aspect ratio for the camera
 	float aspectRatio = windowWidth / windowHeight;
 	aRatio = aspectRatio;
-	//EffectManager::CreateEffect(EffectType::Vignette, windowWidth, windowHeight);
-	//EffectManager::CreateEffect(EffectType::Sepia, windowWidth, windowHeight);
-	//EffectManager::RemoveEffect(EffectManager::GetSepiaHandle()); //added this to get rid of sephia
+	EffectManager::CreateEffect(EffectType::Vignette, windowWidth, windowHeight);
+	EffectManager::CreateEffect(EffectType::Sepia, windowWidth, windowHeight);
+	EffectManager::RemoveEffect(EffectManager::GetSepiaHandle()); //added this to get rid of sephia
 
 
 	//Setup MainCamera Entity
@@ -853,7 +853,7 @@ void CascadeVillage::InitScene(float windowWidth, float windowHeight)
 
 	
 	startup = true;
-
+	transitionStarted = false;
 	ECS::GetComponent<HorizontalScroll>(MainEntities::MainCamera()).SetFocus(&ECS::GetComponent<Transform>(MainEntities::MainPlayer()));
 	ECS::GetComponent<VerticalScroll>(MainEntities::MainCamera()).SetFocus(&ECS::GetComponent<Transform>(MainEntities::MainPlayer()));
 

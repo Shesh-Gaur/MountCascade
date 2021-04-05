@@ -41,8 +41,6 @@ void Game::InitGame()
 	m_scenes.push_back(new BossPhase1("Boss Phase One Time"));
 	m_scenes.push_back(new BossPhase3("Boss Phase Three Time"));
 
-
-
 	//Sets active scene reference to our scene
 	m_activeScene = m_scenes[3];
 
@@ -226,20 +224,22 @@ void Game::KeyboardDown()
 
 	if (switchSceneCascadeVillage == true)
 	{
-
 		switchSceneCascadeVillage = false;
-			SwapScene(3);
-			
-		
+		SwapScene(3);		
 	}
 
 	if (switchSceneMushroomCave == true)
 	{
 		switchSceneMushroomCave = false;
 		SwapScene(1);
-
-
 	}
+
+	if (switchSceneBossRoom1 == true)
+	{
+		switchSceneBossRoom1 = false;
+		SwapScene(4);
+	}
+
 	if (Input::GetKeyDown(Key::Z))
 	{
 		SwapScene(3);
@@ -350,6 +350,8 @@ void Game::SwapScene(int newScene)
 		PhysicsSystem::Init();
 		switchSceneCascadeVillage = false;
 		switchSceneMushroomCave = false;
+		switchSceneBossRoom1 = false;
+
 }
 
 

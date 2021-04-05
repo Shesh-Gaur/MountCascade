@@ -579,7 +579,7 @@ void PhysicsBody::Update(Transform * trans)
 						if (wallRay.m_fixture != NULL)
 						{
 							std::cout << "\n" << ECS::GetComponent<PhysicsBody>((int)wallRay.m_fixture->GetBody()->GetUserData()).GetName();
-							if (ECS::GetComponent<PhysicsBody>((int)wallRay.m_fixture->GetBody()->GetUserData()).GetName() != "Player" && ECS::GetComponent<PhysicsBody>((int)wallRay.m_fixture->GetBody()->GetUserData()).GetName() != "Trigger")
+							if (ECS::GetComponent<PhysicsBody>((int)wallRay.m_fixture->GetBody()->GetUserData()).GetName() != "Player" && ECS::GetComponent<PhysicsBody>((int)wallRay.m_fixture->GetBody()->GetUserData()).GetName() != "Trigger" && ECS::GetComponent<PhysicsBody>((int)wallRay.m_fixture->GetBody()->GetUserData()).GetName() != "Bat")
 							{
 								recoverCooldown = recoverCooldownDefault;
 								isCharging = false;

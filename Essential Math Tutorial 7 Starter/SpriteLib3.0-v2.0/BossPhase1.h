@@ -65,7 +65,7 @@ public:
 	float autosaveTimer = 0.f;
 	int autosaveInterval = 60;
 
-	int gLength = 10, gWidth = 10;
+	int gLength = 37, gWidth = 6;
 	b2Vec2 pastPlayerPosition = b2Vec2(999, 999);
 	int nextNode = 1;
 	float pathFindTimerDefault = 2.f;
@@ -82,6 +82,10 @@ public:
 	float hpTrans = 1.f;
 	float dashTrans = 1.f;
 	b2Vec2 newPos;
+	bool phase2 = false;
+	float batSpawnTimerDefault = 15.f;
+	float batSpawnTimer = batSpawnTimerDefault;
+
 protected:
 	bool m_firstWindow = false;
 	bool m_secondWindow = false;

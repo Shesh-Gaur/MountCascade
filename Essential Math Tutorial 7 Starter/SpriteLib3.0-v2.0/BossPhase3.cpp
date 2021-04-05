@@ -535,7 +535,7 @@ void BossPhase3::InitScene(float windowWidth, float windowHeight)
 			//if (nodeRay.m_fixture == nullptr || nodeRay.m_fixture->GetBody()->GetType() == b2_dynamicBody)
 			//{
 
-			if (nodeRay.m_fixture == nullptr)
+			if (nodeRay.m_fixture == nullptr || ECS::GetComponent<PhysicsBody>((int)nodeRay.m_fixture->GetBody()->GetUserData()).GetName() == "Decor" || ECS::GetComponent<PhysicsBody>((int)nodeRay.m_fixture->GetBody()->GetUserData()).GetName() == "Bat" || ECS::GetComponent<PhysicsBody>((int)nodeRay.m_fixture->GetBody()->GetUserData()).GetName() == "Player" || ECS::GetComponent<PhysicsBody>((int)nodeRay.m_fixture->GetBody()->GetUserData()).GetName() == "Boss")
 			{
 
 				//makeNode(x, y ,1);
@@ -558,6 +558,7 @@ void BossPhase3::InitScene(float windowWidth, float windowHeight)
 
 
 	startup = true;
+	transitionStarted = false;
 
 
 

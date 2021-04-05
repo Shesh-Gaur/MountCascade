@@ -68,7 +68,7 @@ void updateNbors(b2World* m_physicsWorld) //Finds the neighboring nodes to the n
 					{
 						RayCastCallback obstacleRay;
 						m_physicsWorld->RayCast(&obstacleRay, allNodes[i].position, allNodes[p].position);
-						if (obstacleRay.m_fixture == nullptr)
+						if (obstacleRay.m_fixture == nullptr || ECS::GetComponent<PhysicsBody>((int)obstacleRay.m_fixture->GetBody()->GetUserData()).GetName() == "Decor" || ECS::GetComponent<PhysicsBody>((int)obstacleRay.m_fixture->GetBody()->GetUserData()).GetName() == "Bat" || ECS::GetComponent<PhysicsBody>((int)obstacleRay.m_fixture->GetBody()->GetUserData()).GetName() == "Player" || ECS::GetComponent<PhysicsBody>((int)obstacleRay.m_fixture->GetBody()->GetUserData()).GetName() == "Boss")
 						{
 							allNodes[i].neighbors[allNodes[i].nborsCount] = p; //stores index of nbor in node array
 							allNodes[i].nborsCount++;
@@ -290,17 +290,21 @@ void CalculatePath()
 			//Add to closed set
 			//cout << "\nCC:" << compareOpen().position.x << " "<< compareOpen().position.y;
 			int ind = compareOpen();
-			closedSet[closedCount] = openSet[ind];
-			allNodes[closedSet[closedCount]].makeClosed();
-			closedCount++;
-			//cout << "\n";
-			//Removes node from open set so it has to shift over everything?
-			for (ind; ind < openCount; ind++)
+			if (openSet[ind] != NULL)
 			{
-				openSet[ind] = openSet[ind + 1];
+				closedSet[closedCount] = openSet[ind];
+				allNodes[closedSet[closedCount]].makeClosed();
+				closedCount++;
 
+				//cout << "\n";
+				//Removes node from open set so it has to shift over everything?
+				for (ind; ind < openCount; ind++)
+				{
+					openSet[ind] = openSet[ind + 1];
+
+				}
+				openCount--;
 			}
-			openCount--;
 			//HOLY FUCK IT WORKS!!
 		}
 		//drawGrid();

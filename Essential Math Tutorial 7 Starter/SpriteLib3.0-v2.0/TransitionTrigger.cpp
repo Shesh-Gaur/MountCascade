@@ -56,6 +56,12 @@ void TransitionTrigger::OnEnter()
 			y = 10;
 
 		}
+		else if (nextScene == 2)
+		{
+			theGame.switchSceneBossRoom1 = true;
+			x = 1945;
+			y = 550;
+		}
 
 		playerSaveFile << x;
 		playerSaveFile << "\t" << y;

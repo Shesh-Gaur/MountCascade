@@ -64,7 +64,7 @@ public:
 	float autosaveTimer = 0.f;
 	int autosaveInterval = 60;
 
-	int gLength = 10, gWidth = 10;
+	int gLength = 12, gWidth = 10;
 	b2Vec2 pastPlayerPosition = b2Vec2(999, 999);
 	int nextNode = 1;
 	float pathFindTimerDefault = 2.f;
