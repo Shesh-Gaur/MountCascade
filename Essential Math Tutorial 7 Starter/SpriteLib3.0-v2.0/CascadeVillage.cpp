@@ -54,9 +54,9 @@ void CascadeVillage::InitScene(float windowWidth, float windowHeight)
 	//Sets up aspect ratio for the camera
 	float aspectRatio = windowWidth / windowHeight;
 	aRatio = aspectRatio;
-	//EffectManager::CreateEffect(EffectType::Vignette, windowWidth, windowHeight);
-	//EffectManager::CreateEffect(EffectType::Sepia, windowWidth, windowHeight);
-	//EffectManager::RemoveEffect(EffectManager::GetSepiaHandle()); //added this to get rid of sephia
+	EffectManager::CreateEffect(EffectType::Vignette, windowWidth, windowHeight);
+	EffectManager::CreateEffect(EffectType::Sepia, windowWidth, windowHeight);
+	EffectManager::RemoveEffect(EffectManager::GetSepiaHandle()); //added this to get rid of sephia
 
 
 	//Setup MainCamera Entity
@@ -166,13 +166,14 @@ void CascadeVillage::InitScene(float windowWidth, float windowHeight)
 		b2Body* tempBody;
 		b2BodyDef tempDef;
 		tempDef.type = b2_dynamicBody;
-		tempDef.position.Set(float32(0), float32(100));
+		tempDef.position.Set(float32(0), float32(0));
 
 		tempBody = m_physicsWorld->CreateBody(&tempDef);
 
 		tempPhsBody = PhysicsBody(entity, tempBody, float(tempSpr.GetWidth() - shrinkX), vec2(0.f, 0.f), false, OBJECTS, PICKUP, 0.f, 0.f);
 		tempPhsBody.SetColor(vec4(0.f, 1.f, 0.f, 0.3f));
 		tempPhsBody.SetRotationAngleDeg(0);
+		tempPhsBody.SetGravityScale(0.f);
 
 	}
 
@@ -401,10 +402,10 @@ void CascadeVillage::InitScene(float windowWidth, float windowHeight)
 		std::string fileName = "punisher/Punisher1.png";
 		ECS::GetComponent<Sprite>(entity).LoadSprite(fileName, 77, 100);
 		ECS::GetComponent<Sprite>(entity).SetTransparency(1.0f);
-		ECS::GetComponent<Transform>(entity).SetPosition(vec3(-220.f, 145.f, 0.01f));
+		ECS::GetComponent<Transform>(entity).SetPosition(vec3(-220.f, 175.f, 0.01f));
 	}
 
-	//Punisher Tutorial Jump
+	//Punisher Tutorial dash
 	{
 		auto entity = ECS::CreateEntity();
 		//Add components
@@ -415,10 +416,10 @@ void CascadeVillage::InitScene(float windowWidth, float windowHeight)
 		std::string fileName = "punisher/Punisher1.png";
 		ECS::GetComponent<Sprite>(entity).LoadSprite(fileName, 77, 100);
 		ECS::GetComponent<Sprite>(entity).SetTransparency(1.0f);
-		ECS::GetComponent<Transform>(entity).SetPosition(vec3(320.f, 140.f, 0.01f));
+		ECS::GetComponent<Transform>(entity).SetPosition(vec3(320.f, 145.f, 0.01f));
 	}
 
-	//Punisher Tutorial Dash
+	//Punisher wall jump
 	{
 		auto entity = ECS::CreateEntity();
 		//Add components
@@ -429,7 +430,7 @@ void CascadeVillage::InitScene(float windowWidth, float windowHeight)
 		std::string fileName = "punisher/Punisher1.png";
 		ECS::GetComponent<Sprite>(entity).LoadSprite(fileName, 77, 100);
 		ECS::GetComponent<Sprite>(entity).SetTransparency(1.0f);
-		ECS::GetComponent<Transform>(entity).SetPosition(vec3(1255.f, 145.f, 0.01f));
+		ECS::GetComponent<Transform>(entity).SetPosition(vec3(1255.f, 140.f, 0.01f));
 	}
 
 	//Punisher Tutorial Attack
@@ -443,7 +444,7 @@ void CascadeVillage::InitScene(float windowWidth, float windowHeight)
 		std::string fileName = "punisher/Punisher1.png";
 		ECS::GetComponent<Sprite>(entity).LoadSprite(fileName, 77, 100);
 		ECS::GetComponent<Sprite>(entity).SetTransparency(1.0f);
-		ECS::GetComponent<Transform>(entity).SetPosition(vec3(1575.f, 310.f, 0.01f));
+		ECS::GetComponent<Transform>(entity).SetPosition(vec3(1775.f, 335.f, 0.01f));
 	}
 
 	{ //Punisher Text Entity
@@ -458,7 +459,7 @@ void CascadeVillage::InitScene(float windowWidth, float windowHeight)
 		std::string fileName = "tutorial/Chatbox-Move and Jump.png";
 		ECS::GetComponent<Sprite>(entity).LoadSprite(fileName, 96, 48);
 		ECS::GetComponent<Sprite>(entity).SetTransparency(0.0f);
-		ECS::GetComponent<Transform>(entity).SetPosition(vec3(-105.f, 160.f, 0.01f));
+		ECS::GetComponent<Transform>(entity).SetPosition(vec3(-105.f, 180.f, 0.01f));
 	}
 
 	{
@@ -754,7 +755,7 @@ void CascadeVillage::InitScene(float windowWidth, float windowHeight)
 		std::string fileName = "jumpBoost/Boost1.png";
 		ECS::GetComponent<Sprite>(entity).LoadSprite(fileName, 512, 512);
 		ECS::GetComponent<Sprite>(entity).SetTransparency(1.f);
-		ECS::GetComponent<Transform>(entity).SetPosition(vec3(-1321.f, 575.f, 0.021f));
+		ECS::GetComponent<Transform>(entity).SetPosition(vec3(-1321.f, 600.f, 0.021f));
 	}
 	{ //background mountain 1
 
@@ -850,9 +851,9 @@ void CascadeVillage::InitScene(float windowWidth, float windowHeight)
 	player.theAttackTrigger = attackTrigger1;
 
 
-
+	
 	startup = true;
-
+	transitionStarted = false;
 	ECS::GetComponent<HorizontalScroll>(MainEntities::MainCamera()).SetFocus(&ECS::GetComponent<Transform>(MainEntities::MainPlayer()));
 	ECS::GetComponent<VerticalScroll>(MainEntities::MainCamera()).SetFocus(&ECS::GetComponent<Transform>(MainEntities::MainPlayer()));
 
@@ -871,6 +872,8 @@ void CascadeVillage::makeBox(float xPos, float yPos, float zPos, float rotation,
 	//Sets up components
 	std::string fileName = "greyBox2.jpg";
 	ECS::GetComponent<Sprite>(entity).LoadSprite(fileName, width, height);
+	ECS::GetComponent<Sprite>(entity).SetTransparency(0.f);
+
 	ECS::GetComponent<Transform>(entity).SetPosition(vec3(0.f, 0.f, zPos));
 
 	auto& tempSpr = ECS::GetComponent<Sprite>(entity);
@@ -1236,6 +1239,7 @@ void CascadeVillage::makeIceWall(float xPos, float yPos, float zPos, float rotat
 	std::string fileName = "iceWall.jpg";
 	ECS::GetComponent<Sprite>(entity).LoadSprite(fileName, width, height);
 	ECS::GetComponent<Transform>(entity).SetPosition(vec3(0.f, 0.f, zPos));
+	ECS::GetComponent<Sprite>(entity).SetTransparency(0.f);
 
 	auto& tempSpr = ECS::GetComponent<Sprite>(entity);
 	auto& tempPhsBody = ECS::GetComponent<PhysicsBody>(entity);
@@ -1542,7 +1546,7 @@ void CascadeVillage::cameraTrackPlayer()
 
 	b2Vec2 speed = b2Vec2(10, 10);
 	ECS::GetComponent<PhysicsBody>(playerFollow).GetBody()->SetLinearVelocity(b2Vec2(newPos.x * speed.x , newPos.y * speed.y ));
-
+	//std::cout << "\nPLAYER FOLLOW " << ECS::GetComponent<PhysicsBody>(playerFollow).GetPosition().y;
 }
 
 

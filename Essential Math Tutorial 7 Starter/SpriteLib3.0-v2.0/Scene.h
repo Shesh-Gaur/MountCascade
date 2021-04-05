@@ -109,6 +109,7 @@ protected:
 private:
 	//Hello world entity number
 	int m_helloWorldSign = 0;
+	
 };
 
 #endif // !__SCENE_H__

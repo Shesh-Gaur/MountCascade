@@ -329,6 +329,7 @@ void BossPhase3::InitScene(float windowWidth, float windowHeight)
 		tempPhsBody = PhysicsBody(entity, tempBody, float(tempSpr.GetWidth() - shrinkX), vec2(0.f, 0.f), false, OBJECTS, PICKUP, 0.f, 0.f);
 		tempPhsBody.SetColor(vec4(0.f, 1.f, 0.f, 0.3f));
 		tempPhsBody.SetRotationAngleDeg(0);
+		tempPhsBody.SetGravityScale(0.f);
 
 	}
 
@@ -534,7 +535,7 @@ void BossPhase3::InitScene(float windowWidth, float windowHeight)
 			//if (nodeRay.m_fixture == nullptr || nodeRay.m_fixture->GetBody()->GetType() == b2_dynamicBody)
 			//{
 
-			if (nodeRay.m_fixture == nullptr)
+			if (nodeRay.m_fixture == nullptr || ECS::GetComponent<PhysicsBody>((int)nodeRay.m_fixture->GetBody()->GetUserData()).GetName() == "Decor" || ECS::GetComponent<PhysicsBody>((int)nodeRay.m_fixture->GetBody()->GetUserData()).GetName() == "Bat" || ECS::GetComponent<PhysicsBody>((int)nodeRay.m_fixture->GetBody()->GetUserData()).GetName() == "Player" || ECS::GetComponent<PhysicsBody>((int)nodeRay.m_fixture->GetBody()->GetUserData()).GetName() == "Boss")
 			{
 
 				//makeNode(x, y ,1);
@@ -557,6 +558,7 @@ void BossPhase3::InitScene(float windowWidth, float windowHeight)
 
 
 	startup = true;
+	transitionStarted = false;
 
 
 
@@ -565,6 +567,7 @@ void BossPhase3::InitScene(float windowWidth, float windowHeight)
 
 	ECS::GetComponent<HorizontalScroll>(MainEntities::MainCamera()).SetFocus(&ECS::GetComponent<Transform>(playerFollow));
 	ECS::GetComponent<VerticalScroll>(MainEntities::MainCamera()).SetFocus(&ECS::GetComponent<Transform>(playerFollow));
+	hasChargeJump = true;
 
 }
 
@@ -1723,9 +1726,20 @@ void BossPhase3::GUIWindowTwo()
 void BossPhase3::RunLevelEditor()
 {
 	float scaleSpeed = 10;
+	
+	if (Input::GetKey(Key::NumPad9))
+	{
+		mouseAdjustment += 100.f * Timer::deltaTime;
+	}
+	else if (Input::GetKey(Key::NumPad7))
+	{
+		mouseAdjustment -= 100.f * Timer::deltaTime;
+	}
+
+
 	b2Vec2 wMousePos;
 	wMousePos = (b2Vec2((mousePosX * (fov/70)) / 4, (mousePosY *(fov/70)) / 4));
-	wMousePos += b2Vec2(ECS::GetComponent<Camera>(MainEntities::MainCamera()).GetPosition().x, ECS::GetComponent<Camera>(MainEntities::MainCamera()).GetPosition().y);
+	wMousePos += b2Vec2(ECS::GetComponent<Camera>(MainEntities::MainCamera()).GetPosition().x + mouseAdjustment, ECS::GetComponent<Camera>(MainEntities::MainCamera()).GetPosition().y);
 	ECS::GetComponent<Sprite>(rayMarker).SetTransparency(0.9f);
 	ECS::GetComponent<Transform>(rayMarker).SetPosition(wMousePos.x, wMousePos.y, 2);
 

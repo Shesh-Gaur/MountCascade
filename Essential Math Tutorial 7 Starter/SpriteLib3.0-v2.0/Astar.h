@@ -1,6 +1,6 @@
 #pragma once
 
-const int gridWidth = 10;
+const int gridWidth = 15;
 const int numOfNodes = gridWidth * gridWidth;
 const int gap = 50;
 class node

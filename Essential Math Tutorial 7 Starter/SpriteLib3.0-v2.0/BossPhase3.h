@@ -52,7 +52,7 @@ public:
 	float aRatio;
 	float nPlane = 3.0f;
 	float fov = 70.f;
-
+	float mouseAdjustment = 0.f;
 	//Important Variables
 	float mousePosX, mousePosY;
 	bool levelEditor, startup = false;

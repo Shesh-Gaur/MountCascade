@@ -31,7 +31,7 @@ void AttackTextTrigger::OnEnter()
 		std::string fileName = "tutorial/Chatbox-Attack.png";
 		ECS::GetComponent<Sprite>(entity).LoadSprite(fileName, 92, 48);
 		ECS::GetComponent<Sprite>(entity).SetTransparency(1.f);
-		ECS::GetComponent<Transform>(entity).SetPosition(vec3(1680.f, 350.f, 2.f));
+		ECS::GetComponent<Transform>(entity).SetPosition(vec3(1650.f, 390.f, 2.f));
 		isATTRan = true;
 	}
 
