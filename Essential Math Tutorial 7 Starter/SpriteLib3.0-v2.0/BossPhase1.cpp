@@ -652,6 +652,74 @@ void BossPhase1::InitScene(float windowWidth, float windowHeight)
 
 	}
 
+	{
+		//Creates entity
+		auto entity = ECS::CreateEntity();
+		phase1Wall = entity;
+		//Add components
+		ECS::AttachComponent<Sprite>(entity);
+		ECS::AttachComponent<Transform>(entity);
+		ECS::AttachComponent<PhysicsBody>(entity);
+
+		//Sets up components
+		std::string fileName = "greyBox.jpg";
+		ECS::GetComponent<Sprite>(entity).LoadSprite(fileName, 86.f, 545.f);
+		ECS::GetComponent<Transform>(entity).SetPosition(vec3(0.f, 0.f, 0.02f));
+
+		auto& tempSpr = ECS::GetComponent<Sprite>(entity);
+		auto& tempPhsBody = ECS::GetComponent<PhysicsBody>(entity);
+
+		float shrinkX = 0.f;
+		float shrinkY = 0.f;
+		b2Body* tempBody;
+		b2BodyDef tempDef;
+		tempDef.type = b2_staticBody;
+		tempDef.position.Set(float32(-375.472f), float32(422.591f));
+
+		tempBody = m_physicsWorld->CreateBody(&tempDef);
+
+		tempPhsBody = PhysicsBody(entity, tempBody, float(tempSpr.GetWidth() - shrinkX),
+			float(tempSpr.GetHeight() - shrinkY), vec2(0.f, 0.f), false, GROUND, PLAYER | ENEMY | OBJECTS | HEXAGON, 1.f, 69.f);
+		tempPhsBody.SetColor(vec4(0.f, 1.f, 0.f, 0.3f));
+		tempPhsBody.SetRotationAngleDeg(0);
+		tempPhsBody.SetName("Decor");
+
+	}
+
+	{
+		//Creates entity
+		auto entity = ECS::CreateEntity();
+		phase1Wall2 = entity;
+
+		//Add components
+		ECS::AttachComponent<Sprite>(entity);
+		ECS::AttachComponent<Transform>(entity);
+		ECS::AttachComponent<PhysicsBody>(entity);
+
+		//Sets up components
+		std::string fileName = "greyBox.jpg";
+		ECS::GetComponent<Sprite>(entity).LoadSprite(fileName, 86.f, 545.f);
+		ECS::GetComponent<Transform>(entity).SetPosition(vec3(0.f, 0.f, 0.02f));
+
+		auto& tempSpr = ECS::GetComponent<Sprite>(entity);
+		auto& tempPhsBody = ECS::GetComponent<PhysicsBody>(entity);
+
+		float shrinkX = 0.f;
+		float shrinkY = 0.f;
+		b2Body* tempBody;
+		b2BodyDef tempDef;
+		tempDef.type = b2_staticBody;
+		tempDef.position.Set(float32(333.f), float32(422.591f));
+
+		tempBody = m_physicsWorld->CreateBody(&tempDef);
+
+		tempPhsBody = PhysicsBody(entity, tempBody, float(tempSpr.GetWidth() - shrinkX),
+			float(tempSpr.GetHeight() - shrinkY), vec2(0.f, 0.f), false, GROUND, PLAYER | ENEMY | OBJECTS | HEXAGON, 1.f, 69.f);
+		tempPhsBody.SetColor(vec4(0.f, 1.f, 0.f, 0.3f));
+		tempPhsBody.SetRotationAngleDeg(0);
+		tempPhsBody.SetName("Decor");
+
+	}
 
 
 
@@ -707,7 +775,8 @@ void BossPhase1::InitScene(float windowWidth, float windowHeight)
 	auto& player = ECS::GetComponent<Player>(MainEntities::MainPlayer());
 	player.theAttackTrigger = attackTrigger1;
 
-
+	//Spawn in platforms when phase 2 starts instead of from save file
+	
 
 	startup = true;
 	hasChargeJump = true;
@@ -857,6 +926,8 @@ void BossPhase1::makeMushroom(float xPos, float yPos, float zPos, float rotation
 	tempPhsBody = PhysicsBody(entity, tempBody, float(tempSpr.GetWidth() - shrinkX), vec2(0.f, 0.f), false, OBJECTS, 0.f, 0.f);
 	tempPhsBody.SetColor(vec4(0.f, 1.f, 0.f, 0.3f));
 	tempPhsBody.SetRotationAngleDeg(rotation);
+	tempPhsBody.SetName("Decor");
+
 
 }
 
@@ -1513,6 +1584,10 @@ void BossPhase1::Update()
 		ECS::GetComponent<Sprite>(MainEntities::MainPlayer()).SetWidth(256);
 		ECS::GetComponent<Sprite>(MainEntities::MainPlayer()).SetHeight(128);
 	}
+	else if (player.m_attacking && player.haveYouPressedSpace == true) {
+		ECS::GetComponent<Sprite>(MainEntities::MainPlayer()).SetWidth(64);
+		ECS::GetComponent<Sprite>(MainEntities::MainPlayer()).SetHeight(64);
+	}
 	else if (player.m_dashing) {
 		ECS::GetComponent<Sprite>(MainEntities::MainPlayer()).SetWidth(448);
 		ECS::GetComponent<Sprite>(MainEntities::MainPlayer()).SetHeight(64);
@@ -1521,6 +1596,7 @@ void BossPhase1::Update()
 		ECS::GetComponent<Sprite>(MainEntities::MainPlayer()).SetWidth(96);
 		ECS::GetComponent<Sprite>(MainEntities::MainPlayer()).SetHeight(64);
 	}
+	
 	else
 		ECS::GetComponent<Sprite>(MainEntities::MainPlayer()).SetWidth(64);
 	if (!player.m_attacking) ECS::GetComponent<Sprite>(MainEntities::MainPlayer()).SetHeight(64);
@@ -1694,6 +1770,9 @@ void BossPhase1::Update()
 		if (ECS::GetComponent<PhysicsBody>(boss).GetHealth() <= 15)
 		{
 			phase2 = true;
+			//PhysicsBody::m_bodiesToDelete.push_back(phase1Wall);
+			PhysicsBody::m_bodiesToDelete.push_back(phase1Wall2);
+
 		}
 	}
 	//std::cout << "\n" << airDashCounter;

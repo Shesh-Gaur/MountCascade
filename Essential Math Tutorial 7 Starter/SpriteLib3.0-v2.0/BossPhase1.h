@@ -126,6 +126,9 @@ protected:
 	int bg3;
 	int bg4;
 	int bg5;
+	int phase1Wall;
+	int phase1Wall2;
+
 	std::vector<int> batVec2;
 
 	float backgtimer = 0.f;
