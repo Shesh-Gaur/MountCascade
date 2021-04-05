@@ -251,7 +251,7 @@ void PhysicsPlayground::InitScene(float windowWidth, float windowHeight)
 		std::string fileName = "tutorial/Chatbox-Charged Jump.png";
 		ECS::GetComponent<Sprite>(entity).LoadSprite(fileName, 96, 48);
 		ECS::GetComponent<Sprite>(entity).SetTransparency(1.f);
-		ECS::GetComponent<Transform>(entity).SetPosition(vec3(510.f, 155.f, 2.f));
+		ECS::GetComponent<Transform>(entity).SetPosition(vec3(500.f, 155.f, 2.f));
 
 	}
 
@@ -270,7 +270,7 @@ void PhysicsPlayground::InitScene(float windowWidth, float windowHeight)
 		std::string fileName = "punisher/Punisher1.png";
 		ECS::GetComponent<Sprite>(entity).LoadSprite(fileName, 77, 100);
 		ECS::GetComponent<Sprite>(entity).SetTransparency(1.f);
-		ECS::GetComponent<Transform>(entity).SetPosition(vec3(580.f, 160.f, 2.f));
+		ECS::GetComponent<Transform>(entity).SetPosition(vec3(580.f, 165.f, 0.01f));
 
 	}
 
