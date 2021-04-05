@@ -68,7 +68,7 @@ void PhysicsPlayground::InitScene(float windowWidth, float windowHeight)
 		//Set up the components
 		std::string fileName = "overlay/The_Mushroom_Cave_Overlay.png";
 		ECS::GetComponent<Sprite>(entity).LoadSprite(fileName, 4096, 4096);
-		ECS::GetComponent<Sprite>(entity).SetTransparency(0.5f);
+		ECS::GetComponent<Sprite>(entity).SetTransparency(1.f);
 		ECS::GetComponent<Transform>(entity).SetPosition(vec3(525.f, 250.f, 0.021f));
 	}
 
@@ -955,7 +955,7 @@ void PhysicsPlayground::makeBox(float xPos, float yPos, float zPos, float rotati
 	std::string fileName = "greyBox.jpg";
 	ECS::GetComponent<Sprite>(entity).LoadSprite(fileName, width, height);
 	ECS::GetComponent<Transform>(entity).SetPosition(vec3(0.f, 0.f, zPos));
-
+	ECS::GetComponent<Sprite>(entity).SetTransparency(0.f);
 	auto& tempSpr = ECS::GetComponent<Sprite>(entity);
 	auto& tempPhsBody = ECS::GetComponent<PhysicsBody>(entity);
 
