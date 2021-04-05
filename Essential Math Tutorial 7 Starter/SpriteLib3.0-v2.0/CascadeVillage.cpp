@@ -166,13 +166,14 @@ void CascadeVillage::InitScene(float windowWidth, float windowHeight)
 		b2Body* tempBody;
 		b2BodyDef tempDef;
 		tempDef.type = b2_dynamicBody;
-		tempDef.position.Set(float32(0), float32(100));
+		tempDef.position.Set(float32(0), float32(0));
 
 		tempBody = m_physicsWorld->CreateBody(&tempDef);
 
 		tempPhsBody = PhysicsBody(entity, tempBody, float(tempSpr.GetWidth() - shrinkX), vec2(0.f, 0.f), false, OBJECTS, PICKUP, 0.f, 0.f);
 		tempPhsBody.SetColor(vec4(0.f, 1.f, 0.f, 0.3f));
 		tempPhsBody.SetRotationAngleDeg(0);
+		tempPhsBody.SetGravityScale(0.f);
 
 	}
 
@@ -850,7 +851,7 @@ void CascadeVillage::InitScene(float windowWidth, float windowHeight)
 	player.theAttackTrigger = attackTrigger1;
 
 
-
+	
 	startup = true;
 
 	ECS::GetComponent<HorizontalScroll>(MainEntities::MainCamera()).SetFocus(&ECS::GetComponent<Transform>(MainEntities::MainPlayer()));
@@ -871,6 +872,8 @@ void CascadeVillage::makeBox(float xPos, float yPos, float zPos, float rotation,
 	//Sets up components
 	std::string fileName = "greyBox2.jpg";
 	ECS::GetComponent<Sprite>(entity).LoadSprite(fileName, width, height);
+	ECS::GetComponent<Sprite>(entity).SetTransparency(0.f);
+
 	ECS::GetComponent<Transform>(entity).SetPosition(vec3(0.f, 0.f, zPos));
 
 	auto& tempSpr = ECS::GetComponent<Sprite>(entity);
@@ -1236,6 +1239,7 @@ void CascadeVillage::makeIceWall(float xPos, float yPos, float zPos, float rotat
 	std::string fileName = "iceWall.jpg";
 	ECS::GetComponent<Sprite>(entity).LoadSprite(fileName, width, height);
 	ECS::GetComponent<Transform>(entity).SetPosition(vec3(0.f, 0.f, zPos));
+	ECS::GetComponent<Sprite>(entity).SetTransparency(0.f);
 
 	auto& tempSpr = ECS::GetComponent<Sprite>(entity);
 	auto& tempPhsBody = ECS::GetComponent<PhysicsBody>(entity);
@@ -1542,7 +1546,7 @@ void CascadeVillage::cameraTrackPlayer()
 
 	b2Vec2 speed = b2Vec2(10, 10);
 	ECS::GetComponent<PhysicsBody>(playerFollow).GetBody()->SetLinearVelocity(b2Vec2(newPos.x * speed.x , newPos.y * speed.y ));
-
+	//std::cout << "\nPLAYER FOLLOW " << ECS::GetComponent<PhysicsBody>(playerFollow).GetPosition().y;
 }
 
 

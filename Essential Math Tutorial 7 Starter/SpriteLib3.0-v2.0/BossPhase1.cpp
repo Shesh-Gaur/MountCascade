@@ -400,6 +400,7 @@ void BossPhase1::InitScene(float windowWidth, float windowHeight)
 		tempPhsBody = PhysicsBody(entity, tempBody, float(tempSpr.GetWidth() - shrinkX), vec2(0.f, 0.f), false, OBJECTS, PICKUP, 0.f, 0.f);
 		tempPhsBody.SetColor(vec4(0.f, 1.f, 0.f, 0.3f));
 		tempPhsBody.SetRotationAngleDeg(0);
+		tempPhsBody.SetGravityScale(0.f);
 
 	}
 
@@ -710,6 +711,10 @@ void BossPhase1::InitScene(float windowWidth, float windowHeight)
 
 	startup = true;
 	hasChargeJump = true;
+	bossStarted = false;
+	fov = 70.f;
+	ECS::GetComponent<Camera>(MainEntities::MainCamera()).Perspective(fov, aRatio, nPlane, 1000.f);
+
 	ECS::GetComponent<HorizontalScroll>(MainEntities::MainCamera()).SetFocus(&ECS::GetComponent<Transform>(MainEntities::MainPlayer()));
 	ECS::GetComponent<VerticalScroll>(MainEntities::MainCamera()).SetFocus(&ECS::GetComponent<Transform>(MainEntities::MainPlayer()));
 
@@ -1222,6 +1227,14 @@ void BossPhase1::readSaveFile()
 
 void BossPhase1::cameraTrackPlayer()
 {
+	if (ECS::GetComponent<PhysicsBody>(MainEntities::MainPlayer()).GetPosition().y < 1100.f && ECS::GetComponent<PhysicsBody>(MainEntities::MainPlayer()).GetPosition().y > 800.f)
+	{
+
+			bossStarted = true;
+		
+	}
+
+
 	if (bossStarted == true)
 	{
 
@@ -1273,6 +1286,8 @@ void BossPhase1::cameraTrackPlayer()
 	}
 	else
 	{
+
+		//std::cout << "\nNORMAL";
 		b2Vec2 newPos = ECS::GetComponent<PhysicsBody>(MainEntities::MainPlayer()).GetPosition() + b2Vec2(mousePosX / 30, (mousePosY / 15) - 10) - ECS::GetComponent<PhysicsBody>(playerFollow).GetPosition();
 		float length = sqrt(newPos.x * newPos.x + newPos.y * newPos.y);
 		newPos = b2Vec2(newPos.x, newPos.y);
@@ -1445,8 +1460,8 @@ void BossPhase1::SavePlayerLoc() {
 	std::ofstream fstre;
 	std::string fileLoc = "assets/PlayerSaves/File2.txt";
 
-	int tempx = ECS::GetComponent<PhysicsBody>(MainEntities::MainPlayer()).GetPosition().x;
-	int tempy = ECS::GetComponent<PhysicsBody>(MainEntities::MainPlayer()).GetPosition().y;
+	int tempx = -624.f;
+	int tempy = 1268.f;
 
 	fstre.open(fileLoc);
 	if (!fstre) {
@@ -1468,7 +1483,8 @@ b2Vec2 BossPhase1::LoadPlayerLoc() {
 		std::cout << "Failed to load player location!" << std::endl;
 	}
 	else {
-		fstre >> tempx >> tempy;
+		fstre >> tempx;
+		fstre >> tempy;
 	}
 
 	return b2Vec2(tempx,tempy);
@@ -1641,6 +1657,7 @@ void BossPhase1::Update()
 	
 	if (startup == false)
 	{
+
 		startup = true;
 
 	}
@@ -1649,6 +1666,12 @@ void BossPhase1::Update()
 		std::cout << "Resetting player location at: " << LoadPlayerLoc().x << " " << LoadPlayerLoc().y << std::endl;
 		health = 6;
 		ECS::GetComponent<PhysicsBody>(MainEntities::MainPlayer()).SetPosition(LoadPlayerLoc());
+		bossStarted = false;
+		fov = 70.f;
+		ECS::GetComponent<Camera>(MainEntities::MainCamera()).Perspective(fov, aRatio, nPlane, 1000.f);
+
+		ECS::GetComponent<PhysicsBody>(boss).SetHealth(ECS::GetComponent<PhysicsBody>(boss).GetMaxHealth());
+
 	}
 
 
@@ -2244,7 +2267,8 @@ void BossPhase1::KeyboardHold()
 	}
 	if (Input::GetKeyDown(Key::B))
 	{
-		bossStarted = true;
+		//bossStarted = true;
+
 
 	}
 
