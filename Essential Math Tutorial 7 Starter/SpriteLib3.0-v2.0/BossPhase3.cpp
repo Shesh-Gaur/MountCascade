@@ -296,7 +296,34 @@ void BossPhase3::InitScene(float windowWidth, float windowHeight)
 		ECS::GetComponent<Sprite>(entity).SetTransparency(1.0f);
 		ECS::GetComponent<Transform>(entity).SetPosition(vec3(-540.f, 1300.f, 0.01f));
 	}
-
+//	{ //Test Box Entity 64
+//
+////Creates entity
+//		auto entity = ECS::CreateEntity();
+//		//Add components
+//		ECS::AttachComponent<Sprite>(entity);
+//		ECS::AttachComponent<Transform>(entity);
+//
+//		//Set up the components
+//		std::string fileName = "boxsprite.jpg";
+//		ECS::GetComponent<Sprite>(entity).LoadSprite(fileName, 64, 64);
+//		ECS::GetComponent<Sprite>(entity).SetTransparency(1.0f);
+//		ECS::GetComponent<Transform>(entity).SetPosition(vec3(3100.f, 400.f, 0.0f));
+//	}
+//	{ //Test Box Entity 128
+//
+////Creates entity
+//		auto entity = ECS::CreateEntity();
+//		//Add components
+//		ECS::AttachComponent<Sprite>(entity);
+//		ECS::AttachComponent<Transform>(entity);
+//
+//		//Set up the components
+//		std::string fileName = "boxsprite.jpg";
+//		ECS::GetComponent<Sprite>(entity).LoadSprite(fileName, 128, 128);
+//		ECS::GetComponent<Sprite>(entity).SetTransparency(1.0f);
+//		ECS::GetComponent<Transform>(entity).SetPosition(vec3(3000.f, 400.f, 0.0f));
+//	}
 	//Setup new Entity
 	{
 		/*Scene::CreateSprite(m_sceneReg, "HelloWorld.png", 100, 60, 0.5f, vec3(0.f, 0.f, 0.f));*/
@@ -1733,7 +1760,7 @@ void BossPhase3::RunLevelEditor()
 	}
 	else if (Input::GetKey(Key::O))
 	{
-		mouseAdjustment -= 100.f;
+		mouseAdjustment -= 100.f * Timer::deltaTime;
 	}
 
 
