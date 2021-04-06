@@ -642,8 +642,8 @@ void BossPhase1::InitScene(float windowWidth, float windowHeight)
 			float(tempSpr.GetHeight() - shrinkY), vec2(0.f, -72.f), false, ENEMY, PLAYER | ENEMY , 1.f,8.f);
 		tempPhsBody.SetColor(vec4(0.f, 1.f, 0.f, 0.3f));
 		tempPhsBody.SetRotationAngleDeg(0);
-		tempPhsBody.SetHealth(30);
-		tempPhsBody.SetMaxHealth(30);
+		tempPhsBody.SetHealth(45);
+		tempPhsBody.SetMaxHealth(45);
 		tempPhsBody.SetSpeed(70.f);
 		tempPhsBody.SetHealthBar(bossInBar);
 		tempPhsBody.SetName("Boss");
@@ -775,8 +775,9 @@ void BossPhase1::InitScene(float windowWidth, float windowHeight)
 	auto& player = ECS::GetComponent<Player>(MainEntities::MainPlayer());
 	player.theAttackTrigger = attackTrigger1;
 
+
+
 	//Spawn in platforms when phase 2 starts instead of from save file
-	
 
 	startup = true;
 	hasChargeJump = true;
@@ -1767,11 +1768,14 @@ void BossPhase1::Update()
 	updateUI();
 	if (phase2 == false)
 	{
-		if (ECS::GetComponent<PhysicsBody>(boss).GetHealth() <= 15)
+		if (ECS::GetComponent<PhysicsBody>(boss).GetHealth() <= 30)
 		{
 			phase2 = true;
 			//PhysicsBody::m_bodiesToDelete.push_back(phase1Wall);
 			PhysicsBody::m_bodiesToDelete.push_back(phase1Wall2);
+			makeBox(132.053f, 415.067f, 0.02f, 0.f, 92.f, 27.f);
+			makeBox(-192.146f, 411.107f, 0.02f, 0.f, 92.f, 27.f);
+			makeBox(163.6f, 393.742f, 0.02f, 0.f, 29.f, 16.f);
 
 		}
 	}

@@ -279,6 +279,8 @@ void PhysicsBody::Update(Transform * trans)
 		if (playerSpotted == false && getCurrentClock() % 10 == 0)
 		{
 			fileName = "golem/idleframe1.png";
+			ECS::GetComponent<Sprite>((int)GetBody()->GetUserData()).LoadSprite(fileName, 256, 256);
+
 			RayCastCallback viewRay;
 			m_body->GetWorld()->RayCast(&viewRay, GetPosition(), ECS::GetComponent<PhysicsBody>(MainEntities::MainPlayer()).GetPosition());
 
@@ -295,12 +297,51 @@ void PhysicsBody::Update(Transform * trans)
 		if (playerSpotted == true)
 		{
 			animationFrame += 5.f * getDeltaTime();
+			
+			if (GetPosition().y <= 138)
+			{
+				if (GetPosition().x > 700)
+				{
+					SetPosition(b2Vec2(100.f, 350.f));
+
+				}
+				else
+				{
+					//Make Vulnerable
+					//TP to the spot
+					isAttacking = false;
+					isCharging = false;
+					isVulnerable = true;
+
+					SetPosition(b2Vec2(1000, 420));
+				}
+
+				
+			}
+			
+			if (isVulnerable == true && !isAttacking)
+			{
+				fileName = "golem/idleframe1.png";
+				ECS::GetComponent<Sprite>((int)GetBody()->GetUserData()).LoadSprite(fileName, 256, 256);
+				recoverCooldown = recoverCooldownDefault;
+				SetPosition(b2Vec2(1000, 420));
+
+
+			}
+
+			if (resetPosition == true)
+			{
+				GetBody()->SetLinearVelocity(b2Vec2(GetSpeed()* -10, GetBody()->GetLinearVelocity().y));
+
+				resetPosition = false;
+			}
+
 			if (attackCooldown > 0)
 			{
 				attackCooldown -= 1.f * getDeltaTime();
 			}
 			//std::cout << "\nAttack Cooldown " << attackCooldown;
-			if (bossLastVel == NULL)
+			if (bossLastVel == NULL || bossLastVel == 0)
 			{
 				bossLastVel = 10.f;
 
@@ -319,7 +360,7 @@ void PhysicsBody::Update(Transform * trans)
 
 			}
 
-			if (!isAttacking && !isCharging) //Is Walking
+			if (!isAttacking && !isCharging && !isVulnerable) //Is Walking
 			{
 
 				if (recoverCooldown > 0)
@@ -413,8 +454,14 @@ void PhysicsBody::Update(Transform * trans)
 					direction2 /= abs(direction2);
 					SetNextMovement(b2Vec2(direction2 * GetSpeed(), GetBody()->GetLinearVelocity().y));
 				}
-				GetBody()->SetLinearVelocity(b2Vec2(GetNextMovement().x, GetNextMovement().y));
-				bossLastVel = GetVelocity().x;
+
+				if (GetPosition().x < 225.f)
+				{
+
+					GetBody()->SetLinearVelocity(b2Vec2(GetNextMovement().x, GetNextMovement().y));
+					bossLastVel = GetVelocity().x;
+				}
+				
 				//std::cout << "\nHi, I'm WALKING rn " << animationFrame;
 
 			}
@@ -476,7 +523,7 @@ void PhysicsBody::Update(Transform * trans)
 
 			}
 
-			if (isCharging)//Is Charging
+			if (isCharging && !isAttacking && !isVulnerable)//Is Charging
 			{
 				if (bossLastVel < 0) {
 					switch ((int)round(animationFrame)) { //left
@@ -572,14 +619,14 @@ void PhysicsBody::Update(Transform * trans)
 
 					if (bossLastVel != 0)
 					{
-						GetBody()->GetWorld()->RayCast(&wallRay, GetPosition(), GetPosition() + b2Vec2(bossLastVel * 1.5, 0));
+						GetBody()->GetWorld()->RayCast(&wallRay, GetPosition() - b2Vec2(0.f,-20.f), GetPosition() - b2Vec2(0.f, -20.f) + b2Vec2(bossLastVel * 1.5, 0));
 
 
 
 						if (wallRay.m_fixture != NULL)
 						{
 							std::cout << "\n" << ECS::GetComponent<PhysicsBody>((int)wallRay.m_fixture->GetBody()->GetUserData()).GetName();
-							if (ECS::GetComponent<PhysicsBody>((int)wallRay.m_fixture->GetBody()->GetUserData()).GetName() != "Player" && ECS::GetComponent<PhysicsBody>((int)wallRay.m_fixture->GetBody()->GetUserData()).GetName() != "Trigger" && ECS::GetComponent<PhysicsBody>((int)wallRay.m_fixture->GetBody()->GetUserData()).GetName() != "Bat")
+							if (ECS::GetComponent<PhysicsBody>((int)wallRay.m_fixture->GetBody()->GetUserData()).GetName() != "Player" && ECS::GetComponent<PhysicsBody>((int)wallRay.m_fixture->GetBody()->GetUserData()).GetName() != "Trigger" )
 							{
 								recoverCooldown = recoverCooldownDefault;
 								isCharging = false;
@@ -1087,8 +1134,18 @@ void PhysicsBody::SetName(std::string n)
 
 void PhysicsBody::TakeDamage(float dmg,int ent)
 {
-	
+	if (isVulnerable == false)
+	{
 		health -= dmg;
+	}
+	else
+	{
+		health -= dmg*5;
+		isVulnerable = false;
+		resetPosition = true;
+
+	}
+
 		if (health <= 0)
 		{
 			health = 0;

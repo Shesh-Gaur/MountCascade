@@ -32,7 +32,6 @@ enum EntityCategories
 
 };
 
-
 class PhysicsBody
 {
 public:
@@ -156,6 +155,8 @@ public:
 	static std::vector<int> m_bodiesToDelete;
 	bool isCharging = false;
 	bool isAttacking = false;
+	bool isVulnerable = false;
+	bool resetPosition = false;
 	int healthBar = 69;
 private:
 	//The actual box2D body
@@ -205,8 +206,11 @@ private:
 	float attackCooldown = attackCooldownDefault;
 	float recoverCooldownDefault = 10.f;
 	float recoverCooldown = recoverCooldownDefault;
-	float bossLastVel;
+	float bossLastVel = 0.f;
 	int chargeLoopDefault = 6.f;
 	int chargeLoop = chargeLoopDefault;
+	float batSpawnTimerDefault = 25.f;
+	float batSpawnTimer = batSpawnTimerDefault;
+
 	
 };
