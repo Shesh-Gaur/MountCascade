@@ -1733,7 +1733,7 @@ void BossPhase3::RunLevelEditor()
 	}
 	else if (Input::GetKey(Key::O))
 	{
-		mouseAdjustment -= 100.f * Timer::deltaTime;
+		mouseAdjustment -= 100.f;
 	}
 
 
