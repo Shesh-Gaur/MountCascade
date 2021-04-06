@@ -275,6 +275,29 @@ void PhysicsBody::Update(Transform * trans)
 		std::string fileName;
 		ECS::GetComponent<Sprite>((int)GetBody()->GetUserData()).LoadSprite(fileName, 256, 256);
 
+		if (GetHealth() < 7 && batSpawnCounter == 3)
+		{
+			spawnBatsNow = true;
+			batSpawnCounter++;
+
+		}
+		else if (GetHealth() < 14 && batSpawnCounter == 2)
+		{
+			spawnBatsNow = true;
+			batSpawnCounter++;
+
+		}
+		else if (GetHealth() < 21 && batSpawnCounter == 1)
+		{
+			spawnBatsNow = true;
+			batSpawnCounter++;
+
+		}
+		else if (GetHealth() < 28 && batSpawnCounter == 0)
+		{
+			spawnBatsNow = true;
+			batSpawnCounter++;
+		}
 
 		if (playerSpotted == false && getCurrentClock() % 10 == 0)
 		{
@@ -302,31 +325,16 @@ void PhysicsBody::Update(Transform * trans)
 			{
 				if (GetPosition().x > 700)
 				{
-					SetPosition(b2Vec2(100.f, 350.f));
+					
+					SetPosition(b2Vec2(-23.f, 700.f));
 
 				}
 				else
 				{
-					//Make Vulnerable
-					//TP to the spot
-					isAttacking = false;
-					isCharging = false;
-					isVulnerable = true;
-
-					SetPosition(b2Vec2(1000, 420));
+					SetPosition(b2Vec2(615.f, 690.f));
+					
 				}
-
 				
-			}
-			
-			if (isVulnerable == true && !isAttacking)
-			{
-				fileName = "golem/idleframe1.png";
-				ECS::GetComponent<Sprite>((int)GetBody()->GetUserData()).LoadSprite(fileName, 256, 256);
-				recoverCooldown = recoverCooldownDefault;
-				SetPosition(b2Vec2(1000, 420));
-
-
 			}
 
 			if (resetPosition == true)
@@ -360,7 +368,7 @@ void PhysicsBody::Update(Transform * trans)
 
 			}
 
-			if (!isAttacking && !isCharging && !isVulnerable) //Is Walking
+			if (!isAttacking && !isCharging) //Is Walking
 			{
 
 				if (recoverCooldown > 0)
@@ -439,6 +447,7 @@ void PhysicsBody::Update(Transform * trans)
 						fileName = "golem/idleframe3.png";
 						animationFrame = 0;
 						break;
+
 					}
 				}
 				ECS::GetComponent<Sprite>((int)GetBody()->GetUserData()).LoadSprite(fileName, 256, 256);
@@ -461,7 +470,7 @@ void PhysicsBody::Update(Transform * trans)
 					GetBody()->SetLinearVelocity(b2Vec2(GetNextMovement().x, GetNextMovement().y));
 					bossLastVel = GetVelocity().x;
 				}
-				
+
 				//std::cout << "\nHi, I'm WALKING rn " << animationFrame;
 
 			}
@@ -523,7 +532,7 @@ void PhysicsBody::Update(Transform * trans)
 
 			}
 
-			if (isCharging && !isAttacking && !isVulnerable)//Is Charging
+			if (isCharging && !isAttacking)//Is Charging
 			{
 				if (bossLastVel < 0) {
 					switch ((int)round(animationFrame)) { //left
@@ -619,14 +628,12 @@ void PhysicsBody::Update(Transform * trans)
 
 					if (bossLastVel != 0)
 					{
-						GetBody()->GetWorld()->RayCast(&wallRay, GetPosition() - b2Vec2(0.f,-20.f), GetPosition() - b2Vec2(0.f, -20.f) + b2Vec2(bossLastVel * 1.5, 0));
-
-
+						GetBody()->GetWorld()->RayCast(&wallRay, GetPosition() - b2Vec2(0.f,100.f), GetPosition() - b2Vec2(0.f, 100.f) + b2Vec2(bossLastVel * 1.5, 0));
 
 						if (wallRay.m_fixture != NULL)
 						{
 							std::cout << "\n" << ECS::GetComponent<PhysicsBody>((int)wallRay.m_fixture->GetBody()->GetUserData()).GetName();
-							if (ECS::GetComponent<PhysicsBody>((int)wallRay.m_fixture->GetBody()->GetUserData()).GetName() != "Player" && ECS::GetComponent<PhysicsBody>((int)wallRay.m_fixture->GetBody()->GetUserData()).GetName() != "Trigger" )
+							if (ECS::GetComponent<PhysicsBody>((int)wallRay.m_fixture->GetBody()->GetUserData()).GetName() != "Player" && ECS::GetComponent<PhysicsBody>((int)wallRay.m_fixture->GetBody()->GetUserData()).GetName() != "Trigger" && ECS::GetComponent<PhysicsBody>((int)wallRay.m_fixture->GetBody()->GetUserData()).GetName() != "Bat")
 							{
 								recoverCooldown = recoverCooldownDefault;
 								isCharging = false;
@@ -636,8 +643,9 @@ void PhysicsBody::Update(Transform * trans)
 						}
 						else
 						{
-							GetBody()->SetLinearVelocity(b2Vec2(bossLastVel * 4, GetBody()->GetLinearVelocity().y));
 
+								GetBody()->SetLinearVelocity(b2Vec2(bossLastVel * 4, GetBody()->GetLinearVelocity().y));
+							
 						}
 					}
 					else
@@ -1134,17 +1142,8 @@ void PhysicsBody::SetName(std::string n)
 
 void PhysicsBody::TakeDamage(float dmg,int ent)
 {
-	if (isVulnerable == false)
-	{
-		health -= dmg;
-	}
-	else
-	{
-		health -= dmg*5;
-		isVulnerable = false;
-		resetPosition = true;
 
-	}
+		health -= dmg;
 
 		if (health <= 0)
 		{
@@ -1210,5 +1209,11 @@ void PhysicsBody::SetHealthBar(int obj)
 {
 
 	healthBar = obj;
+
+}
+
+void PhysicsBody::SetAgro(bool hi)
+{
+	playerSpotted = hi;
 
 }

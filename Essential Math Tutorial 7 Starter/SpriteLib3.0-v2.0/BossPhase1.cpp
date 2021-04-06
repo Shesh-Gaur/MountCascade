@@ -1078,6 +1078,8 @@ void BossPhase1::makeBat(float xPos, float yPos, float zPos, float rotation, flo
 	tempPhsBody.SetRotationAngleDeg(rotation);
 	tempPhsBody.SetName("Bat");
 	tempPhsBody.SetHealth(2);
+	tempPhsBody.SetAgro(true);
+
 
 }
 
@@ -1814,7 +1816,14 @@ void BossPhase1::Update()
 
 	if (phase2 == true)
 	{
+		if (ECS::GetComponent<PhysicsBody>(boss).spawnBatsNow == true)
+		{
+			makeBat(-23.f,641.f , 0.02f, 0, 10, 10);
+			makeBat(-23.f, 651.f, 0.02f, 0, 10, 10);
+			makeBat(-23.f, 631.f, 0.02f, 0, 10, 10);
 
+			ECS::GetComponent<PhysicsBody>(boss).spawnBatsNow = false;
+		}
 
 
 	}

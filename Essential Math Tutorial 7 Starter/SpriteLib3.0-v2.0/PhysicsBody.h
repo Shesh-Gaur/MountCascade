@@ -141,7 +141,7 @@ public:
 	void SetHealth(float hp);
 	void SetMaxHealth(float hp);
 	void SetHealthBar(int obj);
-
+	void SetAgro(bool hu);
 
 	void TakeDamage(float dmg,int ent);
 	void SetName(std::string n);
@@ -157,6 +157,7 @@ public:
 	bool isAttacking = false;
 	bool isVulnerable = false;
 	bool resetPosition = false;
+	bool spawnBatsNow = false;
 	int healthBar = 69;
 private:
 	//The actual box2D body
@@ -211,6 +212,6 @@ private:
 	int chargeLoop = chargeLoopDefault;
 	float batSpawnTimerDefault = 25.f;
 	float batSpawnTimer = batSpawnTimerDefault;
-
+	int batSpawnCounter = 0;
 	
 };
