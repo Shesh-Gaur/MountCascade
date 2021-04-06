@@ -69,6 +69,34 @@ void BossPhase1::InitScene(float windowWidth, float windowHeight)
 		ECS::GetComponent<VerticalScroll>(entity).SetCam(&ECS::GetComponent<Camera>(entity));
 	}
 
+	{
+		auto entity = ECS::CreateEntity();
+		//Add components
+		ov1 = entity;
+		ECS::AttachComponent<Sprite>(entity);
+		ECS::AttachComponent<Transform>(entity);
+
+		//Set up the components
+		std::string fileName = "overlay/Boss_Stage_1_Overlay.png";
+		ECS::GetComponent<Sprite>(entity).LoadSprite(fileName, 4096, 4096);
+		ECS::GetComponent<Sprite>(entity).SetTransparency(1.0f);
+		ECS::GetComponent<Transform>(entity).SetPosition(vec3(-30.f, 860.f, 0.021f));
+	}
+
+	{
+		auto entity = ECS::CreateEntity();
+		//Add components
+		ov2 = entity;
+		ECS::AttachComponent<Sprite>(entity);
+		ECS::AttachComponent<Transform>(entity);
+
+		//Set up the components
+		std::string fileName = "overlay/Boss_Stage_2_Overlay.png";
+		ECS::GetComponent<Sprite>(entity).LoadSprite(fileName, 4096, 4096);
+		ECS::GetComponent<Sprite>(entity).SetTransparency(0.f);
+		ECS::GetComponent<Transform>(entity).SetPosition(vec3(315.f, 853.f, 0.021f));
+	}
+
 	//Setup new Entity
 	{
 		/*Scene::CreateSprite(m_sceneReg, "HelloWorld.png", 100, 60, 0.5f, vec3(0.f, 0.f, 0.f));*/
@@ -804,6 +832,7 @@ void BossPhase1::makeBox(float xPos, float yPos, float zPos, float rotation, flo
 	//Sets up components
 	std::string fileName = "greyBox.jpg";
 	ECS::GetComponent<Sprite>(entity).LoadSprite(fileName, width, height);
+	//ECS::GetComponent<Sprite>(entity).SetTransparency(1.f);
 	ECS::GetComponent<Transform>(entity).SetPosition(vec3(0.f, 0.f, zPos));
 
 	auto& tempSpr = ECS::GetComponent<Sprite>(entity);
@@ -1776,6 +1805,8 @@ void BossPhase1::Update()
 			makeBox(132.053f, 415.067f, 0.02f, 0.f, 92.f, 27.f);
 			makeBox(-192.146f, 411.107f, 0.02f, 0.f, 92.f, 27.f);
 			makeBox(163.6f, 393.742f, 0.02f, 0.f, 29.f, 16.f);
+			ECS::GetComponent<Sprite>(ov1).SetTransparency(0.f);
+			ECS::GetComponent<Sprite>(ov2).SetTransparency(1.0f);
 
 		}
 	}

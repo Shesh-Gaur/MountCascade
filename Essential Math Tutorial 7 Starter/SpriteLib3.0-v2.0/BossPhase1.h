@@ -149,5 +149,6 @@ protected:
 	int bossLastVel = 0;
 	int bossAttackAnimNum = 0;
 
-
+	int ov1;
+	int ov2;
 };
