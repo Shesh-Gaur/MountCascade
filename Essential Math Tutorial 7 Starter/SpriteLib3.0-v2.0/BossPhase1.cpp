@@ -229,21 +229,20 @@ void BossPhase1::InitScene(float windowWidth, float windowHeight)
 
 		//Creates entity
 		auto entity = ECS::CreateEntity();
-		bg1 = entity;
+		//bg1 = entity;
 		//Add components
 		ECS::AttachComponent<Sprite>(entity);
 		ECS::AttachComponent<Transform>(entity);
 
 		//Set up the components
-		std::string fileName = "Cave_background1.png";
+		std::string fileName = "Lava_Cave.png";
 		ECS::GetComponent<Sprite>(entity).LoadSprite(fileName, 1920, 1080);
 		ECS::GetComponent<Sprite>(entity).SetTransparency(1.f);
 		ECS::GetComponent<Transform>(entity).SetPosition(vec3(100.f, 400.f, -50.f));
 	}
 
 	//Setup new Entity
-	{
-		/*Scene::CreateSprite(m_sceneReg, "HelloWorld.png", 100, 60, 0.5f, vec3(0.f, 0.f, 0.f));*/
+	/*{
 
 		//Creates entity
 		auto entity = ECS::CreateEntity();
@@ -261,7 +260,6 @@ void BossPhase1::InitScene(float windowWidth, float windowHeight)
 
 	//Setup new Entity
 	{
-		/*Scene::CreateSprite(m_sceneReg, "HelloWorld.png", 100, 60, 0.5f, vec3(0.f, 0.f, 0.f));*/
 
 		//Creates entity
 		auto entity = ECS::CreateEntity();
@@ -279,7 +277,6 @@ void BossPhase1::InitScene(float windowWidth, float windowHeight)
 
 	//Setup new Entity
 	{
-		/*Scene::CreateSprite(m_sceneReg, "HelloWorld.png", 100, 60, 0.5f, vec3(0.f, 0.f, 0.f));*/
 
 		//Creates entity
 		auto entity = ECS::CreateEntity();
@@ -297,7 +294,6 @@ void BossPhase1::InitScene(float windowWidth, float windowHeight)
 
 	//Setup new Entity
 	{
-		/*Scene::CreateSprite(m_sceneReg, "HelloWorld.png", 100, 60, 0.5f, vec3(0.f, 0.f, 0.f));*/
 
 		//Creates entity
 		auto entity = ECS::CreateEntity();
@@ -311,11 +307,10 @@ void BossPhase1::InitScene(float windowWidth, float windowHeight)
 		ECS::GetComponent<Sprite>(entity).LoadSprite(fileName, 1920, 1080);
 		ECS::GetComponent<Sprite>(entity).SetTransparency(0.f);
 		ECS::GetComponent<Transform>(entity).SetPosition(vec3(100.f, 400.f, -50.f));
-	}
+	}*/
 
 	//Setup new Entity
 	{
-		/*Scene::CreateSprite(m_sceneReg, "HelloWorld.png", 100, 60, 0.5f, vec3(0.f, 0.f, 0.f));*/
 
 		//Creates entity
 		auto entity = ECS::CreateEntity();
@@ -1706,7 +1701,7 @@ void BossPhase1::Update()
 
 	//std::cout << "Vel: " << ECS::GetComponent<PhysicsBody>(boss).GetVelocity().x << " Frame: " << bossFrameNum << " Dif Time: " << bossDiffTime << std::endl;
 
-	backgtimer += 1 * Timer::deltaTime;
+	/*backgtimer += 1 * Timer::deltaTime;
 	if (backgtimer > 1.25) {
 		backgtimer = 0;
 	}
@@ -1739,7 +1734,7 @@ void BossPhase1::Update()
 		ECS::GetComponent<Sprite>(bg1).SetTransparency(1.f);
 		ECS::GetComponent<Sprite>(bg5).SetTransparency(0.f);
 
-	}
+	}*/
 
 	if (ECS::GetComponent<PhysicsBody>(MainEntities::MainPlayer()).GetPosition().x > -600 && !activatePunisher) {
 		activatePunisher = true;

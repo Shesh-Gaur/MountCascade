@@ -108,20 +108,6 @@ void BossPhase3::InitScene(float windowWidth, float windowHeight)
 
 	}
 
-	{ //lava overlay
-		auto entity = ECS::CreateEntity();
-		//Add components
-
-		ECS::AttachComponent<Sprite>(entity);
-		ECS::AttachComponent<Transform>(entity);
-
-		//Set up the components
-		std::string fileName = "Lava Pit/Lava pit1.png";
-		ECS::GetComponent<Sprite>(entity).LoadSprite(fileName, 384, 64);
-		ECS::GetComponent<Sprite>(entity).SetTransparency(1.f);
-		ECS::GetComponent<Transform>(entity).SetPosition(vec3(2960.f, -50.f, 0.021f));
-	}
-
 	{ //overlay
 		auto entity = ECS::CreateEntity();
 		//Add components
@@ -288,7 +274,7 @@ void BossPhase3::InitScene(float windowWidth, float windowHeight)
 		ECS::AttachComponent<Transform>(entity);
 
 		//Set up the components
-		std::string fileName = "Cave_background1.png";
+		std::string fileName = "Lava_Cave.png";
 		ECS::GetComponent<Sprite>(entity).LoadSprite(fileName, 1920, 1080);
 		ECS::GetComponent<Sprite>(entity).SetTransparency(1.f);
 		ECS::GetComponent<Transform>(entity).SetPosition(vec3(100.f, 400.f, -50.f));

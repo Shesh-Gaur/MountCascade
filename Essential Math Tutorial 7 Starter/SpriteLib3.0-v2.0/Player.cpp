@@ -2,6 +2,7 @@
 
 float dashtimer;
 bool dashActive = false;
+bool allowDashA = false;
 
 Player::Player()
 {
@@ -253,18 +254,25 @@ void Player::AnimationUpdate()
 			dashtimer += 1 * Timer::deltaTime;
 		}
 
-		if (dashtimer > 0.3) {
+		if (dashtimer > 0.8) {
 			activeAnimation = RUN;
 			dashActive = false;
 			dashtimer = 0;
 		}
 
 		if (Input::GetKey(Key::Shift)) {
-			if (canDash) {
+			if (canDash && allowDashA) {
 				dashActive = true;
 				m_dashing = true;
 				activeAnimation = DASH;
 			}
+		}
+
+		if (!Input::GetKey(Key::Shift)) {
+			allowDashA = true;
+		}
+		else {
+			allowDashA = false;
 		}
 
 		//std::cout << dashActive << " " << dashtimer << std::endl;
