@@ -240,6 +240,12 @@ void Game::KeyboardDown()
 		SwapScene(4);
 	}
 
+	if (switchSceneBossChase == true)
+	{
+		switchSceneBossChase = false;
+		SwapScene(5);
+	}
+
 	if (Input::GetKeyDown(Key::Z))
 	{
 		SwapScene(3);
@@ -351,6 +357,7 @@ void Game::SwapScene(int newScene)
 		switchSceneCascadeVillage = false;
 		switchSceneMushroomCave = false;
 		switchSceneBossRoom1 = false;
+		switchSceneBossChase = false;
 
 }
 

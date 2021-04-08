@@ -67,6 +67,8 @@ public:
 	bool switchSceneCascadeVillage = false;
 	bool switchSceneMushroomCave = false;
 	bool switchSceneBossRoom1 = false;
+	bool switchSceneBossChase = false;
+
 
 
 private:

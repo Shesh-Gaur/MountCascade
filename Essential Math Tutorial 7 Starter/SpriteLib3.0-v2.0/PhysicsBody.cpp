@@ -279,19 +279,25 @@ void PhysicsBody::Update(Transform * trans)
 		std::string fileName;
 		ECS::GetComponent<Sprite>((int)GetBody()->GetUserData()).LoadSprite(fileName, 256, 256);
 
-		if (GetHealth() < 6 && batSpawnCounter == 2)
+		if (GetHealth() < 6 && batSpawnCounter == 3)
 		{
 			spawnBatsNow = true;
 			batSpawnCounter++;
 
 		}
-		else if (GetHealth() < 12 && batSpawnCounter == 1)
+		else if (GetHealth() < 12 && batSpawnCounter == 2)
 		{
 			spawnBatsNow = true;
 			batSpawnCounter++;
 
 		}
-		else if (GetHealth() < 18 && batSpawnCounter == 0)
+		else if (GetHealth() < 20 && batSpawnCounter == 1)
+		{
+			spawnBatsNow = true;
+			batSpawnCounter++;
+
+		}
+		else if (GetHealth() < 28 && batSpawnCounter == 0)
 		{
 			spawnBatsNow = true;
 			batSpawnCounter++;
@@ -299,7 +305,7 @@ void PhysicsBody::Update(Transform * trans)
 		}
 
 
-		else if (GetHealth() == 20 && batSpawnCounter != 0)
+		else if (GetHealth() == 30 && batSpawnCounter != 0)
 		{
 			batSpawnCounter = 0;
 
@@ -337,8 +343,8 @@ void PhysicsBody::Update(Transform * trans)
 				}
 				else
 				{
-					SetPosition(b2Vec2(615.f, 690.f));
-					
+					SetPosition(b2Vec2(630.f, 690.f));
+					recoverCooldown = 2.f;
 				}
 				
 			}

@@ -80,6 +80,7 @@ public:
 	float screenShakeTimer = 0.f;
 	float hpTrans = 1.f;
 	float dashTrans = 1.f;
+	float scrollDistance = -72.f;
 	b2Vec2 newPos;
 protected:
 	bool m_firstWindow = false;

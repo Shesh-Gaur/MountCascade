@@ -1227,22 +1227,27 @@ void BossPhase3::cameraTrackPlayer()
 {
 	if (bossStarted == true)
 	{
+		
+		scrollDistance += 80.f * Timer::deltaTime;
 
-		if (fov < 83)
+		
+
+
+		if (fov < 88)
 		{
 			fov += 2.5f * Timer::deltaTime;
+			ECS::GetComponent<Camera>(MainEntities::MainCamera()).Perspective(fov, aRatio, nPlane, 1000.f);
 
 		}
 		if (screenShakeTimer <= 0)
 		{
-			newPos = b2Vec2(-22.f, 280.f) - ECS::GetComponent<PhysicsBody>(playerFollow).GetPosition();
+			newPos = b2Vec2(scrollDistance, 18.f) - ECS::GetComponent<PhysicsBody>(playerFollow).GetPosition();
 			screenShakeTimer = 0;
 		}
 		else
 		{
 			newPos = b2Vec2(-22.f + ECS::GetComponent<PhysicsBody>(MainEntities::MainPlayer()).GetBody()->GetLinearVelocity().x, 280.f + ECS::GetComponent<PhysicsBody>(MainEntities::MainPlayer()).GetBody()->GetLinearVelocity().y) - ECS::GetComponent<PhysicsBody>(playerFollow).GetPosition();
 		}
-		ECS::GetComponent<Camera>(MainEntities::MainCamera()).Perspective(fov, aRatio, nPlane, 1000.f);
 
 		ECS::GetComponent<Camera>(MainEntities::MainCamera()).SetPosition(ECS::GetComponent<Camera>(MainEntities::MainCamera()).GetPosition());
 
@@ -2187,6 +2192,12 @@ void BossPhase3::KeyboardHold()
 
 	int maxVel = 120;
 
+	if (Input::GetKeyDown(Key::B))
+	{
+		bossStarted = true;
+
+	}
+
 	if (levelEditor == true)
 	{
 		RunLevelEditor();
@@ -2222,11 +2233,7 @@ void BossPhase3::KeyboardHold()
 			levelEditor = false;
 		}
 	}
-	if (Input::GetKeyDown(Key::B))
-	{
-		bossStarted = true;
 
-	}
 
 }
 

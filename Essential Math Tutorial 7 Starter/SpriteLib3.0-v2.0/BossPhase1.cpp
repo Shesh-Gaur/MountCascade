@@ -673,7 +673,7 @@ void BossPhase1::InitScene(float windowWidth, float windowHeight)
 		auto& tempSpr = ECS::GetComponent<Sprite>(entity);
 		auto& tempPhsBody = ECS::GetComponent<PhysicsBody>(entity);
 
-		float shrinkX = 88.f;
+		float shrinkX = 90.f;
 		float shrinkY = 145.f;
 		b2Body* tempBody;
 		b2BodyDef tempDef;
@@ -686,8 +686,8 @@ void BossPhase1::InitScene(float windowWidth, float windowHeight)
 			float(tempSpr.GetHeight() - shrinkY), vec2(0.f, -72.f), false, ENEMY, PLAYER | ENEMY , 1.f,8.f);
 		tempPhsBody.SetColor(vec4(0.f, 1.f, 0.f, 0.3f));
 		tempPhsBody.SetRotationAngleDeg(0);
-		tempPhsBody.SetHealth(35);
-		tempPhsBody.SetMaxHealth(35);
+		tempPhsBody.SetHealth(45);
+		tempPhsBody.SetMaxHealth(45);
 		tempPhsBody.SetSpeed(70.f);
 		tempPhsBody.SetHealthBar(bossInBar);
 		tempPhsBody.SetName("Boss");
@@ -766,6 +766,44 @@ void BossPhase1::InitScene(float windowWidth, float windowHeight)
 
 	}
 
+	//Setup trigger to Chass Room
+	{
+		//Creates entity
+		auto entity = ECS::CreateEntity();
+
+		//Add components
+		ECS::AttachComponent<Transform>(entity);
+		ECS::AttachComponent<PhysicsBody>(entity);
+		ECS::AttachComponent<Trigger*>(entity);
+		ECS::AttachComponent<Sprite>(entity);
+
+		//Sets up components
+		std::string fileName = "boxSprite.jpg";
+		ECS::GetComponent<Sprite>(entity).LoadSprite(fileName, 90, 50);
+		ECS::GetComponent<Sprite>(entity).SetTransparency(0.f);
+		ECS::GetComponent<Transform>(entity).SetPosition(vec3(0.f, 0.f, 0.002f));
+		ECS::GetComponent<Trigger*>(entity) = new TransitionTrigger();
+		ECS::GetComponent<Trigger*>(entity)->SetTriggerEntity(entity);
+
+		TransitionTrigger* temp = (TransitionTrigger*)ECS::GetComponent<Trigger*>(entity);
+		temp->nextScene = 3;
+
+		auto& tempPhsBody = ECS::GetComponent<PhysicsBody>(entity);
+		auto& tempSpr = ECS::GetComponent<Sprite>(entity);
+		float shrinkX = 0.f;
+		float shrinkY = 0.f;
+		b2Body* tempBody;
+		b2BodyDef tempDef;
+		tempDef.type = b2_staticBody;
+		tempDef.position.Set(float32(1667.f), float32(154.f));
+
+		tempBody = m_physicsWorld->CreateBody(&tempDef);
+
+		tempPhsBody = PhysicsBody(entity, tempBody, float(tempSpr.GetWidth() - shrinkX),
+			float(tempSpr.GetHeight() - shrinkY), vec2(0.f, 0.f), true, TRIGGER, PLAYER);
+		tempPhsBody.SetColor(vec4(1.f, 0.f, 0.f, 0.3f));
+		tempPhsBody.SetName("Trigger");
+	}
 
 
 
@@ -1836,9 +1874,10 @@ void BossPhase1::Update()
 
 	cameraTrackPlayer();
 	updateUI();
+	CheckTransition();
 	if (phase2 == false)
 	{
-		if (ECS::GetComponent<PhysicsBody>(boss).GetHealth() <= 20)
+		if (ECS::GetComponent<PhysicsBody>(boss).GetHealth() <= 30)
 		{
 			phase2 = true;
 			//PhysicsBody::m_bodiesToDelete.push_back(phase1Wall);
@@ -1847,7 +1886,7 @@ void BossPhase1::Update()
 			makeBox(-192.146f, 411.107f, 0.02f, 0.f, 92.f, 27.f);
 			makeBox(163.6f, 393.742f, 0.02f, 0.f, 29.f, 16.f);
 			ECS::GetComponent<Sprite>(ov1).SetTransparency(0.f);
-			ECS::GetComponent<Sprite>(ov2).SetTransparency(1.0f);
+			ECS::GetComponent<Sprite>(ov2).SetTransparency(0.f);
 
 		}
 	}

@@ -62,6 +62,12 @@ void TransitionTrigger::OnEnter()
 			x = 1945;
 			y = 550;
 		}
+		else if (nextScene == 3)
+		{
+			theGame.switchSceneBossChase = true;
+			x = 1945;
+			y = 550;
+		}
 
 		playerSaveFile << x;
 		playerSaveFile << "\t" << y;
