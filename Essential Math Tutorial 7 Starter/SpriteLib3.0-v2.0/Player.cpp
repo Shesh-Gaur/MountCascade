@@ -1,5 +1,8 @@
 #include "Player.h"
 
+float dashtimer;
+bool dashStarted = false;
+
 Player::Player()
 {
 }
@@ -246,12 +249,25 @@ void Player::AnimationUpdate()
 			//if (canYouFuckingJump) activeAnimation = RUN;
 		}
 
-		if (Input::GetKey(Key::Shift)) {
+		if (Input::GetKeyDown(Key::Shift)) {
 			if (canDash) {
+				dashStarted = true;
 				m_dashing = true;
 				activeAnimation = DASH;
+				dashtimer += 1 * Timer::deltaTime;
+				if (dashtimer > 0.5) {
+					activeAnimation = RUN;
+				}
 			}
 		}
+
+		if (Input::GetKeyUp(Key::Shift)) {
+			if (canDash) {
+				dashtimer = 0;
+				dashStarted = false;
+			}
+		}
+
 		if (activeAnimation != DASH) m_dashing = false;
 
 		
