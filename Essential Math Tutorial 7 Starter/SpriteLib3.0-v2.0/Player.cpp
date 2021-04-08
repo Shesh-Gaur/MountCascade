@@ -1,7 +1,7 @@
 #include "Player.h"
 
 float dashtimer;
-bool dashStarted = false;
+bool dashActive = false;
 
 Player::Player()
 {
@@ -248,25 +248,26 @@ void Player::AnimationUpdate()
 			//if (!m_attacking && !haveYouPressedSpace && !canYouFuckingJump) activeAnimation = JUMP;
 			//if (canYouFuckingJump) activeAnimation = RUN;
 		}
+		
+		if (dashActive) {
+			dashtimer += 1 * Timer::deltaTime;
+		}
 
-		if (Input::GetKeyDown(Key::Shift)) {
+		if (dashtimer > 0.3) {
+			activeAnimation = RUN;
+			dashActive = false;
+			dashtimer = 0;
+		}
+
+		if (Input::GetKey(Key::Shift)) {
 			if (canDash) {
-				dashStarted = true;
+				dashActive = true;
 				m_dashing = true;
 				activeAnimation = DASH;
-				dashtimer += 1 * Timer::deltaTime;
-				if (dashtimer > 0.5) {
-					activeAnimation = RUN;
-				}
 			}
 		}
 
-		if (Input::GetKeyUp(Key::Shift)) {
-			if (canDash) {
-				dashtimer = 0;
-				dashStarted = false;
-			}
-		}
+		//std::cout << dashActive << " " << dashtimer << std::endl;
 
 		if (activeAnimation != DASH) m_dashing = false;
 

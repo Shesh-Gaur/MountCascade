@@ -70,6 +70,86 @@ void BossPhase3::InitScene(float windowWidth, float windowHeight)
 		ECS::GetComponent<VerticalScroll>(entity).SetCam(&ECS::GetComponent<Camera>(entity));
 	}
 
+	{ //RUN Punisher
+/*Scene::CreateSprite(m_sceneReg, "HelloWorld.png", 100, 60, 0.5f, vec3(0.f, 0.f, 0.f));*/
+
+//Creates entity
+		auto entity = ECS::CreateEntity();
+
+		//dashTextEntity = entity;
+		//Add components
+		ECS::AttachComponent<Sprite>(entity);
+		ECS::AttachComponent<Transform>(entity);
+
+		//Set up the components
+		std::string fileName = "punisher/Punisher1.png";
+		ECS::GetComponent<Sprite>(entity).LoadSprite(fileName, 77, 100);
+		ECS::GetComponent<Sprite>(entity).SetTransparency(1.f);
+		ECS::GetComponent<Transform>(entity).SetPosition(vec3(100.f, -30.f, 0.01f));
+
+	}
+
+	{ //RUN Punisher
+/*Scene::CreateSprite(m_sceneReg, "HelloWorld.png", 100, 60, 0.5f, vec3(0.f, 0.f, 0.f));*/
+
+//Creates entity
+		auto entity = ECS::CreateEntity();
+
+		//dashTextEntity = entity;
+		//Add components
+		ECS::AttachComponent<Sprite>(entity);
+		ECS::AttachComponent<Transform>(entity);
+
+		//Set up the components
+		std::string fileName = "tutorial/Chatbox-Run.png";
+		ECS::GetComponent<Sprite>(entity).LoadSprite(fileName, 96, 48);
+		ECS::GetComponent<Sprite>(entity).SetTransparency(1.f);
+		ECS::GetComponent<Transform>(entity).SetPosition(vec3(180.f, 20.f, 0.01f));
+
+	}
+
+	{ //lava overlay
+		auto entity = ECS::CreateEntity();
+		//Add components
+
+		ECS::AttachComponent<Sprite>(entity);
+		ECS::AttachComponent<Transform>(entity);
+
+		//Set up the components
+		std::string fileName = "Lava Pit/Lava pit1.png";
+		ECS::GetComponent<Sprite>(entity).LoadSprite(fileName, 384, 64);
+		ECS::GetComponent<Sprite>(entity).SetTransparency(1.f);
+		ECS::GetComponent<Transform>(entity).SetPosition(vec3(2960.f, -50.f, 0.021f));
+	}
+
+	{ //overlay
+		auto entity = ECS::CreateEntity();
+		//Add components
+		
+		ECS::AttachComponent<Sprite>(entity);
+		ECS::AttachComponent<Transform>(entity);
+
+		//Set up the components
+		std::string fileName = "overlay/Boss_Stage_3_Overlay_Left.png";
+		ECS::GetComponent<Sprite>(entity).LoadSprite(fileName, 4096, 4096);
+		ECS::GetComponent<Sprite>(entity).SetTransparency(1.f);
+		ECS::GetComponent<Transform>(entity).SetPosition(vec3(1060.f, 85.f, 0.021f));
+	}
+
+	{ //overlay
+		auto entity = ECS::CreateEntity();
+		//Add components
+
+		ECS::AttachComponent<Sprite>(entity);
+		ECS::AttachComponent<Transform>(entity);
+
+		//Set up the components
+		std::string fileName = "overlay/Boss_Stage_3_Overlay_Right.png";
+		ECS::GetComponent<Sprite>(entity).LoadSprite(fileName, 4096, 4096);
+		ECS::GetComponent<Sprite>(entity).SetTransparency(1.f);
+		ECS::GetComponent<Transform>(entity).SetPosition(vec3(5156.f, 85.f, 0.021f));
+	}
+
 	//Setup new Entity
 	{
 		/*Scene::CreateSprite(m_sceneReg, "HelloWorld.png", 100, 60, 0.5f, vec3(0.f, 0.f, 0.f));*/
@@ -611,6 +691,7 @@ void BossPhase3::makeBox(float xPos, float yPos, float zPos, float rotation, flo
 	//Sets up components
 	std::string fileName = "greyBox.jpg";
 	ECS::GetComponent<Sprite>(entity).LoadSprite(fileName, width, height);
+	ECS::GetComponent<Sprite>(entity).SetTransparency(0.f);
 	ECS::GetComponent<Transform>(entity).SetPosition(vec3(0.f, 0.f, zPos));
 
 	auto& tempSpr = ECS::GetComponent<Sprite>(entity);
@@ -871,6 +952,7 @@ void BossPhase3::makeIceWall(float xPos, float yPos, float zPos, float rotation,
 	//Sets up components
 	std::string fileName = "iceWall.jpg";
 	ECS::GetComponent<Sprite>(entity).LoadSprite(fileName, width, height);
+	ECS::GetComponent<Sprite>(entity).SetTransparency(0.f);
 	ECS::GetComponent<Transform>(entity).SetPosition(vec3(0.f, 0.f, zPos));
 
 	auto& tempSpr = ECS::GetComponent<Sprite>(entity);
