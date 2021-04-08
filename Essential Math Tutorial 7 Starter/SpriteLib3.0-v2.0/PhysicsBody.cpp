@@ -270,33 +270,39 @@ void PhysicsBody::Update(Transform * trans)
 		std::string fileName2 = "Masks/SquareMask.png";
 		float adj = GetHealth() / GetMaxHealth();
 		ECS::GetComponent<Sprite>(healthBar).LoadSprite(fileName2, 510 * adj, 12);
-		
+
+		if (health <= 0)
+		{
+			SetPosition(b2Vec2(1000, 1000));
+		}
 
 		std::string fileName;
 		ECS::GetComponent<Sprite>((int)GetBody()->GetUserData()).LoadSprite(fileName, 256, 256);
 
-		if (GetHealth() < 7 && batSpawnCounter == 3)
+		if (GetHealth() < 6 && batSpawnCounter == 2)
 		{
 			spawnBatsNow = true;
 			batSpawnCounter++;
 
 		}
-		else if (GetHealth() < 14 && batSpawnCounter == 2)
+		else if (GetHealth() < 12 && batSpawnCounter == 1)
 		{
 			spawnBatsNow = true;
 			batSpawnCounter++;
 
 		}
-		else if (GetHealth() < 21 && batSpawnCounter == 1)
+		else if (GetHealth() < 18 && batSpawnCounter == 0)
 		{
 			spawnBatsNow = true;
 			batSpawnCounter++;
 
 		}
-		else if (GetHealth() < 28 && batSpawnCounter == 0)
+
+
+		else if (GetHealth() == 20 && batSpawnCounter != 0)
 		{
-			spawnBatsNow = true;
-			batSpawnCounter++;
+			batSpawnCounter = 0;
+
 		}
 
 		if (playerSpotted == false && getCurrentClock() % 10 == 0)
@@ -384,7 +390,7 @@ void PhysicsBody::Update(Transform * trans)
 
 				//std::cout << "\nRECOVER COOLDOWN " << recoverCooldown;
 
-				if (GetVelocity().x > 10) {
+				if (GetVelocity().x > 60) {
 					switch ((int)round(animationFrame)) {
 					case 0:
 						fileName = "golem/golemoppositerunframe1.png";
@@ -410,7 +416,7 @@ void PhysicsBody::Update(Transform * trans)
 
 
 				}
-				else if (GetVelocity().x < -10) {
+				else if (GetVelocity().x < -60) {
 					switch ((int)round(animationFrame)) {
 					case 0:
 						fileName = "golem/runframe1.png";
@@ -469,6 +475,14 @@ void PhysicsBody::Update(Transform * trans)
 
 					GetBody()->SetLinearVelocity(b2Vec2(GetNextMovement().x, GetNextMovement().y));
 					bossLastVel = GetVelocity().x;
+				}
+
+				else if (GetNextMovement().x < 0 && GetPosition().x < 255.f)
+				{
+					GetBody()->SetLinearVelocity(b2Vec2(GetNextMovement().x, GetNextMovement().y));
+					bossLastVel = GetVelocity().x;
+
+
 				}
 
 				//std::cout << "\nHi, I'm WALKING rn " << animationFrame;
@@ -633,19 +647,20 @@ void PhysicsBody::Update(Transform * trans)
 						if (wallRay.m_fixture != NULL)
 						{
 							std::cout << "\n" << ECS::GetComponent<PhysicsBody>((int)wallRay.m_fixture->GetBody()->GetUserData()).GetName();
-							if (ECS::GetComponent<PhysicsBody>((int)wallRay.m_fixture->GetBody()->GetUserData()).GetName() != "Player" && ECS::GetComponent<PhysicsBody>((int)wallRay.m_fixture->GetBody()->GetUserData()).GetName() != "Trigger" && ECS::GetComponent<PhysicsBody>((int)wallRay.m_fixture->GetBody()->GetUserData()).GetName() != "Bat")
+							if (ECS::GetComponent<PhysicsBody>((int)wallRay.m_fixture->GetBody()->GetUserData()).GetName() == "Wall" || ECS::GetComponent<PhysicsBody>((int)wallRay.m_fixture->GetBody()->GetUserData()).GetName() == "Decor")
 							{
 								recoverCooldown = recoverCooldownDefault;
 								isCharging = false;
 								chargeLoop = chargeLoopDefault;
 							}
-
+							else
+							{
+								GetBody()->SetLinearVelocity(b2Vec2(bossLastVel * 4, GetBody()->GetLinearVelocity().y));
+							}
 						}
 						else
 						{
-
-								GetBody()->SetLinearVelocity(b2Vec2(bossLastVel * 4, GetBody()->GetLinearVelocity().y));
-							
+								GetBody()->SetLinearVelocity(b2Vec2(bossLastVel * 4, GetBody()->GetLinearVelocity().y));		
 						}
 					}
 					else
@@ -1147,16 +1162,20 @@ void PhysicsBody::TakeDamage(float dmg,int ent)
 
 		if (health <= 0)
 		{
-			health = 0;
-			std::cout << "\nEnemy Killed";
+			if (GetName() != "Boss")
+			{
+				health = 0;
+				std::cout << "\nEnemy Killed";
 
-			batExists = false;
-			
-			//ECS::GetComponent<Transform>(ent).SetPositionX(-10000.f);
+				batExists = false;
 
-			//SetPosition(b2Vec2(-10000,0), false);
+				//ECS::GetComponent<Transform>(ent).SetPositionX(-10000.f);
 
-			m_bodiesToDelete.push_back(ent);
+				//SetPosition(b2Vec2(-10000,0), false);
+
+				m_bodiesToDelete.push_back(ent);
+			}
+
 		}
 	
 }

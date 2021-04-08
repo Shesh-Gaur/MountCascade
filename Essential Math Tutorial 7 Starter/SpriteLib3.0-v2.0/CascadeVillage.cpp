@@ -472,7 +472,7 @@ void CascadeVillage::InitScene(float windowWidth, float windowHeight)
 		std::string fileName = "overlay/Cascade_Village_Overlay.png";
 		ECS::GetComponent<Sprite>(entity).LoadSprite(fileName, 4096, 4096);
 		ECS::GetComponent<Sprite>(entity).SetTransparency(1.0f);
-		ECS::GetComponent<Transform>(entity).SetPosition(vec3(240.f, 255.f, 0.021f));
+		ECS::GetComponent<Transform>(entity).SetPosition(vec3(240.f, 255.f, 0.0211f));
 	}
 
 	//Setup trigger
@@ -716,7 +716,7 @@ void CascadeVillage::InitScene(float windowWidth, float windowHeight)
 		//Sets up components
 		std::string fileName = "boxSprite.jpg";
 		ECS::GetComponent<Sprite>(entity).LoadSprite(fileName, 50, 50);
-		ECS::GetComponent<Sprite>(entity).SetTransparency(0.5f);
+		ECS::GetComponent<Sprite>(entity).SetTransparency(0.f);
 		ECS::GetComponent<Transform>(entity).SetPosition(vec3(30.f, -20.f, 0.002f));
 		ECS::GetComponent<Trigger*>(entity) = new TransitionTrigger();
 		ECS::GetComponent<Trigger*>(entity)->SetTriggerEntity(entity);

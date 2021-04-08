@@ -226,8 +226,8 @@ void Scene::makeLoadingScreen()
 		ECS::AttachComponent<Transform>(entity);
 
 		//Set up the components
-		std::string fileName = "Loading_screen.png";
-		ECS::GetComponent<Sprite>(entity).LoadSprite(fileName,480, 270);
+		std::string fileName = "black.jpg";
+		ECS::GetComponent<Sprite>(entity).LoadSprite(fileName,2000, 2000);
 		ECS::GetComponent<Sprite>(entity).SetTransparency(0.f);
 		ECS::GetComponent<Transform>(entity).SetPosition(vec3(-1000.f, -150.f, -60.f));
 	

@@ -79,7 +79,7 @@ void BossPhase1::InitScene(float windowWidth, float windowHeight)
 		//Set up the components
 		std::string fileName = "overlay/Boss_Stage_1_Overlay.png";
 		ECS::GetComponent<Sprite>(entity).LoadSprite(fileName, 4096, 4096);
-		ECS::GetComponent<Sprite>(entity).SetTransparency(1.0f);
+		ECS::GetComponent<Sprite>(entity).SetTransparency(1.f);
 		ECS::GetComponent<Transform>(entity).SetPosition(vec3(-30.f, 860.f, 0.021f));
 	}
 
@@ -330,7 +330,23 @@ void BossPhase1::InitScene(float windowWidth, float windowHeight)
 		ECS::GetComponent<Sprite>(entity).SetTransparency(1.f);
 		ECS::GetComponent<Transform>(entity).SetPosition(vec3(-100.f, 900.f, -49.f));
 	}
+	//Setup new Entity
+	{
+		/*Scene::CreateSprite(m_sceneReg, "HelloWorld.png", 100, 60, 0.5f, vec3(0.f, 0.f, 0.f));*/
 
+		//Creates entity
+		auto entity = ECS::CreateEntity();
+
+		//Add components
+		ECS::AttachComponent<Sprite>(entity);
+		ECS::AttachComponent<Transform>(entity);
+
+		//Set up the components
+		std::string fileName = "fadeIn3.png";
+		ECS::GetComponent<Sprite>(entity).LoadSprite(fileName, 2560, 2080);
+		ECS::GetComponent<Sprite>(entity).SetTransparency(1.f);
+		ECS::GetComponent<Transform>(entity).SetPosition(vec3(1340.f, 300.f, -49.f));
+	}
 	{ //dash bar
 		/*Scene::CreateSprite(m_sceneReg, "HelloWorld.png", 100, 60, 0.5f, vec3(0.f, 0.f, 0.f));*/
 
@@ -617,7 +633,7 @@ void BossPhase1::InitScene(float windowWidth, float windowHeight)
 		std::string fileName = "Boss_Bar_Outline.png";
 		ECS::GetComponent<Sprite>(entity).LoadSprite(fileName, 512, 512);
 		ECS::GetComponent<Sprite>(entity).SetTransparency(1.f);
-		ECS::GetComponent<Transform>(entity).SetPosition(vec3(-22.f, 800.f, 0.03f));
+		ECS::GetComponent<Transform>(entity).SetPosition(vec3(-10.f, 800.f, 0.03f));
 
 	}
 
@@ -637,7 +653,7 @@ void BossPhase1::InitScene(float windowWidth, float windowHeight)
 		std::string fileName = "Masks/SquareMask.png";
 		ECS::GetComponent<Sprite>(entity).LoadSprite(fileName, 510, 12);
 		ECS::GetComponent<Sprite>(entity).SetTransparency(1.f);
-		ECS::GetComponent<Transform>(entity).SetPosition(vec3(-22.f, 552.f, 0.03f));
+		ECS::GetComponent<Transform>(entity).SetPosition(vec3(-10.f, 552.f, 0.03f));
 	}
 
 	//Create BOSS
@@ -670,47 +686,13 @@ void BossPhase1::InitScene(float windowWidth, float windowHeight)
 			float(tempSpr.GetHeight() - shrinkY), vec2(0.f, -72.f), false, ENEMY, PLAYER | ENEMY , 1.f,8.f);
 		tempPhsBody.SetColor(vec4(0.f, 1.f, 0.f, 0.3f));
 		tempPhsBody.SetRotationAngleDeg(0);
-		tempPhsBody.SetHealth(45);
-		tempPhsBody.SetMaxHealth(45);
+		tempPhsBody.SetHealth(35);
+		tempPhsBody.SetMaxHealth(35);
 		tempPhsBody.SetSpeed(70.f);
 		tempPhsBody.SetHealthBar(bossInBar);
 		tempPhsBody.SetName("Boss");
 
 
-
-	}
-
-	{
-		//Creates entity
-		auto entity = ECS::CreateEntity();
-		phase1Wall = entity;
-		//Add components
-		ECS::AttachComponent<Sprite>(entity);
-		ECS::AttachComponent<Transform>(entity);
-		ECS::AttachComponent<PhysicsBody>(entity);
-
-		//Sets up components
-		std::string fileName = "greyBox.jpg";
-		ECS::GetComponent<Sprite>(entity).LoadSprite(fileName, 86.f, 545.f);
-		ECS::GetComponent<Transform>(entity).SetPosition(vec3(0.f, 0.f, 0.02f));
-
-		auto& tempSpr = ECS::GetComponent<Sprite>(entity);
-		auto& tempPhsBody = ECS::GetComponent<PhysicsBody>(entity);
-
-		float shrinkX = 0.f;
-		float shrinkY = 0.f;
-		b2Body* tempBody;
-		b2BodyDef tempDef;
-		tempDef.type = b2_staticBody;
-		tempDef.position.Set(float32(-375.472f), float32(422.591f));
-
-		tempBody = m_physicsWorld->CreateBody(&tempDef);
-
-		tempPhsBody = PhysicsBody(entity, tempBody, float(tempSpr.GetWidth() - shrinkX),
-			float(tempSpr.GetHeight() - shrinkY), vec2(0.f, 0.f), false, GROUND, PLAYER | ENEMY | OBJECTS | HEXAGON, 1.f, 69.f);
-		tempPhsBody.SetColor(vec4(0.f, 1.f, 0.f, 0.3f));
-		tempPhsBody.SetRotationAngleDeg(0);
-		tempPhsBody.SetName("Decor");
 
 	}
 
@@ -737,7 +719,42 @@ void BossPhase1::InitScene(float windowWidth, float windowHeight)
 		b2Body* tempBody;
 		b2BodyDef tempDef;
 		tempDef.type = b2_staticBody;
-		tempDef.position.Set(float32(333.f), float32(422.591f));
+		tempDef.position.Set(float32(325.f), float32(422.591f));
+
+		tempBody = m_physicsWorld->CreateBody(&tempDef);
+
+		tempPhsBody = PhysicsBody(entity, tempBody, float(tempSpr.GetWidth() - shrinkX),
+			float(tempSpr.GetHeight() - shrinkY), vec2(0.f, 0.f), false, GROUND, PLAYER | ENEMY | OBJECTS | HEXAGON, 1.f, 69.f);
+		tempPhsBody.SetColor(vec4(0.f, 1.f, 0.f, 0.3f));
+		tempPhsBody.SetRotationAngleDeg(0);
+		tempPhsBody.SetName("Decor");
+
+	}
+
+	{
+		//Creates entity
+		auto entity = ECS::CreateEntity();
+		exitDoor = entity;
+
+		//Add components
+		ECS::AttachComponent<Sprite>(entity);
+		ECS::AttachComponent<Transform>(entity);
+		ECS::AttachComponent<PhysicsBody>(entity);
+
+		//Sets up components
+		std::string fileName = "greyBox.jpg";
+		ECS::GetComponent<Sprite>(entity).LoadSprite(fileName, 105.f, 168.f);
+		ECS::GetComponent<Transform>(entity).SetPosition(vec3(0.f, 0.f, 0.02f));
+
+		auto& tempSpr = ECS::GetComponent<Sprite>(entity);
+		auto& tempPhsBody = ECS::GetComponent<PhysicsBody>(entity);
+
+		float shrinkX = 0.f;
+		float shrinkY = 0.f;
+		b2Body* tempBody;
+		b2BodyDef tempDef;
+		tempDef.type = b2_staticBody;
+		tempDef.position.Set(float32(950.646f), float32(368.461f));
 
 		tempBody = m_physicsWorld->CreateBody(&tempDef);
 
@@ -758,7 +775,7 @@ void BossPhase1::InitScene(float windowWidth, float windowHeight)
 
 	for (int y = 0 + 275; y < (gWidth * 50) + 275; y += 50)
 	{
-		for (int x = 0 - 925; x < (gLength * 50) - 925; x += 50)
+		for (int x = 0 - 275; x < (gLength * 50) - 275; x += 50)
 		{
 			RayCastCallback nodeRay;
 			m_physicsWorld->RayCast(&nodeRay, b2Vec2(x, y) + b2Vec2(0, 50), b2Vec2(x, y));
@@ -851,6 +868,8 @@ void BossPhase1::makeBox(float xPos, float yPos, float zPos, float rotation, flo
 		float(tempSpr.GetHeight() - shrinkY), vec2(0.f, 0.f), false, GROUND, PLAYER | ENEMY | OBJECTS | HEXAGON, 1.f, 69.f);
 	tempPhsBody.SetColor(vec4(0.f, 1.f, 0.f, 0.3f));
 	tempPhsBody.SetRotationAngleDeg(rotation);
+	tempPhsBody.SetName("Wall");
+
 
 }
 
@@ -1062,7 +1081,7 @@ void BossPhase1::makeBat(float xPos, float yPos, float zPos, float rotation, flo
 	auto& tempSpr = ECS::GetComponent<Sprite>(entity);
 	auto& tempPhsBody = ECS::GetComponent<PhysicsBody>(entity);
 
-	batVec2.push_back(entity);
+	//batVec2.push_back(entity);
 
 	float shrinkX = 0.f;
 	float shrinkY = 0.f;
@@ -1339,23 +1358,27 @@ void BossPhase1::cameraTrackPlayer()
 	}
 
 
-	if (bossStarted == true)
+	if (bossStarted == true && doorDeleted == false)
 	{
 
 		if (fov < 83)
 		{
 			fov += 2.5f * Timer::deltaTime;
+			ECS::GetComponent<Camera>(MainEntities::MainCamera()).Perspective(fov, aRatio, nPlane, 1000.f);
 
 		}
 		if (screenShakeTimer <= 0)
 		{
 			if (phase2 == false)
 			{
-				newPos = b2Vec2(-22.f, 280.f) - ECS::GetComponent<PhysicsBody>(playerFollow).GetPosition();
+				newPos = b2Vec2(-10.f, 275.f) - ECS::GetComponent<PhysicsBody>(playerFollow).GetPosition();
 			}
 			else
 			{
-				newPos = b2Vec2(ECS::GetComponent<PhysicsBody>(MainEntities::MainPlayer()).GetPosition().x, 280.f) - ECS::GetComponent<PhysicsBody>(playerFollow).GetPosition();
+				newPos = b2Vec2(ECS::GetComponent<PhysicsBody>(MainEntities::MainPlayer()).GetPosition().x, 275.f) - ECS::GetComponent<PhysicsBody>(playerFollow).GetPosition();
+				ECS::GetComponent<Transform>(bossHpBar).SetPosition(vec3(ECS::GetComponent<PhysicsBody>(playerFollow).GetPosition().x *1.1 , 800.f, 0.03f));
+				ECS::GetComponent<Transform>(bossInBar).SetPosition(vec3(ECS::GetComponent<PhysicsBody>(playerFollow).GetPosition().x * 1.1, 552.f, 0.03f));
+
 			}
 			
 
@@ -1366,7 +1389,6 @@ void BossPhase1::cameraTrackPlayer()
 		{
 			newPos = b2Vec2(-22.f + ECS::GetComponent<PhysicsBody>(MainEntities::MainPlayer()).GetBody()->GetLinearVelocity().x, 280.f + ECS::GetComponent<PhysicsBody>(MainEntities::MainPlayer()).GetBody()->GetLinearVelocity().y) - ECS::GetComponent<PhysicsBody>(playerFollow).GetPosition();
 		}
-		ECS::GetComponent<Camera>(MainEntities::MainCamera()).Perspective(fov, aRatio, nPlane, 1000.f);
 
 		ECS::GetComponent<Camera>(MainEntities::MainCamera()).SetPosition(ECS::GetComponent<Camera>(MainEntities::MainCamera()).GetPosition());
 
@@ -1400,7 +1422,12 @@ void BossPhase1::cameraTrackPlayer()
 	}
 	else
 	{
+		if (fov > 71)
+		{
+			fov -= 2.5f * Timer::deltaTime;
+			ECS::GetComponent<Camera>(MainEntities::MainCamera()).Perspective(fov, aRatio, nPlane, 1000.f);
 
+		}
 		//std::cout << "\nNORMAL";
 		b2Vec2 newPos = ECS::GetComponent<PhysicsBody>(MainEntities::MainPlayer()).GetPosition() + b2Vec2(mousePosX / 30, (mousePosY / 15) - 10) - ECS::GetComponent<PhysicsBody>(playerFollow).GetPosition();
 		float length = sqrt(newPos.x * newPos.x + newPos.y * newPos.y);
@@ -1788,9 +1815,21 @@ void BossPhase1::Update()
 		bossStarted = false;
 		fov = 70.f;
 		ECS::GetComponent<Camera>(MainEntities::MainCamera()).Perspective(fov, aRatio, nPlane, 1000.f);
+		if (doorDeleted == false)
+		{
+			if (phase2 == true)
+			{
 
-		ECS::GetComponent<PhysicsBody>(boss).SetHealth(ECS::GetComponent<PhysicsBody>(boss).GetMaxHealth()); //If player dies after boss is killed, game WILL crash. Honestly boss should never be deleted, just moved.
+				ECS::GetComponent<PhysicsBody>(boss).SetHealth(20); //If player dies after boss is killed, game WILL crash. Honestly boss should never be deleted, just moved.
 
+			}
+			else
+			{
+
+				ECS::GetComponent<PhysicsBody>(boss).SetHealth(ECS::GetComponent<PhysicsBody>(boss).GetMaxHealth()); //If player dies after boss is killed, game WILL crash. Honestly boss should never be deleted, just moved.
+
+			}
+		}
 	}
 
 
@@ -1799,7 +1838,7 @@ void BossPhase1::Update()
 	updateUI();
 	if (phase2 == false)
 	{
-		if (ECS::GetComponent<PhysicsBody>(boss).GetHealth() <= 30)
+		if (ECS::GetComponent<PhysicsBody>(boss).GetHealth() <= 20)
 		{
 			phase2 = true;
 			//PhysicsBody::m_bodiesToDelete.push_back(phase1Wall);
@@ -1825,6 +1864,32 @@ void BossPhase1::Update()
 			ECS::GetComponent<PhysicsBody>(boss).spawnBatsNow = false;
 		}
 
+
+	}
+
+	//Door Deletion
+	if (ECS::GetComponent<PhysicsBody>(boss).GetHealth() <= 0)
+	{
+		if (doorDeleted == false)
+		{
+			PhysicsBody::m_bodiesToDelete.push_back(exitDoor);
+			doorDeleted = true;
+			ECS::GetComponent<Sprite>(bossHpBar).SetTransparency(0.f);
+			ECS::GetComponent<Sprite>(bossInBar).SetTransparency(0.f);
+
+
+		}
+	}
+
+	//Lava
+	if (ECS::GetComponent<PhysicsBody>(MainEntities::MainPlayer()).GetPosition().y <= 260.f && ECS::GetComponent<PhysicsBody>(MainEntities::MainPlayer()).GetPosition().x <= 1000.f)
+	{
+		ECS::GetComponent<PhysicsBody>(MainEntities::MainPlayer()).GetBody()->SetLinearVelocity (b2Vec2(0.f, 50000.f));
+		if (startAttackCooldown == false)
+		{
+			health--;
+			startAttackCooldown = true;
+		}
 
 	}
 

@@ -773,7 +773,7 @@ void PhysicsPlayground::InitScene(float windowWidth, float windowHeight)
 		//Sets up components
 		std::string fileName = "boxSprite.jpg";
 		ECS::GetComponent<Sprite>(entity).LoadSprite(fileName, 50, 50);
-		ECS::GetComponent<Sprite>(entity).SetTransparency(0.5f);
+		ECS::GetComponent<Sprite>(entity).SetTransparency(0.f);
 		ECS::GetComponent<Transform>(entity).SetPosition(vec3(30.f, -20.f, 0.002f));
 		ECS::GetComponent<Trigger*>(entity) = new TransitionTrigger();
 		ECS::GetComponent<Trigger*>(entity)->SetTriggerEntity(entity);
@@ -812,7 +812,7 @@ void PhysicsPlayground::InitScene(float windowWidth, float windowHeight)
 		//Sets up components
 		std::string fileName = "boxSprite.jpg";
 		ECS::GetComponent<Sprite>(entity).LoadSprite(fileName, 50, 50);
-		ECS::GetComponent<Sprite>(entity).SetTransparency(0.5f);
+		ECS::GetComponent<Sprite>(entity).SetTransparency(0.f);
 		ECS::GetComponent<Transform>(entity).SetPosition(vec3(0.f,0.f, 0.002f));
 		ECS::GetComponent<Trigger*>(entity) = new TransitionTrigger();
 		ECS::GetComponent<Trigger*>(entity)->SetTriggerEntity(entity);

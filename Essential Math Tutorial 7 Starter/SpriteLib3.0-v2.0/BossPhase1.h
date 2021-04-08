@@ -65,7 +65,7 @@ public:
 	float autosaveTimer = 0.f;
 	int autosaveInterval = 60;
 
-	int gLength = 37, gWidth = 6;
+	int gLength = 24, gWidth = 6;
 	b2Vec2 pastPlayerPosition = b2Vec2(999, 999);
 	int nextNode = 1;
 	float pathFindTimerDefault = 2.f;
@@ -128,7 +128,10 @@ protected:
 	int bg5;
 	int phase1Wall;
 	int phase1Wall2;
-
+	int exitDoor;
+	int tempPlat1;
+	int tempPlat2;
+	
 	std::vector<int> batVec2;
 
 	float backgtimer = 0.f;
@@ -151,4 +154,6 @@ protected:
 
 	int ov1;
 	int ov2;
+
+	bool doorDeleted = false;
 };
