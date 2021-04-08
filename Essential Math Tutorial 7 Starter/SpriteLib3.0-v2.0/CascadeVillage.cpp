@@ -373,23 +373,6 @@ void CascadeVillage::InitScene(float windowWidth, float windowHeight)
 		ECS::GetComponent<Transform>(entity).SetPosition(vec3(920.f, -100.f, -50.f));
 	}
 
-	//Setup new Entity
-	{
-		/*Scene::CreateSprite(m_sceneReg, "HelloWorld.png", 100, 60, 0.5f, vec3(0.f, 0.f, 0.f));*/
-
-		//Creates entity
-		auto entity = ECS::CreateEntity();
-
-		//Add components
-		ECS::AttachComponent<Sprite>(entity);
-		ECS::AttachComponent<Transform>(entity);
-
-		//Set up the components
-		std::string fileName = "Cascade_Village_-_Mountains (1).png";
-		ECS::GetComponent<Sprite>(entity).LoadSprite(fileName, 1920, 1080);
-		ECS::GetComponent<Sprite>(entity).SetTransparency(1.f);
-		ECS::GetComponent<Transform>(entity).SetPosition(vec3(-800.f, 420.f, -40.f));
-	}
 	//Punisher Idle Anim
 	{
 		auto entity = ECS::CreateEntity();
