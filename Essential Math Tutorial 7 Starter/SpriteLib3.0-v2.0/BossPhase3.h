@@ -82,6 +82,9 @@ public:
 	float dashTrans = 1.f;
 	float scrollDistance = -72.f;
 	b2Vec2 newPos;
+	float yScroll = 18.f;
+	bool fallTime = false;
+	float animationFrame2 = 0.f;
 protected:
 	bool m_firstWindow = false;
 	bool m_secondWindow = false;
@@ -136,4 +139,5 @@ protected:
 	int bossLastVel = 0;
 	int bossAttackAnimNum = 0;
 
+	int bigBoss;
 };

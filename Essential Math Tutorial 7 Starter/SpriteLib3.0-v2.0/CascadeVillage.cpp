@@ -385,7 +385,7 @@ void CascadeVillage::InitScene(float windowWidth, float windowHeight)
 		std::string fileName = "punisher/Punisher1.png";
 		ECS::GetComponent<Sprite>(entity).LoadSprite(fileName, 77, 100);
 		ECS::GetComponent<Sprite>(entity).SetTransparency(1.0f);
-		ECS::GetComponent<Transform>(entity).SetPosition(vec3(-220.f, 175.f, 0.01f));
+		ECS::GetComponent<Transform>(entity).SetPosition(vec3(-220.f, 175.f, 0.02f));
 	}
 
 	//Punisher Tutorial dash
@@ -399,7 +399,7 @@ void CascadeVillage::InitScene(float windowWidth, float windowHeight)
 		std::string fileName = "punisher/Punisher1.png";
 		ECS::GetComponent<Sprite>(entity).LoadSprite(fileName, 77, 100);
 		ECS::GetComponent<Sprite>(entity).SetTransparency(1.0f);
-		ECS::GetComponent<Transform>(entity).SetPosition(vec3(320.f, 145.f, 0.01f));
+		ECS::GetComponent<Transform>(entity).SetPosition(vec3(320.f, 145.f, 0.02f));
 	}
 
 	//Punisher wall jump
@@ -413,7 +413,7 @@ void CascadeVillage::InitScene(float windowWidth, float windowHeight)
 		std::string fileName = "punisher/Punisher1.png";
 		ECS::GetComponent<Sprite>(entity).LoadSprite(fileName, 77, 100);
 		ECS::GetComponent<Sprite>(entity).SetTransparency(1.0f);
-		ECS::GetComponent<Transform>(entity).SetPosition(vec3(1255.f, 140.f, 0.01f));
+		ECS::GetComponent<Transform>(entity).SetPosition(vec3(1255.f, 140.f, 0.02f));
 	}
 
 	//Punisher Tutorial Attack
@@ -427,7 +427,7 @@ void CascadeVillage::InitScene(float windowWidth, float windowHeight)
 		std::string fileName = "punisher/Punisher1.png";
 		ECS::GetComponent<Sprite>(entity).LoadSprite(fileName, 77, 100);
 		ECS::GetComponent<Sprite>(entity).SetTransparency(1.0f);
-		ECS::GetComponent<Transform>(entity).SetPosition(vec3(1775.f, 335.f, 0.01f));
+		ECS::GetComponent<Transform>(entity).SetPosition(vec3(1775.f, 335.f, 0.02f));
 	}
 
 	{ //Punisher Text Entity
@@ -456,6 +456,19 @@ void CascadeVillage::InitScene(float windowWidth, float windowHeight)
 		ECS::GetComponent<Sprite>(entity).LoadSprite(fileName, 4096, 4096);
 		ECS::GetComponent<Sprite>(entity).SetTransparency(1.0f);
 		ECS::GetComponent<Transform>(entity).SetPosition(vec3(240.f, 255.f, 0.0211f));
+	}
+
+	{
+		auto entity = ECS::CreateEntity();
+		//Add components
+		ECS::AttachComponent<Sprite>(entity);
+		ECS::AttachComponent<Transform>(entity);
+
+		//Set up the components
+		std::string fileName = "overlay/Cascade_Village_Underlay.png";
+		ECS::GetComponent<Sprite>(entity).LoadSprite(fileName, 4096, 4096);
+		ECS::GetComponent<Sprite>(entity).SetTransparency(1.0f);
+		ECS::GetComponent<Transform>(entity).SetPosition(vec3(240.f, 255.f, 0.019f));
 	}
 
 	//Setup trigger

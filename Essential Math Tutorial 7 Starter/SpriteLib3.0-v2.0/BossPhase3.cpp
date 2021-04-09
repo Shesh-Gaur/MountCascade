@@ -596,6 +596,40 @@ void BossPhase3::InitScene(float windowWidth, float windowHeight)
 		tempPhsBody.SetName("Trigger");
 	}
 
+	{
+		//Creates entity
+		auto entity = ECS::CreateEntity();
+		bigBoss = entity;
+		//Add components
+		ECS::AttachComponent<Sprite>(entity);
+		ECS::AttachComponent<Transform>(entity);
+		ECS::AttachComponent<PhysicsBody>(entity);
+
+		//Sets up components
+		std::string fileName = "golem/redrunframe5.png";
+
+		ECS::GetComponent<Sprite>(entity).LoadSprite(fileName, 512, 512);
+		ECS::GetComponent<Transform>(entity).SetPosition(vec3(0.f, 0.f, 0.021));
+
+		auto& tempSpr = ECS::GetComponent<Sprite>(entity);
+		auto& tempPhsBody = ECS::GetComponent<PhysicsBody>(entity);
+
+		float shrinkX = 500.f;
+		float shrinkY = 500.f;
+		b2Body* tempBody;
+		b2BodyDef tempDef;
+		tempDef.type = b2_dynamicBody;
+		tempDef.position.Set(float32(-210), float32(70));
+
+		tempBody = m_physicsWorld->CreateBody(&tempDef);
+
+		tempPhsBody = PhysicsBody(entity, tempBody, float(tempSpr.GetWidth() - shrinkX),
+			float(tempSpr.GetHeight() - shrinkY), vec2(0.f, 0.f), false, ENEMY,PICKUP);
+		tempPhsBody.SetColor(vec4(0.f, 1.f, 0.f, 0.3f));
+		tempPhsBody.SetRotationAngleDeg(0);
+		tempPhsBody.GetBody()->SetActive(false);
+
+	}
 
 	readSaveFile();
 	resetGrid();
@@ -648,11 +682,10 @@ void BossPhase3::InitScene(float windowWidth, float windowHeight)
 	auto& player = ECS::GetComponent<Player>(MainEntities::MainPlayer());
 	player.theAttackTrigger = attackTrigger1;
 
+	
 
 
-	startup = true;
-	transitionStarted = false;
-
+	//bossStarted = false;
 
 
 	ECS::GetComponent<PhysicsBody>(playerFollow).SetPosition(ECS::GetComponent<PhysicsBody>(MainEntities::MainPlayer()).GetPosition());
@@ -1208,29 +1241,108 @@ void BossPhase3::readSaveFile()
 
 }
 
-
 void BossPhase3::cameraTrackPlayer()
 {
 	if (bossStarted == true)
 	{
-		
-		scrollDistance += 80.f * Timer::deltaTime;
-
-		
-
-
-		if (fov < 88)
+		if (scrollDistance > 4383)
 		{
-			fov += 2.5f * Timer::deltaTime;
-			ECS::GetComponent<Camera>(MainEntities::MainCamera()).Perspective(fov, aRatio, nPlane, 1000.f);
+			if (fallTime == false)
+			{
+				ECS::GetComponent<PhysicsBody>(bigBoss).GetBody()->SetActive(true);
+				ECS::GetComponent<PhysicsBody>(bigBoss).GetBody()->ApplyLinearImpulseToCenter(b2Vec2(480000.f, 0.f), true);
+				fallTime = true;
+			}
 
 		}
-		if (screenShakeTimer <= 0)
+		else
+		{
+			ECS::GetComponent<PhysicsBody>(bigBoss).SetPosition(b2Vec2(scrollDistance * 1.1f - 300.f, 70.f));
+			if (ECS::GetComponent<PhysicsBody>(MainEntities::MainPlayer()).GetPosition().x < scrollDistance * 1.1f - 200.f || ECS::GetComponent<PhysicsBody>(MainEntities::MainPlayer()).GetPosition().y < -600.f || health <= 0)
+			{
+				startup = true;
+				transitionStarted = false;
+				fallTime = false;
+				yScroll = 18.f;
+				scrollDistance = -72.f;
+				health = 6;
+				ECS::GetComponent<PhysicsBody>(MainEntities::MainPlayer()).SetPosition(b2Vec2(0,0));
+				ECS::GetComponent<PhysicsBody>(playerFollow).SetPosition(b2Vec2(0, 0));
+				ECS::GetComponent<PhysicsBody>(bigBoss).SetPosition(b2Vec2(-210, 70));
+				fov = 70.f;
+				ECS::GetComponent<Camera>(MainEntities::MainCamera()).Perspective(fov, aRatio, nPlane, 1000.f);
+
+				//if (startAttackCooldown == false)
+				//{
+				//	health--;
+				//	startAttackCooldown = true;
+				//}
+				//ECS::GetComponent<PhysicsBody>(MainEntities::MainPlayer()).GetBody()->SetLinearVelocity(b2Vec2(50000.f,0.f));
+
+
+			}
+
+		}
+
+		if (ECS::GetComponent<PhysicsBody>(MainEntities::MainPlayer()).GetPosition().x > 5870.f)
+		{
+			bossStarted = false;
+		}
+		 
+		if (scrollDistance > 3050)
+		{
+			
+
+			scrollDistance += 120.f * Timer::deltaTime;
+			if (fov < 130)
+			{
+				fov += 4.f * Timer::deltaTime;
+				ECS::GetComponent<Camera>(MainEntities::MainCamera()).Perspective(fov, aRatio, nPlane, 1000.f);
+
+			}
+
+			if (yScroll > -70)
+			{
+				yScroll -= 9.f * Timer::deltaTime;
+
+			}
+			newPos = b2Vec2(3050.f, yScroll) - ECS::GetComponent<PhysicsBody>(playerFollow).GetPosition();
+
+			std::cout << "\n" << newPos.x;
+		}
+		else if (scrollDistance >1560)
+		{
+			scrollDistance += 120.f * Timer::deltaTime;
+
+
+
+		}
+		else if (scrollDistance > 770)
+		{
+
+			scrollDistance += 100.f * Timer::deltaTime;
+
+
+		}
+		else
+		{
+			scrollDistance += 70.f * Timer::deltaTime;
+			if (fov < 88)
+			{
+				fov += 2.5f * Timer::deltaTime;
+				ECS::GetComponent<Camera>(MainEntities::MainCamera()).Perspective(fov, aRatio, nPlane, 1000.f);
+
+			}
+		}
+
+
+
+		if (screenShakeTimer <= 0 && scrollDistance < 3050)
 		{
 			newPos = b2Vec2(scrollDistance, 18.f) - ECS::GetComponent<PhysicsBody>(playerFollow).GetPosition();
 			screenShakeTimer = 0;
 		}
-		else
+		else if (scrollDistance < 3050)
 		{
 			newPos = b2Vec2(-22.f + ECS::GetComponent<PhysicsBody>(MainEntities::MainPlayer()).GetBody()->GetLinearVelocity().x, 280.f + ECS::GetComponent<PhysicsBody>(MainEntities::MainPlayer()).GetBody()->GetLinearVelocity().y) - ECS::GetComponent<PhysicsBody>(playerFollow).GetPosition();
 		}
@@ -1267,12 +1379,29 @@ void BossPhase3::cameraTrackPlayer()
 	}
 	else
 	{
-		b2Vec2 newPos = ECS::GetComponent<PhysicsBody>(MainEntities::MainPlayer()).GetPosition() + b2Vec2(mousePosX / 30, (mousePosY / 15) - 10) - ECS::GetComponent<PhysicsBody>(playerFollow).GetPosition();
-		float length = sqrt(newPos.x * newPos.x + newPos.y * newPos.y);
-		newPos = b2Vec2(newPos.x, newPos.y);
+		b2Vec2 speed;
 
-		b2Vec2 speed = b2Vec2(10, 10);
-		ECS::GetComponent<PhysicsBody>(playerFollow).GetBody()->SetLinearVelocity(b2Vec2(newPos.x * speed.x, newPos.y * speed.y));
+			if (fov > 78.f)
+			{
+				fov = 78.f;
+				ECS::GetComponent<PhysicsBody>(playerFollow).SetPosition(b2Vec2(5795.f,-60.f));
+				ECS::GetComponent<Camera>(MainEntities::MainCamera()).Perspective(fov, aRatio, nPlane, 1000.f);
+
+			}
+
+			if (ECS::GetComponent<PhysicsBody>(MainEntities::MainPlayer()).GetPosition().x < 5870.f)
+			{
+
+				speed = b2Vec2(10, 10);
+
+
+				b2Vec2 newPos = ECS::GetComponent<PhysicsBody>(MainEntities::MainPlayer()).GetPosition() + b2Vec2(mousePosX / 30, (mousePosY / 15) - 10) - ECS::GetComponent<PhysicsBody>(playerFollow).GetPosition();
+				float length = sqrt(newPos.x * newPos.x + newPos.y * newPos.y);
+				newPos = b2Vec2(newPos.x, newPos.y);
+
+
+				ECS::GetComponent<PhysicsBody>(playerFollow).GetBody()->SetLinearVelocity(b2Vec2(newPos.x * speed.x, newPos.y * speed.y));
+			}
 	}
 }
 
@@ -1606,11 +1735,50 @@ void BossPhase3::Update()
 
 	}
 
-	if (health <= 0) {
-		std::cout << "Resetting player location at: " << LoadPlayerLoc().x << " " << LoadPlayerLoc().y << std::endl;
-		health = 6;
-		ECS::GetComponent<PhysicsBody>(MainEntities::MainPlayer()).SetPosition(LoadPlayerLoc());
+	//if (health <= 0) {
+	//	std::cout << "Resetting player location at: " << LoadPlayerLoc().x << " " << LoadPlayerLoc().y << std::endl;
+	//	health = 6;
+	//	ECS::GetComponent<PhysicsBody>(MainEntities::MainPlayer()).SetPosition(LoadPlayerLoc());
+	//}
+	if (ECS::GetComponent<PhysicsBody>(MainEntities::MainPlayer()).GetPosition().y < -70.f && ECS::GetComponent<PhysicsBody>(MainEntities::MainPlayer()).GetPosition().x < 4183.f)
+	{
+
+		if (startAttackCooldown == false)
+		{
+			health--;
+			startAttackCooldown = true;
+		}
+		ECS::GetComponent<PhysicsBody>(MainEntities::MainPlayer()).GetBody()->SetLinearVelocity(b2Vec2(0.f, 40000.f));
+
 	}
+
+	animationFrame2 += 2.5f * getDeltaTime();
+	std::string fileName;
+
+	switch ((int)round(animationFrame2)) {
+	case 0:
+		fileName = "golem/redrunframe1.png";
+		break;
+	case 1:
+		fileName = "golem/redrunframe2.png";
+		break;
+	case 2:
+		fileName = "golem/redrunframe3.png";
+		break;
+	case 3:
+		fileName = "golem/redrunframe4.png";
+		break;
+	case 4:
+		fileName = "golem/redrunframe5.png";
+		break;
+	default:
+		fileName = "golem/redrunframe6.png";
+		animationFrame2 = 0;
+		break;
+	}
+	ECS::GetComponent<Sprite>(bigBoss).LoadSprite(fileName, 512, 512);
+
+
 
 	cameraTrackPlayer();
 	updateUI();
@@ -2005,7 +2173,7 @@ void BossPhase3::RunLevelEditor()
 	else if (Input::GetKeyDown(Key::Two))
 	{
 		entitiesCreated = true;
-		makeLavaBoss(wMousePos.x, wMousePos.y, 0.021f, 0, 392, 295);
+		makeLavaBoss(wMousePos.x, wMousePos.y, 0.021f, 0, 512, 512);
 
 	}
 	else if (Input::GetKeyDown(Key::Three))

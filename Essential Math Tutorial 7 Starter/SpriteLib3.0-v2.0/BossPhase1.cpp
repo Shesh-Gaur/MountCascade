@@ -80,7 +80,7 @@ void BossPhase1::InitScene(float windowWidth, float windowHeight)
 		std::string fileName = "overlay/Boss_Stage_1_Overlay.png";
 		ECS::GetComponent<Sprite>(entity).LoadSprite(fileName, 4096, 4096);
 		ECS::GetComponent<Sprite>(entity).SetTransparency(1.f);
-		ECS::GetComponent<Transform>(entity).SetPosition(vec3(-30.f, 860.f, 0.021f));
+		ECS::GetComponent<Transform>(entity).SetPosition(vec3(315.f, 853.f, 0.021f));
 	}
 
 	{
@@ -738,7 +738,7 @@ void BossPhase1::InitScene(float windowWidth, float windowHeight)
 
 		//Sets up components
 		std::string fileName = "greyBox.jpg";
-		ECS::GetComponent<Sprite>(entity).LoadSprite(fileName, 105.f, 168.f);
+		ECS::GetComponent<Sprite>(entity).LoadSprite(fileName, 105.f, 198.f);
 		ECS::GetComponent<Transform>(entity).SetPosition(vec3(0.f, 0.f, 0.02f));
 
 		auto& tempSpr = ECS::GetComponent<Sprite>(entity);
@@ -749,7 +749,7 @@ void BossPhase1::InitScene(float windowWidth, float windowHeight)
 		b2Body* tempBody;
 		b2BodyDef tempDef;
 		tempDef.type = b2_staticBody;
-		tempDef.position.Set(float32(950.646f), float32(368.461f));
+		tempDef.position.Set(float32(976.f), float32(373.f));
 
 		tempBody = m_physicsWorld->CreateBody(&tempDef);
 
@@ -882,7 +882,7 @@ void BossPhase1::makeBox(float xPos, float yPos, float zPos, float rotation, flo
 	//Sets up components
 	std::string fileName = "greyBox.jpg";
 	ECS::GetComponent<Sprite>(entity).LoadSprite(fileName, width, height);
-	//ECS::GetComponent<Sprite>(entity).SetTransparency(1.f);
+	ECS::GetComponent<Sprite>(entity).SetTransparency(0.f);
 	ECS::GetComponent<Transform>(entity).SetPosition(vec3(0.f, 0.f, zPos));
 
 	auto& tempSpr = ECS::GetComponent<Sprite>(entity);
@@ -1149,6 +1149,7 @@ void BossPhase1::makeIceWall(float xPos, float yPos, float zPos, float rotation,
 	//Sets up components
 	std::string fileName = "iceWall.jpg";
 	ECS::GetComponent<Sprite>(entity).LoadSprite(fileName, width, height);
+	ECS::GetComponent<Sprite>(entity).SetTransparency(0.f);
 	ECS::GetComponent<Transform>(entity).SetPosition(vec3(0.f, 0.f, zPos));
 
 	auto& tempSpr = ECS::GetComponent<Sprite>(entity);
@@ -1877,11 +1878,13 @@ void BossPhase1::Update()
 			phase2 = true;
 			//PhysicsBody::m_bodiesToDelete.push_back(phase1Wall);
 			PhysicsBody::m_bodiesToDelete.push_back(phase1Wall2);
-			makeBox(132.053f, 415.067f, 0.02f, 0.f, 92.f, 27.f);
-			makeBox(-192.146f, 411.107f, 0.02f, 0.f, 92.f, 27.f);
-			makeBox(163.6f, 393.742f, 0.02f, 0.f, 29.f, 16.f);
+			makeBox(139.f, 421.f, 0.02f, 0.f, 92.f, 27.f);
+			makeBox(-180.f, 421.f, 0.02f, 0.f, 92.f, 27.f);
+			makeBox(170.f, 391.f, 0.02f, 0.f, 29.f, 16.f);
 			ECS::GetComponent<Sprite>(ov1).SetTransparency(0.f);
-			ECS::GetComponent<Sprite>(ov2).SetTransparency(0.f);
+			ECS::GetComponent<Sprite>(ov2).SetTransparency(1.f);
+
+
 
 		}
 	}
